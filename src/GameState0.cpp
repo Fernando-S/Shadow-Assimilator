@@ -65,6 +65,8 @@ void GameState0::LoadAssets() {
 	surpriseGO->box.y = (Game::GetInstance().GetHeight() - surprise->GetHeight()) / 2;
 
 	surpriseGO->AddComponent(surprise);
+	objectArray.emplace_back(surpriseGO);
+	surpriseGO->render = false;
 
 
 
@@ -122,9 +124,28 @@ void GameState0::Update(float dt){
 	popRequested = inputManager.KeyPress(ESCAPE_KEY);		// Seta o popRequested para retornar a TitleSet ao apertar ESC
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray
 
-	if (inputManager.KeyPress(SPACE_KEY)) 
-		objectArray.emplace_back(surpriseGO);
 
+	if (surpriseGO && inputManager.KeyPress(SPACE_KEY))
+		surpriseGO->render = true;
+	else if (surpriseGO && inputManager.KeyPress(A_KEY))
+		surpriseGO->render = false;
+
+
+	/*
+	if (surpriseGO && inputManager.KeyPress(SPACE_KEY)) {
+		auto surprise = new Sprite(*surpriseGO, "./assets/img/Ricardo.png");
+
+		// Seta a escala e posiciona no centro da tela
+		surprise->SetScale(0.53, 0.55);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
+		surpriseGO->box.x = (Game::GetInstance().GetWidth() - surprise->GetWidth()) / 2;
+		surpriseGO->box.y = (Game::GetInstance().GetHeight() - surprise->GetHeight()) / 2;
+
+		surpriseGO->AddComponent(surprise);
+		objectArray.emplace_back(surpriseGO);
+	}
+	else if (surpriseGO && inputManager.KeyPress(A_KEY))
+		objectArray.pop_back();
+	*/
 
 
 

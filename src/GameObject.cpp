@@ -26,7 +26,8 @@ void GameObject::Update(float dt) {
 
 void GameObject::Render() {
 	for (auto &component : this->components) {
-		component->Render();			// Renderiza cada component
+		if(render)
+			component->Render();			// Renderiza cada component
 	}
 }
 
