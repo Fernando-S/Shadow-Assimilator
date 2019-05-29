@@ -6,6 +6,8 @@
 
 auto surpriseGO = new GameObject();
 
+bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false;
+bool direita1 = false, direita2 = false, mostrando = false;
 
 GameState0::GameState0() {
 //	started = false;
@@ -18,7 +20,8 @@ void GameState0::LoadAssets() {
 /////////////////////////////////////////////
 //	  Carrega a Musica e aperta o play	  //
 ///////////////////////////////////////////
-	backgroundMusic = *new Music("./assets/audio/Basshunter_DotA.mp3");
+	//backgroundMusic = *new Music("./assets/audio/Basshunter_DotA.mp3");
+	backgroundMusic = *new Music("./assets/audio/Shadow_Assimilator_-_Theme_1.mp3");
 	backgroundMusic.Play();
 
 
@@ -124,11 +127,62 @@ void GameState0::Update(float dt){
 	popRequested = inputManager.KeyPress(ESCAPE_KEY);		// Seta o popRequested para retornar a TitleSet ao apertar ESC
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray
 
+	// KONAMI CODE
+	// todo - Apertar 2 teclas seguidas nao funciona (reconhece as duas apertando soh uma vez). Usar um timer pra resolver isso
+	if (surpriseGO) {
+		if (inputManager.KeyPress(UP_ARROW_KEY) && !cima2) {
+			cima1 = true;
+			cima2 = baixo1 = baixo2 = esquerda1 = direita1 = esquerda2 = direita2 = false;
+			std::cout << "cima1 = true" << std::endl;
+		}
+		if (inputManager.KeyPress(UP_ARROW_KEY) && cima1) {
+			cima2 = true;
+			cima1 = false;
+			std::cout << "cima2 = true" << std::endl;
+		}
+		if (inputManager.KeyPress(DOWN_ARROW_KEY) && cima2) {
+			baixo1 = true;
+			cima2 = false;
+			std::cout << "baixo1 = true" << std::endl;
+		}
+		if (inputManager.KeyPress(DOWN_ARROW_KEY) && baixo1) {
+			baixo2 = true;
+			baixo1 = false;
+			std::cout << "baixo2 = true" << std::endl;
+		}
+		if (inputManager.KeyPress(LEFT_ARROW_KEY) && baixo2) {
+			esquerda1 = true;
+			baixo2 = false;
+			std::cout << "esquerda1 = true" << std::endl;
+		}
+		if (inputManager.KeyPress(RIGHT_ARROW_KEY) && esquerda1) {
+			direita1 = true;
+			esquerda1 = false;
+			std::cout << "direita1 = true" << std::endl;
+		}
+		if (inputManager.KeyPress(LEFT_ARROW_KEY) && direita1) {
+			esquerda2 = true;
+			direita1 = false;
+			std::cout << "esquerda2 = true" << std::endl;
+		}
+		if (inputManager.KeyPress(RIGHT_ARROW_KEY) && esquerda2) {
+			direita2 = true;
+			esquerda2 = false;
+			std::cout << "direita2 = true" << std::endl;
+		}
 
-	if (surpriseGO && inputManager.KeyPress(SPACE_KEY))
-		surpriseGO->render = true;
-	else if (surpriseGO && inputManager.KeyPress(A_KEY))
-		surpriseGO->render = false;
+		if (direita2 && inputManager.KeyPress(SPACE_KEY)) {
+			mostrando = true;
+			surpriseGO->render = true;
+			std::cout << "mostrando = true" << std::endl;
+		}
+		else if (mostrando && inputManager.KeyPress(A_KEY)) {
+			mostrando = false;
+			surpriseGO->render = false;
+			std::cout << "mostrando = false" << std::endl;
+		}
+	}
+
 
 
 	/*
