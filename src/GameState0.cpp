@@ -45,12 +45,14 @@ void GameState0::LoadAssets() {
 //	  Carrega o Mapa	//
 /////////////////////////
 	auto mapGO = new GameObject();
-	mapGO->box.x = 500;
-	mapGO->box.y = 500;
+	mapGO->box.x = 500;					// todo - resolver posicao
+	mapGO->box.y = 500;					// todo - resolver posicao
 	auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
-	auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);		// todo - resolver esta merda que ta pegando o mapa de outro lugar
-//	auto tileMap = new TileMap(*mapGO, "assets/map/tileMap.txt", tileSet);		// todo - resolver esta merda que ta pegando o mapa de outro lugar
-//	mapGO->box.PlaceCenter({ 0, 100 });
+	auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);
+	//mapGO->box.PlaceCenter({ 0, 100 });				// todo - resolver posicao
+	std::cout << "largura do tileMap: " << tileMap->GetWidth() << "; altura do tileMap: " << tileMap->GetHeight() << std::endl;
+	std::cout << "largura do mapGO: " << mapGO->box.w << "; altura do mapGO: " << mapGO->box.h << std::endl;
+	std::cout << "x do mapGO: " << mapGO->box.x << "; y do mapGO: " << mapGO->box.y << std::endl;
 
 	auto mapCameraFollower = new CameraFollower(*mapGO);
 	mapGO->AddComponent(mapCameraFollower);
