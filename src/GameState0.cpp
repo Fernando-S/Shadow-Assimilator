@@ -35,27 +35,29 @@ void GameState0::LoadAssets() {
 	// Seta a escala e posiciona no centro da tela
 	bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
 	bgGO->box.x = (Game::GetInstance().GetWidth() - bg->GetWidth()) / 2;
-	bgGO->box.y = (Game::GetInstance().GetHeight() - bg->GetHeight()) / 2;
+	bgGO->box.y = (Game::GetInstance().GetHeight() - bg->GetHeight()) / 4;
 	
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
 
-/*
+
 ///////////////////////////
 //	  Carrega o Mapa	//
 /////////////////////////
 	auto mapGO = new GameObject();
-	mapGO->box.x = 0;
-	mapGO->box.y = 0;
+	mapGO->box.x = 500;
+	mapGO->box.y = 500;
 	auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
-	auto tileMap = new TileMap(*mapGO, "assets/map/MEUtileMap.txt", tileSet);		// todo - resolver esta merda que ta pegando o mapa de outro lugar
+	auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);		// todo - resolver esta merda que ta pegando o mapa de outro lugar
+//	auto tileMap = new TileMap(*mapGO, "assets/map/tileMap.txt", tileSet);		// todo - resolver esta merda que ta pegando o mapa de outro lugar
+//	mapGO->box.PlaceCenter({ 0, 100 });
 
 	auto mapCameraFollower = new CameraFollower(*mapGO);
 	mapGO->AddComponent(mapCameraFollower);
 
 	mapGO->AddComponent(tileMap);
 	objectArray.emplace_back(mapGO);
-*/
+
 
 ////////////////////////////////
 //	   Carrega o Ricardo	 //
