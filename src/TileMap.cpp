@@ -17,9 +17,7 @@ void TileMap::Load(std::string file) {
 	std::string linha;
 
 	// abre o arquivo com o tileMap sai do programa mostrando uma msg de erro caso o arquivo seja vazio
-//	tileMapFile.open("./assets/map/tileMap.txt");
-	tileMapFile.open("./assets/map/MEUtileMap.txt");
-//	tileMapFile.open(file);  // todo - descobrir pq isso buga
+	tileMapFile.open(file);
 	if (!tileMapFile.is_open()) {
 		std::cerr << " ERROR: tileMap.txt couldn't be opened!" << std::endl;
 		exit(1);
