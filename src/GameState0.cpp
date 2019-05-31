@@ -105,7 +105,7 @@ void GameState0::LoadAssets() {
 	}
 */
 	
-/*
+
 	// Carrega o Penguin
 	
 	auto penguinGO = new GameObject();
@@ -116,7 +116,7 @@ void GameState0::LoadAssets() {
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
-*/
+
 
 }
 

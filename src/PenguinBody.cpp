@@ -1,6 +1,10 @@
 #include "PenguinBody.h"
 #include "Game.h"
 
+#define MAX_SPEED 400
+#define SPEED_STEP 10
+#define PLAYER_SPEED 250
+
 PenguinBody* PenguinBody::player = nullptr;
 
 PenguinBody::PenguinBody(GameObject& associated) : Component(associated), pcannon() {
@@ -52,43 +56,68 @@ void PenguinBody::Update(float dt) {
 //		Game::GetInstance().GetState().AddObject(explosionGO);
 		Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 	}
+
 	else {
 		double accelSpeedGain = PENGUIN_ACCELERATION * dt;
 
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
-		if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain))
-			linearSpeed += accelSpeedGain;		// Acelera
-		else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain))
-			linearSpeed -= accelSpeedGain;		// Desacelera ou acelera para tras
+		if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
+
+			//linearSpeed += (linearSpeed + SPEED_STEP * dt > MAX_SPEED ? MAX_SPEED - linearSpeed : SPEED_STEP * dt);
+			speed = { 0, -1 };
+			if (linearSpeed <= PLAYER_SPEED) {
+				linearSpeed += (SPEED_STEP);
+			}
+			
+			//linearSpeed = PLAYER_SPEED + (linearSpeed + SPEED_STEP * dt > MAX_SPEED ? MAX_SPEED - linearSpeed : SPEED_STEP * dt);		// Acelera
+
+
+		}
+		else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
+
+			speed = { 0, -1 };
+			linearSpeed = -PLAYER_SPEED + accelSpeedGain;		// Acelera
+
 
 		// Varia o angulo dos Penguins (faz a curva para a direita ou esquerda) dependendo da tecla pressionada
-		if (inputManager.IsKeyDown(A_KEY)) {
-			angleVariation = PENGUIN_ANGULAR_SPEED * dt;
-			angle -= angleVariation;
-			associated.angleDeg = angle * 180 / PI;
-			speed = speed.GetRotated(-angleVariation);		// Vira para a esquerda
 		}
-		else if (inputManager.IsKeyDown(D_KEY)) {
-			angleVariation = PENGUIN_ANGULAR_SPEED * dt;
-			angle += angleVariation;
-			associated.angleDeg = angle * 180 / PI;
-			speed = speed.GetRotated(angleVariation);		// Vira para a direita
+		else if (inputManager.IsKeyDown(A_KEY)) {
+			speed = { -1, 0 };
+			linearSpeed = PLAYER_SPEED - accelSpeedGain;
 		}
 
+		else if (inputManager.IsKeyDown(D_KEY)) {
+			speed = { 1, 0 };
+			linearSpeed = PLAYER_SPEED + accelSpeedGain;
+		}
+
+		else if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
+			if (linearSpeed > 0) {
+				linearSpeed -= accelSpeedGain;
+			}
+			if (linearSpeed < 0) {
+				linearSpeed += accelSpeedGain;
+			}
+		}
 		
 		double atrictSpeedLoss = PENGUIN_ATRICT * dt;
-		
-		// Aplica atrito no movimento acelerado do Penguin
-		if (abs(linearSpeed) > atrictSpeedLoss) {
-			if (linearSpeed < 0)
-				linearSpeed -= -1 * atrictSpeedLoss;
-			else
-				linearSpeed -= atrictSpeedLoss;
 
+		// Aplica atrito no movimento acelerado do Penguin
+		
+		if (abs(linearSpeed) > atrictSpeedLoss) {
+			if (linearSpeed < 0){
+				linearSpeed -= -1 * atrictSpeedLoss;
+			}	
+			else {
+				linearSpeed -= atrictSpeedLoss;
+			}
+
+			//speed = { 1, 0 };
 			associated.box += speed * linearSpeed*dt;
 		}
 		else
 			linearSpeed = 0;
+		
 	}
 
 	
