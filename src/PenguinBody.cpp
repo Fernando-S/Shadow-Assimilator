@@ -14,7 +14,8 @@ PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcan
 	speed = { 1, 0 };
 	linearSpeed = 0;
 	angle = 0;
-	//CameraAccel = 0.0;
+	oppositeAccel = 0;
+	oppositeSpeed = 0;
 	hp = PENGUIN_INITIAL_HP;
 
 	// Carrega o sprite do PenguinBody
@@ -57,58 +58,109 @@ void PenguinBody::Update(float dt) {
 		auto explosionGO = new GameObject();
 		auto explosionSound = new Sound(*explosionGO, "./assets/audio/boom.wav");
 		explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/penguindeath.png", 5, 0.1, 1.5));
-		explosionGO->AddComponent(explosionSound);
-		explosionSound->Play();
-		explosionGO->box.PlaceCenter(associated.box.Center());
-		Game::GetInstance().GetCurrentState().AddObject(explosionGO);
+explosionGO->AddComponent(explosionSound);
+explosionSound->Play();
+explosionGO->box.PlaceCenter(associated.box.Center());
+Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 	}
 
 	else {
-		double accelSpeedGain = PENGUIN_ACCELERATION * dt;
+	double accelSpeedGain = PENGUIN_ACCELERATION * dt;
 
-		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
-		if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-			speed = { 0, -1 };
-			linearSpeed += accelSpeedGain;
-		}
-		else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-			speed = { 0, -1 };
-			linearSpeed -= accelSpeedGain;		// Acelera
+	// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
+	if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
+		speed = { 0, -1 };
+		linearSpeed += accelSpeedGain;
+	}
+	else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
+		speed = { 0, -1 };
+		linearSpeed -= accelSpeedGain;		// Acelera
 
-		}
-		else if (inputManager.IsKeyDown(A_KEY)) {
-			speed = { -1, 0 };
-			linearSpeed += accelSpeedGain;
-			//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
-		}
-		else if (inputManager.IsKeyDown(D_KEY)) {
-			speed = { 1, 0 };
-			linearSpeed += accelSpeedGain;
-			setaNovoSprite = true;
-			moving = true;
-			// todo - pensar em como mudar a sprite de idle para movimento
-			//associated.RemoveComponent(sprite);
-			//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
-			//associated.AddComponent(sprite);
-			//associated.ChangeComponent(sprite, sprite);
+	}
+	else if (inputManager.IsKeyDown(A_KEY)) {
+		if (Getspeed1 == false) {
+			oppositeSpeed = linearSpeed;
+			cout << "\n\nPassarvalor1" << endl << endl;
+			Getspeed1 = true;
 		}
 
-		double atrictSpeedLoss = PENGUIN_ATRICT * dt;
+		speed = { -1, 0 };
+		if (oppositeSpeed > -PLAYER_SPEED) {
 
-		/*
-		if (abs(linearSpeed) > atrictSpeedLoss) {
-			linearSpeed -= (linearSpeed < 0) ? -1 * atrictSpeedLoss : atrictSpeedLoss;
-			Rect newPos = associated.box + speed * linearSpeed*dt;
-
-			if (newPos.Center().x > PENGUIN_WALKING_LIMIT_X_MIN && newPos.Center().x < PENGUIN_WALKING_LIMIT_X_MAX
-				&& newPos.Center().y > PENGUIN_WALKING_LIMIT_Y_MIN && newPos.Center().y < PENGUIN_WALKING_LIMIT_Y_MAX) {
-				associated.box = newPos;
+			if (oppositeSpeed > 0) {
+				oppositeSpeed -= accelSpeedGain;
+				linearSpeed = -oppositeSpeed;
+			}
+			if (oppositeSpeed <= 0) {
+				oppositeSpeed -= accelSpeedGain;
+				linearSpeed = -oppositeSpeed;
 			}
 		}
 		else {
-			linearSpeed = 0;
+			linearSpeed = -oppositeSpeed;
 		}
-		*/
+
+		cout << oppositeSpeed << endl;
+		cout << linearSpeed << endl;
+		//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
+	}
+
+	else if (inputManager.IsKeyDown(D_KEY)) {
+		speed = { 1, 0 };
+
+		if (Getspeed2 == false) {
+			oppositeSpeed = linearSpeed;
+			cout << "\n\nPassarvalor2" << endl << endl;
+			Getspeed2 = true;
+		}
+
+		if (linearSpeed < PLAYER_SPEED) {
+
+			if (oppositeSpeed <= 0) {
+				oppositeSpeed += accelSpeedGain;
+				linearSpeed = oppositeSpeed;
+			}
+
+			linearSpeed += accelSpeedGain;
+
+		}
+		//cout << "linearSpeed: " << linearSpeed << endl;
+		//cout << "oppositeSpeed: " << oppositeSpeed << endl;
+		cout << linearSpeed << endl;
+
+		setaNovoSprite = true;
+		moving = true;
+		// todo - pensar em como mudar a sprite de idle para movimento
+		//associated.RemoveComponent(sprite);
+		//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
+		//associated.AddComponent(sprite);
+		//associated.ChangeComponent(sprite, sprite);
+	}
+
+	double atrictSpeedLoss = PENGUIN_ATRICT * dt;
+
+	/*
+	if (abs(linearSpeed) > atrictSpeedLoss) {
+		linearSpeed -= (linearSpeed < 0) ? -1 * atrictSpeedLoss : atrictSpeedLoss;
+		Rect newPos = associated.box + speed * linearSpeed*dt;
+
+		if (newPos.Center().x > PENGUIN_WALKING_LIMIT_X_MIN && newPos.Center().x < PENGUIN_WALKING_LIMIT_X_MAX
+			&& newPos.Center().y > PENGUIN_WALKING_LIMIT_Y_MIN && newPos.Center().y < PENGUIN_WALKING_LIMIT_Y_MAX) {
+			associated.box = newPos;
+		}
+	}
+	else {
+		linearSpeed = 0;
+	}
+	*/
+
+	if (!(inputManager.IsKeyDown(A_KEY))) {
+		Getspeed1 = false;
+	}
+
+	if (!(inputManager.IsKeyDown(D_KEY))){
+		Getspeed2 = false;
+	}
 
 		if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
 			if (linearSpeed > 0) {

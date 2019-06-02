@@ -37,7 +37,8 @@ private:
 
 	//std::weak_ptr<GameObject> pcannon;
 	Vec2 speed;
-	float linearSpeed, angle, gravity = 1.0;
+	float linearSpeed, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
+	bool Getspeed1 = false, Getspeed2 = false;;
 	int hp;
 	bool setaNovoSprite = false, moving = false;
 
