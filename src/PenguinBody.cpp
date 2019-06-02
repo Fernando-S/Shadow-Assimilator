@@ -1,9 +1,12 @@
 #include "PenguinBody.h"
 #include "Game.h"
+#include <iostream>
 
 #define MAX_SPEED 400
-#define SPEED_STEP 10
-#define PLAYER_SPEED 250
+#define SPEED_STEP 50
+#define PLAYER_SPEED 400
+
+using namespace std;
 
 PenguinBody* PenguinBody::player = nullptr;
 
@@ -12,6 +15,7 @@ PenguinBody::PenguinBody(GameObject& associated) : Component(associated), pcanno
 	speed = { 1, 0 };
 	linearSpeed = 0;
 	angle = 0;
+	CameraAccel = 0.0;
 	hp = PENGUIN_INITIAL_HP;
 
 	// Carrega o sprite do PenguinBody
@@ -53,7 +57,7 @@ void PenguinBody::Update(float dt) {
 		explosionGO->AddComponent(explosionSound);
 		explosionSound->Play();
 		explosionGO->box.PlaceCenter(associated.box.Center());
-//		Game::GetInstance().GetState().AddObject(explosionGO);
+		//		Game::GetInstance().GetState().AddObject(explosionGO);
 		Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 	}
 
@@ -62,36 +66,42 @@ void PenguinBody::Update(float dt) {
 
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
 		if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-
-			//linearSpeed += (linearSpeed + SPEED_STEP * dt > MAX_SPEED ? MAX_SPEED - linearSpeed : SPEED_STEP * dt);
 			speed = { 0, -1 };
-			if (linearSpeed <= PLAYER_SPEED) {
-				linearSpeed += (SPEED_STEP);
-			}
-			
-			//linearSpeed = PLAYER_SPEED + (linearSpeed + SPEED_STEP * dt > MAX_SPEED ? MAX_SPEED - linearSpeed : SPEED_STEP * dt);		// Acelera
-
-
+			linearSpeed += accelSpeedGain;
 		}
 		else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-
 			speed = { 0, -1 };
-			linearSpeed = -PLAYER_SPEED + accelSpeedGain;		// Acelera
+			linearSpeed -= accelSpeedGain;		// Acelera
 
-
-		// Varia o angulo dos Penguins (faz a curva para a direita ou esquerda) dependendo da tecla pressionada
 		}
 		else if (inputManager.IsKeyDown(A_KEY)) {
 			speed = { -1, 0 };
-			linearSpeed = PLAYER_SPEED - accelSpeedGain;
+			linearSpeed += accelSpeedGain;
 		}
-
 		else if (inputManager.IsKeyDown(D_KEY)) {
 			speed = { 1, 0 };
-			linearSpeed = PLAYER_SPEED + accelSpeedGain;
+			linearSpeed += accelSpeedGain;
+	
 		}
 
-		else if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
+		double atrictSpeedLoss = PENGUIN_ATRICT * dt;
+
+		/*
+		if (abs(linearSpeed) > atrictSpeedLoss) {
+			linearSpeed -= (linearSpeed < 0) ? -1 * atrictSpeedLoss : atrictSpeedLoss;
+			Rect newPos = associated.box + speed * linearSpeed*dt;
+
+			if (newPos.Center().x > PENGUIN_WALKING_LIMIT_X_MIN && newPos.Center().x < PENGUIN_WALKING_LIMIT_X_MAX
+				&& newPos.Center().y > PENGUIN_WALKING_LIMIT_Y_MIN && newPos.Center().y < PENGUIN_WALKING_LIMIT_Y_MAX) {
+				associated.box = newPos;
+			}
+		}
+		else {
+			linearSpeed = 0;
+		}
+		*/
+		
+		if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
 			if (linearSpeed > 0) {
 				linearSpeed -= accelSpeedGain;
 			}
@@ -99,15 +109,13 @@ void PenguinBody::Update(float dt) {
 				linearSpeed += accelSpeedGain;
 			}
 		}
-		
-		double atrictSpeedLoss = PENGUIN_ATRICT * dt;
 
 		// Aplica atrito no movimento acelerado do Penguin
-		
+
 		if (abs(linearSpeed) > atrictSpeedLoss) {
 			if (linearSpeed < 0){
 				linearSpeed -= -1 * atrictSpeedLoss;
-			}	
+			}
 			else {
 				linearSpeed -= atrictSpeedLoss;
 			}
@@ -117,11 +125,12 @@ void PenguinBody::Update(float dt) {
 		}
 		else
 			linearSpeed = 0;
-		
+
 	}
 
 	
 }
+
 
 void PenguinBody::Render() {
 
