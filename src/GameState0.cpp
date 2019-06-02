@@ -254,14 +254,10 @@ void GameState0::Update(float dt){
 
 
 
-
-
-
-
 	std::vector<Collider*> colliders(objectArray.size(), nullptr);
 	bool collidersArrayFilled = false;
 
-	// todo - mudar esse reconhecimento de colisao q eh merda
+	// todo - ver se precisa mudar esse reconhecimento de colisao
 
 	// Checa colisoes entre os Colliders dos GameObjects
 	for (i = 0; i < objectArray.size() - 1; i++) {

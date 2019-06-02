@@ -20,6 +20,28 @@
 #define A_KEY               SDLK_a
 #define S_KEY               SDLK_s
 #define D_KEY               SDLK_d
+#define Z_KEY               SDLK_z
+#define X_KEY               SDLK_x
+#define ZERO_KEY            SDLK_0
+#define ONE_KEY				SDLK_1
+#define TWO_KEY             SDLK_2
+#define THREE_KEY           SDLK_3
+#define FOUR_KEY            SDLK_4
+#define FIVE_KEY            SDLK_5
+#define SIX_KEY             SDLK_6
+#define SEVEN_KEY           SDLK_7
+#define EIGHT_KEY           SDLK_8
+#define NINE_KEY            SDLK_9
+#define NUMPAD_ZERO_KEY     SDLK_KP_0
+#define NUMPAD_ONE_KEY		SDLK_KP_1
+#define NUMPAD_TWO_KEY		SDLK_KP_2
+#define NUMPAD_THREE_KEY    SDLK_KP_3
+#define NUMPAD_FOUR_KEY     SDLK_KP_4
+#define NUMPAD_FIVE_KEY     SDLK_KP_5
+#define NUMPAD_SIX_KEY		SDLK_KP_6
+#define NUMPAD_SEVEN_KEY    SDLK_KP_7
+#define NUMPAD_EIGHT_KEY    SDLK_KP_8
+#define NUMPAD_NINE_KEY     SDLK_KP_9
 
 
 class InputManager{

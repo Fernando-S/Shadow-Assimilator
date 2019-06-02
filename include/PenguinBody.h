@@ -30,12 +30,16 @@ public:
 
 	static PenguinBody* player;
 	//float secondsToSelfDestruction = 1.5;
+	Sprite* sprite;
 
 private:
-	std::weak_ptr<GameObject> pcannon;
+	void SetSprite(const char* file, int frameCount, float frameTime);
+
+	//std::weak_ptr<GameObject> pcannon;
 	Vec2 speed;
-	float linearSpeed, angle;
+	float linearSpeed, angle, gravity = 1.0;
 	int hp;
+	bool setaNovoSprite = false, moving = false;
 
 };
 

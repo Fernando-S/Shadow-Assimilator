@@ -17,6 +17,7 @@ public:
 	bool IsDead();
 	void RequestDelete();
 	void AddComponent(Component* cpt);
+	void ChangeComponent(Component* cpt, Component* newCPT);
 	void RemoveComponent(Component *cpt);
 	void NotifyCollision(GameObject& other);
 

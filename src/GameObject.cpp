@@ -46,6 +46,18 @@ void GameObject::AddComponent(Component* cpt) {
 		cpt->Start();				// Chama Start dos components adicionados se stared = true
 }
 
+void GameObject::ChangeComponent(Component* cpt, Component* newCPT) {
+	unsigned i;
+	std::shared_ptr<Component>& component = *(new std::shared_ptr<Component>(cpt));
+
+	for (i = 0; i < this->components.size(); i++) {						// Percorre o vetor de components ate achar o desejado
+		if (this->components[i] == component) {							// Verifica se o component atual eh o desejado
+			this->components.erase(this->components.begin() + i);		// Remove o component desejado
+			this->components.emplace_back(newCPT);
+		}
+	}
+}
+
 void GameObject::RemoveComponent(Component* cpt) {
 	unsigned i;
 	std::shared_ptr<Component>& component = *(new std::shared_ptr<Component>(cpt));
