@@ -11,7 +11,7 @@ TileSet::TileSet(int tileWidth, int tileHeight, const char* file) : tileSet(*new
 		this->tileWidth = tileWidth;
 		columns = tileSet.GetWidth()/tileWidth;
 		rows = tileSet.GetHeight()/tileHeight;
-	}
+	} 
 }
 
 void TileSet::RenderTile(unsigned index, float x, float y) {

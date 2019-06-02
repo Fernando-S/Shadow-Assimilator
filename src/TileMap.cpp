@@ -67,7 +67,7 @@ void TileMap::Render() {
 void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
 	int x, y;
 
-	for (x = 0; x < mapWidth; x++) {
+	for (x = 0; x < mapWidth; x++) { 
 		for (y = 0; y < mapHeight; y++) {
 //			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth(), y*tileSet->GetTileHeight()); // renderiza cada tile com efeito de parrallax
 			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth() - cameraX - PARALLAX * layer*cameraX, y*tileSet->GetTileHeight() - cameraY - PARALLAX * layer*cameraY);

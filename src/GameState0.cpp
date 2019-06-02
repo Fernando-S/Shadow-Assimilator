@@ -6,6 +6,7 @@
 
 auto surpriseGO = new GameObject();
 
+bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false;
 bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false;
 bool direita1 = false, direita2 = false, mostrando = false;
 
@@ -28,10 +29,12 @@ void GameState0::LoadAssets() {
 /////////////////////////////////
 //	  Carrega o Background	  //
 ///////////////////////////////
+	
 	auto bgGO = new GameObject();
 	auto bg = new Sprite(*bgGO, "./assets/img/Art_logo_mono3x.png");
+	//auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
 	bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
-
+	
 	// Seta a escala e posiciona no centro da tela
 	bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
 	bgGO->box.x = (Game::GetInstance().GetWidth() - bg->GetWidth()) / 2;
@@ -39,7 +42,7 @@ void GameState0::LoadAssets() {
 	
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
-
+	
 
 ///////////////////////////
 //	  Carrega o Mapa	//
@@ -77,6 +80,18 @@ void GameState0::LoadAssets() {
 
 
 
+///////////////////////////////////
+//		Carrega o Penguin		//
+/////////////////////////////////
+	auto penguinGO = new GameObject();
+	auto penguin = new PenguinBody(*penguinGO);
+
+	penguinGO->AddComponent(penguin);
+	penguinGO->box.PlaceCenter(Vec2(704, 640));
+	objectArray.emplace_back(penguinGO);
+
+	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
+
 
 
 
@@ -104,19 +119,6 @@ void GameState0::LoadAssets() {
 		objectArray.emplace_back(alienGO);
 	}
 */
-	
-
-	// Carrega o Penguin
-	
-	auto penguinGO = new GameObject();
-	auto penguin = new PenguinBody(*penguinGO);
-
-	penguinGO->AddComponent(penguin);
-	penguinGO->box.PlaceCenter(Vec2(704, 640));
-	objectArray.emplace_back(penguinGO);
-
-	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
-
 
 }
 
@@ -180,7 +182,7 @@ void GameState0::Update(float dt){
 			surpriseGO->render = true;
 			std::cout << "mostrando = true" << std::endl;
 		}
-		else if (mostrando && inputManager.KeyPress(A_KEY)) {
+		else if (mostrando && inputManager.MouseRelease(LEFT_MOUSE_BUTTON)) {
 			mostrando = false;
 			surpriseGO->render = false;
 			std::cout << "mostrando = false" << std::endl;
@@ -189,24 +191,59 @@ void GameState0::Update(float dt){
 
 
 
-	/*
-	if (surpriseGO && inputManager.KeyPress(SPACE_KEY)) {
-		auto surprise = new Sprite(*surpriseGO, "./assets/img/Ricardo.png");
 
-		// Seta a escala e posiciona no centro da tela
-		surprise->SetScale(0.53, 0.55);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
-		surpriseGO->box.x = (Game::GetInstance().GetWidth() - surprise->GetWidth()) / 2;
-		surpriseGO->box.y = (Game::GetInstance().GetHeight() - surprise->GetHeight()) / 2;
 
-		surpriseGO->AddComponent(surprise);
-		objectArray.emplace_back(surpriseGO);
+	// PENSADOR CODE
+	if (surpriseGO) {
+		if ( (inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
+			dois = true;
+			tres = quatro = cinco = meia = sete = oito = false;
+			std::cout << "dois = true" << std::endl;
+		}
+		if ( (inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
+			tres = true;
+			dois = quatro = cinco = meia = sete = oito = false;
+			std::cout << "tres = true" << std::endl;
+		}
+		if ( (inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
+			quatro = true;
+			dois = tres = cinco = meia = sete = oito = false;
+			std::cout << "quatro = true" << std::endl;
+		}
+		if ( (inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
+			cinco = true;
+			dois = tres = quatro = meia = sete = oito = false;
+			std::cout << "cinco = true" << std::endl;
+		}
+		if ( (inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
+			meia = true;
+			dois = tres = quatro = cinco = sete = oito = false;
+			std::cout << "meia = true" << std::endl;
+		}
+		if ( (inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
+			sete = true;
+			dois = tres = quatro = cinco = meia = oito = false;
+			std::cout << "sete = true" << std::endl;
+		}
+		if ((inputManager.KeyRelease(EIGHT_KEY) || inputManager.KeyRelease(NUMPAD_EIGHT_KEY)) && sete) {
+			oito = true;
+			dois = tres = quatro = cinco = meia = sete = false;
+			std::cout << "oito = true" << std::endl;
+		}
+
+		//if (oito && inputManager.KeyPress(SPACE_KEY)) {
+		if (oito && inputManager.MouseRelease(LEFT_MOUSE_BUTTON)) {
+			mostrando = true;
+			surpriseGO->render = true;
+			std::cout << "mostrando = true" << std::endl;
+		}
+		//else if (mostrando && inputManager.KeyPress(A_KEY)) {
+		else if (mostrando && inputManager.MouseRelease(RIGHT_MOUSE_BUTTON)) {
+			mostrando = false;
+			surpriseGO->render = false;
+			std::cout << "mostrando = false" << std::endl;
+		}
 	}
-	else if (surpriseGO && inputManager.KeyPress(A_KEY))
-		objectArray.pop_back();
-	*/
-
-
-
 
 
 
