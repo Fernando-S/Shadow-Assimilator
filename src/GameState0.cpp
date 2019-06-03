@@ -87,7 +87,8 @@ void GameState0::LoadAssets() {
 	auto penguin = new PenguinBody(*penguinGO);
 
 	penguinGO->AddComponent(penguin);
-	penguinGO->box.PlaceCenter(Vec2(704, 640));
+	//penguinGO->box.PlaceCenter(Vec2(704, 640));
+	penguinGO->box.PlaceCenter(Vec2(704, 705));
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin

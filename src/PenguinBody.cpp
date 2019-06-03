@@ -207,7 +207,7 @@ Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 	if (setaNovoSprite) {
 		associated.RemoveComponent(sprite);
 		if(moving)
-			SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
+			SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
 		else
 			SetSprite("./assets/img/sprite_idle.png", 12, 0.1);
 		associated.AddComponent(sprite);

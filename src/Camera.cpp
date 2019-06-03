@@ -21,7 +21,7 @@ void Camera::Update(float dt) {
 
 	if (focus) {
 		pos.x = focus->box.Center().x - Game::GetInstance().GetWidth() / 2;		// alinha pos.x da camera com x do foco se houver um
-		pos.y = focus->box.Center().y - Game::GetInstance().GetHeight() / 2;	// alinha pos.y da camera com y do foco se houver um
+		pos.y = focus->box.Center().y - Game::GetInstance().GetHeight() *2/3;	// alinha pos.y da camera com y do foco se houver um
 	}
 	else {				// faz a posicao da camera variar de acordo com os inputs se nao houver um foco
 

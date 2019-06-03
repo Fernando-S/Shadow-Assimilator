@@ -84,7 +84,8 @@ Game& Game::GetInstance() {
 		return *instance;		// retorna a instancia se ja existir uma
 	else {
 		// todo - mudar a resolucao para 1280 X 480 quando tivermos um mapa para isso
-		instance = new Game("Shadow Assimilator", 1024, 600);		// instancia um novo jogo
+		//instance = new Game("Shadow Assimilator", 1024, 600);		// instancia um novo jogo
+		instance = new Game("Shadow Assimilator", 1280, 480);		// instancia um novo jogo
 		return *instance;		// retorna a nova instancia instancia
 	}
 }
