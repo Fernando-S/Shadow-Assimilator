@@ -10,7 +10,6 @@ Text::Text(GameObject& associated, std::string fontFile, int fontSize, TextStyle
 	this->fontSize = fontSize;
 	this->color = color;
 
-	// todo - dar uma olhada melhjor nisso depois
 	intermittenceCount = 0;
 	this->intermittenceSeconds = intermittenceSeconds;
 	RemakeTexture();
@@ -125,7 +124,6 @@ void Text::RemakeTexture() {
 	SDL_FreeSurface(surface);
 }
 
-// todo - pensar se eh melhor fazer assim ou soh colocar o vetor com rgb mesmo
 SDL_Color Text::GetSDLColor(Uint8 a, Uint8 r, Uint8 g, Uint8 b) {
 	return { r, g, b, a };
 }

@@ -33,7 +33,7 @@ PenguinBody::~PenguinBody() {
 
 void PenguinBody::Start() {
 	/*
-	// Cria de fato o PenguinBody e o adiciona ao PenguinCannon
+	// Adiciona ao PenguinCannon
 	auto cannonGO = new GameObject();
 	//	auto cannon = new PenguinCannon(*cannonGO, Game::GetInstance().GetState().GetObjectPtr(&associated));
 	auto cannon = new PenguinCannon(*cannonGO, Game::GetInstance().GetCurrentState().GetObjectPtr(&associated));
@@ -58,12 +58,11 @@ void PenguinBody::Update(float dt) {
 		auto explosionGO = new GameObject();
 		auto explosionSound = new Sound(*explosionGO, "./assets/audio/boom.wav");
 		explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/penguindeath.png", 5, 0.1, 1.5));
-explosionGO->AddComponent(explosionSound);
-explosionSound->Play();
-explosionGO->box.PlaceCenter(associated.box.Center());
-Game::GetInstance().GetCurrentState().AddObject(explosionGO);
+		explosionGO->AddComponent(explosionSound);
+		explosionSound->Play();
+		explosionGO->box.PlaceCenter(associated.box.Center());
+		Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 	}
-
 	else {
 	double accelSpeedGain = PENGUIN_ACCELERATION * dt;
 
@@ -78,6 +77,10 @@ Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 
 	}
 	else if (inputManager.IsKeyDown(A_KEY)) {
+
+		if (linearSpeed == 0)
+			oppositeSpeed = 0;
+
 		if (Getspeed1 == false) {
 			oppositeSpeed = linearSpeed;
 			cout << "\n\nPassarvalor1" << endl << endl;
@@ -96,17 +99,19 @@ Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 				linearSpeed = -oppositeSpeed;
 			}
 		}
-		else {
+		else
 			linearSpeed = -oppositeSpeed;
-		}
 
-		cout << oppositeSpeed << endl;
-		cout << linearSpeed << endl;
+		cout << "linearSpeed1: " << linearSpeed << endl;
+		cout << "oppositeSpeed1: " << oppositeSpeed << endl;
 		//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
 	}
 
 	else if (inputManager.IsKeyDown(D_KEY)) {
 		speed = { 1, 0 };
+
+		if (linearSpeed == 0)
+			oppositeSpeed = 0;
 
 		if (Getspeed2 == false) {
 			oppositeSpeed = linearSpeed;
@@ -114,28 +119,25 @@ Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 			Getspeed2 = true;
 		}
 
-		if (linearSpeed < PLAYER_SPEED) {
+		if (linearSpeed < PLAYER_SPEED + 50) {
 
-			if (oppositeSpeed <= 0) {
-				oppositeSpeed += accelSpeedGain;
-				linearSpeed = oppositeSpeed;
+			if (oppositeSpeed >= 0) {
+				oppositeSpeed -= accelSpeedGain;
+				linearSpeed = -oppositeSpeed;
+			}
+			else {
+				linearSpeed += accelSpeedGain;
 			}
 
-			linearSpeed += accelSpeedGain;
-
 		}
-		//cout << "linearSpeed: " << linearSpeed << endl;
-		//cout << "oppositeSpeed: " << oppositeSpeed << endl;
-		cout << linearSpeed << endl;
+		cout << "linearSpeed2: " << linearSpeed << endl;
+		cout << "oppositeSpeed2: " << oppositeSpeed << endl;
+		//cout << linearSpeed << endl;
 
 		setaNovoSprite = true;
 		moving = true;
-		// todo - pensar em como mudar a sprite de idle para movimento
-		//associated.RemoveComponent(sprite);
-		//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
-		//associated.AddComponent(sprite);
-		//associated.ChangeComponent(sprite, sprite);
 	}
+
 
 	double atrictSpeedLoss = PENGUIN_ATRICT * dt;
 
@@ -154,32 +156,27 @@ Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 	}
 	*/
 
-	if (!(inputManager.IsKeyDown(A_KEY))) {
+	if (!(inputManager.IsKeyDown(A_KEY)))
 		Getspeed1 = false;
-	}
 
-	if (!(inputManager.IsKeyDown(D_KEY))){
+	if (!(inputManager.IsKeyDown(D_KEY)))
 		Getspeed2 = false;
-	}
+
 
 		if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
-			if (linearSpeed > 0) {
+			if (linearSpeed > 0)
 				linearSpeed -= accelSpeedGain;
-			}
-			if (linearSpeed < 0) {
+			else if (linearSpeed < 0)
 				linearSpeed += accelSpeedGain;
-			}
 		}
 
 		// Aplica atrito no movimento acelerado do Penguin
 
 		if (abs(linearSpeed) > atrictSpeedLoss) {
-			if (linearSpeed < 0) {
+			if (linearSpeed < 0)
 				linearSpeed -= -1 * atrictSpeedLoss;
-			}
-			else {
+			else
 				linearSpeed -= atrictSpeedLoss;
-			}
 
 			//speed = { 1, 0 };
 			associated.box += speed * linearSpeed*dt;
@@ -188,6 +185,9 @@ Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 			linearSpeed = 0;
 
 	}
+
+
+
 /*
 	if ( inputManager.KeyRelease(A_KEY) && inputManager.KeyRelease(D_KEY) &&
 		 inputManager.KeyRelease(W_KEY) && inputManager.KeyRelease(S_KEY) && (linearSpeed == 0)) {
@@ -196,17 +196,17 @@ Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 	}
 */
 
-	/*
+/*
 	if (linearSpeed == 0) {
 		moving = false;
 		setaNovoSprite = true;
 	}
-	*/
+*/
 
-	// todo - pensar em como trocar
+	// todo - pensar em como trocar de parado para andando e de andando para parado
 	if (setaNovoSprite) {
 		associated.RemoveComponent(sprite);
-		if(moving)
+		if (moving)
 			SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
 		else
 			SetSprite("./assets/img/sprite_idle.png", 12, 0.1);
@@ -246,3 +246,9 @@ Vec2 PenguinBody::GetCenter() {
 void PenguinBody::SetSprite(const char* file, int frameCount, float frameTime) {
 	sprite = new Sprite(associated, file, frameCount, frameTime);
 }
+
+/*
+bool PenguinBody::IsMoving() {
+	return moving;
+}
+*/

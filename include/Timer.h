@@ -7,13 +7,11 @@
 class Timer {
 public:
 	Timer();
-	// todo - ver melhor isso
 	Timer(float time);
 	void Update(float dt);
 	void Restart();
 	float Get();
 
-	// todo - ver melhor isso
 	void Set(float time);
 		
 private:

@@ -27,6 +27,7 @@ public:
 	bool Is(std::string type) override;
 	void NotifyCollision(GameObject& other) override;
 	Vec2 GetCenter();			// Funcao para poder pegar a posicao do penguin
+	//bool IsMoving();
 
 	static PenguinBody* player;
 	//float secondsToSelfDestruction = 1.5;

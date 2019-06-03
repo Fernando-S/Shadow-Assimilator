@@ -4,7 +4,6 @@ Timer::Timer() {
 	time = 0;
 }
 
-// todo - ver melhor isso
 Timer::Timer(float time) {
 	this->time = time;
 }
@@ -21,7 +20,6 @@ float Timer::Get() {
 	return time;
 }
 
-// todo - ver melhor isso
 void Timer::Set(float time) {
 	this->time = time;
 }

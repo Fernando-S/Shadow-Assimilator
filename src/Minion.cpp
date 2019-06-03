@@ -89,11 +89,11 @@ void Minion::Shoot(Vec2 target) {
 	Game::GetInstance().GetCurrentState().AddObject(bulletGO);
 }
 
-// todo - decidir se o minion deve morrer separadamente ou nao
+// decidir se o minion deve morrer separadamente ou nao
 void Minion::NotifyCollision(GameObject& other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
 
-	// todo - conseguir nao bugar isso e dar dano no Alien
+	// conseguir nao bugar isso e dar dano no Alien
 	if ((bullet && !bullet->targetsPlayer) && bullet->playerBullet)
 		std::cout << "Minion acertado! Mas nao deu dano..." << std::endl;
 }

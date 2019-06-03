@@ -19,7 +19,6 @@ void TitleState::LoadAssets() {
 
 	// criacao do texto de "press to play"
 	auto textGO = new GameObject();
-	// todo - pensar melhor em como passar a textoColor
 	SDL_Color textColor = { 255, 150, 0, 255 };
 	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press SPACE to play!", /*{ 255, 150, 0, 255 }*/ textColor/*, 0.7*/);
 	textGO->AddComponent(text);

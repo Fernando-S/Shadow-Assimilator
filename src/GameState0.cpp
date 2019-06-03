@@ -4,6 +4,7 @@
 
 
 
+
 auto surpriseGO = new GameObject();
 
 bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false;
@@ -48,10 +49,20 @@ void GameState0::LoadAssets() {
 //	  Carrega o Mapa	//
 /////////////////////////
 	auto mapGO = new GameObject();
-	mapGO->box.x = 500;					// todo - resolver posicao
-	mapGO->box.y = 500;					// todo - resolver posicao
-	auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
-	auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);
+	mapGO->box.x = 0;					// todo - resolver posicao
+	mapGO->box.y = 0;					// todo - resolver posicao
+	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
+	//auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);
+
+	// TileSet de 40 por 40
+//	auto tileSet = new TileSet(40, 40, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+//	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap40x40.txt", tileSet);
+	
+
+	// TileSet de 80 por 80
+	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
+
 	//mapGO->box.PlaceCenter({ 0, 100 });				// todo - resolver posicao
 	std::cout << "largura do tileMap: " << tileMap->GetWidth() << "; altura do tileMap: " << tileMap->GetHeight() << std::endl;
 	std::cout << "largura do mapGO: " << mapGO->box.w << "; altura do mapGO: " << mapGO->box.h << std::endl;
@@ -87,8 +98,7 @@ void GameState0::LoadAssets() {
 	auto penguin = new PenguinBody(*penguinGO);
 
 	penguinGO->AddComponent(penguin);
-	//penguinGO->box.PlaceCenter(Vec2(704, 640));
-	penguinGO->box.PlaceCenter(Vec2(704, 705));
+	penguinGO->box.PlaceCenter(Vec2(704, 741));
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
@@ -133,6 +143,7 @@ void GameState0::Update(float dt){
 	quitRequested = inputManager.QuitRequested();			// Seta o quitRequested ao fechar o jogo
 	popRequested = inputManager.KeyPress(ESCAPE_KEY);		// Seta o popRequested para retornar a TitleSet ao apertar ESC
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray
+
 
 	// KONAMI CODE
 	// todo - Apertar 2 teclas seguidas nao funciona (reconhece as duas apertando soh uma vez). Usar um timer pra resolver isso

@@ -47,7 +47,7 @@ void Game::Run() {
 					currentState = &GetCurrentState();		// Pega o estado do topo da pilha e torna esse o estado atual
 					currentState->Resume();					// Resume o novo estado atual no topo da pilha
 				}
-				else                    // todo - refazer isso de uma forma melhor
+				else                    // todo - tentar refazer isso de uma forma melhor
 					break;				// Se a pilha de estados ficou vazia, sai do laco 
 			}
 
@@ -83,8 +83,6 @@ Game& Game::GetInstance() {
 	if (instance != nullptr)
 		return *instance;		// retorna a instancia se ja existir uma
 	else {
-		// todo - mudar a resolucao para 1280 X 480 quando tivermos um mapa para isso
-		//instance = new Game("Shadow Assimilator", 1024, 600);		// instancia um novo jogo
 		instance = new Game("Shadow Assimilator", 1280, 480);		// instancia um novo jogo
 		return *instance;		// retorna a nova instancia instancia
 	}
