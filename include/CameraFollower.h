@@ -8,11 +8,15 @@
 
 class CameraFollower: public Component {
 public:
-		CameraFollower(GameObject& go);
+		CameraFollower(GameObject& go/*, bool adjCenter = false*/);
 		void Update(float dt);
 		void Render();
 		bool Is(std::string type);
 
+private:
+	//bool adjustCenter;
+
+	//void AdjustCenter();
 };
 
 #endif	//CAMERAFOLLOWER_H

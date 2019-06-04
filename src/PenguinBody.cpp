@@ -231,12 +231,20 @@ bool PenguinBody::Is(std::string type) {
 
 void PenguinBody::NotifyCollision(GameObject& other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
+	auto chao = (TileMap*)other.GetComponent("TileMap");
 
 	// Prosfere dano ao jogador se o tiro for dos Aliens
 	if ((bullet && bullet->targetsPlayer) && bullet->alienBullet) {
 		std::cout << "Vida do Penguin: " << hp << std::endl;
 		hp -= bullet->GetDamage();
 	}
+
+	// todo - pensar em como fazer essa colisao com o chao
+	/*
+	if (chao->associated.box.y) {
+
+	}
+	*/
 }
 
 Vec2 PenguinBody::GetCenter() {

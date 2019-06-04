@@ -33,14 +33,23 @@ void GameState0::LoadAssets() {
 	
 	auto bgGO = new GameObject();
 	auto bg = new Sprite(*bgGO, "./assets/img/Art_logo_mono3x.png");
-	//auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
+//	auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
 	bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
 	
 	// Seta a escala e posiciona no centro da tela
 	bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
-	bgGO->box.x = (Game::GetInstance().GetWidth() - bg->GetWidth()) / 2;
-	bgGO->box.y = (Game::GetInstance().GetHeight() - bg->GetHeight()) / 4;
+
 	
+
+	auto bgCamFollower = new CameraFollower(*bgGO/*, true*/);
+	bgGO->AddComponent(bgCamFollower);
+
+	//bgGO->box.x = (Game::GetInstance().GetWidth() - bg->GetWidth()) / 2;
+	//bgGO->box.y = (Game::GetInstance().GetHeight() - bg->GetHeight()) / 4;
+
+	bgGO->box.h = bg->GetHeight();
+	bgGO->box.w = bg->GetWidth();
+
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
 	
@@ -51,6 +60,8 @@ void GameState0::LoadAssets() {
 	auto mapGO = new GameObject();
 	mapGO->box.x = 0;					// todo - resolver posicao
 	mapGO->box.y = 0;					// todo - resolver posicao
+	//mapGO->box.PlaceCenter(Vec2(0, 800));				// todo - resolver posicao
+
 	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
 	//auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);
 
@@ -61,15 +72,21 @@ void GameState0::LoadAssets() {
 
 	// TileSet de 80 por 80
 	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
+	//auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
+	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
 
-	//mapGO->box.PlaceCenter({ 0, 100 });				// todo - resolver posicao
+	mapGO->box.w = tileMap->GetWidth() * tileSet->GetTileHeight();
+	mapGO->box.h = tileMap->GetHeight() * tileSet->GetTileHeight();
+	//mapGO->box.h = 3 * tileSet->GetTileHeight();
+
 	std::cout << "largura do tileMap: " << tileMap->GetWidth() << "; altura do tileMap: " << tileMap->GetHeight() << std::endl;
 	std::cout << "largura do mapGO: " << mapGO->box.w << "; altura do mapGO: " << mapGO->box.h << std::endl;
 	std::cout << "x do mapGO: " << mapGO->box.x << "; y do mapGO: " << mapGO->box.y << std::endl;
 
-	auto mapCameraFollower = new CameraFollower(*mapGO);
-	mapGO->AddComponent(mapCameraFollower);
+
+	//auto mapCameraFollower = new CameraFollower(*mapGO);
+	//mapGO->AddComponent(mapCameraFollower);
+
 
 	mapGO->AddComponent(tileMap);
 	objectArray.emplace_back(mapGO);
@@ -98,12 +115,17 @@ void GameState0::LoadAssets() {
 	auto penguin = new PenguinBody(*penguinGO);
 
 	penguinGO->AddComponent(penguin);
-	penguinGO->box.PlaceCenter(Vec2(704, 741));
+	//penguinGO->box.PlaceCenter(Vec2(704, 741));
+	penguinGO->box.PlaceCenter(Vec2(704, -68));
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
 
-
+///////////////////////////////////
+//		Collider do Chao		//
+/////////////////////////////////
+	//auto chaoGO = new GameObject();
+	
 
 
 /*

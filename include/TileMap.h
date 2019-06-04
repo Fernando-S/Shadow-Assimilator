@@ -8,6 +8,8 @@
 #include "TileSet.h" 
 #include "GameObject.h"
 
+#include "Collider.h"
+
 #define PARALLAX 0.5
 
 class TileMap : public Component{
