@@ -110,8 +110,8 @@ void PenguinBody::Update(float dt) {
 	else if (inputManager.IsKeyDown(D_KEY)) {
 		speed = { 1, 0 };
 
-		if (linearSpeed == 0)
-			oppositeSpeed = 0;
+		//if (linearSpeed == 0)
+		//	oppositeSpeed = 0;
 
 		if (Getspeed2 == false) {
 			oppositeSpeed = linearSpeed;
@@ -164,10 +164,24 @@ void PenguinBody::Update(float dt) {
 
 
 		if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
-			if (linearSpeed > 0)
+
+			if (linearSpeed > 40) {
 				linearSpeed -= accelSpeedGain;
-			else if (linearSpeed < 0)
+			}
+			else if (linearSpeed < -40) {
 				linearSpeed += accelSpeedGain;
+			}
+			else if (linearSpeed < 40) {
+				if (linearSpeed != 0) {
+					linearSpeed--;
+				}
+			}
+			else if (linearSpeed > -40) {
+				if (linearSpeed != 0) {
+					linearSpeed--;
+				}
+			}
+			cout << "linearSpeed: " << linearSpeed << endl;
 		}
 
 		// Aplica atrito no movimento acelerado do Penguin

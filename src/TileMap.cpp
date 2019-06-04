@@ -11,8 +11,8 @@ TileMap::TileMap(GameObject& associated, std::string file, TileSet *tileSet) : C
 
 	associated.AddComponent(new Collider(associated));
 
-	std::cout << "associated x: " << associated.box.x << std::endl;
-	std::cout << "associated y: " << associated.box.y << std::endl;
+	//std::cout << "associated x: " << associated.box.x << std::endl;
+	//std::cout << "associated y: " << associated.box.y << std::endl;
 }
 
 void TileMap::Load(std::string file) {
@@ -64,8 +64,8 @@ int& TileMap::At(int x, int y, int z) {
 void TileMap::Render() {
 	int i;
 
-	std::cout << "associated x: " << associated.box.x << std::endl;
-	std::cout << "associated y: " << associated.box.y << std::endl;
+	//std::cout << "associated x: " << associated.box.x << std::endl;
+	//std::cout << "associated y: " << associated.box.y << std::endl;
 
 	/*for (i = 0; i < mapDepth; i++) {
 		RenderLayer(i, (int)this->associated.box.x + Camera::pos.x, (int)this->associated.box.y + Camera::pos.y);	// chama o render de cada layer
