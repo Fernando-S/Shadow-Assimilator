@@ -76,7 +76,7 @@ void GameState0::LoadAssets() {
 	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
 
 	mapGO->box.w = tileMap->GetWidth() * tileSet->GetTileHeight();
-	mapGO->box.h = tileMap->GetHeight() * tileSet->GetTileHeight();
+	mapGO->box.h = tileMap->GetHeight() * tileSet->GetTileHeight() + 10;
 	//mapGO->box.h = 3 * tileSet->GetTileHeight();
 
 	std::cout << "largura do tileMap: " << tileMap->GetWidth() << "; altura do tileMap: " << tileMap->GetHeight() << std::endl;
@@ -109,14 +109,14 @@ void GameState0::LoadAssets() {
 
 
 ///////////////////////////////////
-//		Carrega o Penguin		//
+//		Carrega a Personagem	//
 /////////////////////////////////
 	auto penguinGO = new GameObject();
 	auto penguin = new PenguinBody(*penguinGO);
 
 	penguinGO->AddComponent(penguin);
 	//penguinGO->box.PlaceCenter(Vec2(704, 741));
-	penguinGO->box.PlaceCenter(Vec2(704, -68));
+	penguinGO->box.PlaceCenter(Vec2(704, -59));
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin

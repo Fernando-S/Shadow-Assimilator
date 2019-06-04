@@ -53,7 +53,7 @@ void GameObject::ChangeComponent(Component* cpt, Component* newCPT) {
 	for (i = 0; i < this->components.size(); i++) {						// Percorre o vetor de components ate achar o desejado
 		if (this->components[i] == component) {							// Verifica se o component atual eh o desejado
 			this->components.erase(this->components.begin() + i);		// Remove o component desejado
-			this->components.emplace_back(newCPT);
+			this->components.emplace_back(newCPT);						// Adiciona o novo component
 		}
 	}
 }
