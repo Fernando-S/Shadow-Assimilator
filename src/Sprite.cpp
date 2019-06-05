@@ -23,12 +23,16 @@ Sprite::Sprite(GameObject &associated, const char* file, int frameCount, float f
 	timeElapsed = 0;
 	this->secondsToSelfDestruct = secondsToSelfDestruct;
 
+	SetSprite(file, frameCount, frameTime);
+	/*
 	Open(file);	
 	SetFrameCount(frameCount);
 	SetFrameTime(frameTime);
+	*/
 }
 
 Sprite::~Sprite() {
+	//Resources::ClearImages();
 }
 
 void Sprite::Open(const char* file) {				// mudei para const char*
@@ -121,7 +125,7 @@ void Sprite::Render(int x, int y) {
 //	if (SDL_RenderCopyEx(Game::GetInstance().GetRenderer(), texture, &clipRect, &dstRect, associated.angleDeg, nullptr, SDL_FLIP_NONE) != 0) {
 	if (SDL_RenderCopyEx(Game::GetInstance().GetRenderer(), texture.get(), &clipRect, &dstRect, associated.angleDeg, nullptr, SDL_FLIP_NONE) != 0) {
 		std::cerr << "SDL_RenderCopy returned ERROR: " << SDL_GetError() << std::endl;
-		exit(1);
+		//exit(1);
 	}	  
 }
 
@@ -174,4 +178,10 @@ void Sprite::SetFrameCount(int frameCount) {
 
 void Sprite::SetFrameTime(float frameTime) {
 	this->frameTime = frameTime;		// Seta o frameTime
+}
+
+void Sprite::SetSprite(const char* file, int frameCount, float frameTime, float secondsToSelfDestruct) {
+	Open(file);
+	SetFrameCount(frameCount);
+	SetFrameTime(frameTime);
 }
