@@ -30,12 +30,13 @@ void GameState0::LoadAssets() {
 ///////////////////////////////
 	
 	auto bgGO = new GameObject();
-	auto bg = new Sprite(*bgGO, "./assets/img/Art_logo_mono3x.png");
-//	auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
-	bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
+	//auto bg = new Sprite(*bgGO, "./assets/img/Art_logo_mono3x.png");
+	//auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
+	auto bg = new Sprite(*bgGO, "./assets/img/teste.jpg");
+	//bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
 	
 	// Seta a escala e posiciona no centro da tela
-	bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
+//	bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
 
 	
 
@@ -71,10 +72,10 @@ void GameState0::LoadAssets() {
 
 	// TileSet de 80 por 80
 	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
-	//auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
+	//auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
+	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
 
-	mapGO->box.w = tileMap->GetWidth() * tileSet->GetTileHeight();
+	mapGO->box.w = tileMap->GetWidth() * tileSet->GetTileWidth();
 	mapGO->box.h = tileMap->GetHeight() * tileSet->GetTileHeight() + 10;
 	//mapGO->box.h = 3 * tileSet->GetTileHeight();
 
@@ -115,7 +116,8 @@ void GameState0::LoadAssets() {
 
 	penguinGO->AddComponent(penguin);
 	//penguinGO->box.PlaceCenter(Vec2(704, 741));
-	penguinGO->box.PlaceCenter(Vec2(704, -59));
+	penguinGO->box.PlaceCenter(Vec2(704, 600));
+	//penguinGO->box.PlaceCenter(Vec2(704, -59));
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin

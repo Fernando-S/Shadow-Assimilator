@@ -68,7 +68,7 @@ void TileMap::Render() {
 	//std::cout << "associated y: " << associated.box.y << std::endl;
 
 	for (i = 0; i < mapDepth; i++) {
-		RenderLayer(i, (int)this->associated.box.x + Camera::pos.x, (int)this->associated.box.y + Camera::pos.y);	// chama o render de cada layer
+		RenderLayer(i, (int)this->associated.box.x - Camera::pos.x, (int)this->associated.box.y - Camera::pos.y);	// chama o render de cada layer
 	}
 	/*
 	for (int i = 0; i < mapDepth; ++i) {
@@ -84,7 +84,7 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
 //			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth(), y*tileSet->GetTileHeight()); // renderiza cada tile com efeito de parrallax
 //			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth() - cameraX, y*tileSet->GetTileHeight() - cameraY); // renderiza cada tile com efeito de parrallax
 //			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth() - cameraX - PARALLAX * layer*cameraX, y*tileSet->GetTileHeight() - cameraY - PARALLAX * layer*cameraY);
-			tileSet->RenderTile((unsigned)At(x, y, layer), -cameraX + x * 80, -cameraY + y * 80);
+			tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x * 80, cameraY + y * 80);
 		}
 	}
 	

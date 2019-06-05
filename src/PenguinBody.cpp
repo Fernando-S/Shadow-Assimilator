@@ -36,8 +36,8 @@ PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcan
 	//associated.AddComponent(sprite_runningR);
 	//associated.ChangeComponent(sprite, sprite_idle);
 
-	//associated.AddComponent(new Collider(associated));
-	//associated.angleDeg = angle * 180 / PI;
+	associated.AddComponent(new Collider(associated));
+	associated.angleDeg = angle * 180 / PI;
 }
 
 PenguinBody::~PenguinBody() {
@@ -72,25 +72,29 @@ void PenguinBody::Update(float dt) {
 	}
 	else {
 		double accelSpeedGain = PENGUIN_ACCELERATION * dt;
+
+		// todo - ver se esse eh o lugar certo da gravidade
+		associated.box.y += 100 * dt;
+
 		/*
 		if (Jump > 0) {
 			speed = { 0, -1 };
 			linearSpeed += accelSpeedGain;
 		}
-
+		*/
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
 		if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-			if (Jump < 10) {
-				Jump++;
-			}
-			//speed = { 0, -1 };
-			//linearSpeed += accelSpeedGain;
+			//if (Jump < 10) {
+			//	Jump++;
+			//}
+			speed = { 0, -1 };
+			linearSpeed += accelSpeedGain;
 		}
 		else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
 			speed = { 0, -1 };
 			linearSpeed -= accelSpeedGain;		// Acelera
 		}
-		else */
+		else
 		if (inputManager.IsKeyDown(A_KEY)) {
 
 			if (linearSpeed == 0)
@@ -207,6 +211,9 @@ void PenguinBody::Update(float dt) {
 			else
 				linearSpeed -= atrictSpeedLoss;
 			associated.box += speed * linearSpeed*dt;
+
+			// todo - Colocar no lugar certo da graviade
+			//associated.box += speed * 100*dt;
 		}
 		else {
 			linearSpeed = 0;
@@ -284,10 +291,15 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 	}
 
 	// todo - pensar em como fazer essa colisao com o chao
-	/*
-	if (chao->associated.box.y) {
+	
+	if (chao) {
+		cout << "colidiu com o chao\n";
+		//linearSpeed = 0;
+		// todo - parar a gravidade aqui
+		//associated.box.y -=;
+	
 	}
-	*/
+	
 }
 
 Vec2 PenguinBody::GetCenter() {

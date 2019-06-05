@@ -1,7 +1,7 @@
 #include "Collider.h"
 
 
-//#define DEBUG		// Comentar isso no jogo final para nao ver as hitboxes
+#define DEBUG		// Comentar isso no jogo final para nao ver as hitboxes
 
 #ifdef DEBUG
 #include "Camera.h"
