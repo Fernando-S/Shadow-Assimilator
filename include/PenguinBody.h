@@ -17,6 +17,7 @@
 #define PENGUIN_ANGULAR_SPEED PI		// em rads/s
 #define PENGUIN_INITIAL_HP 100			// em hit points
 
+
 class PenguinBody : public Component{
 public:
 	PenguinBody(GameObject& associated);
@@ -42,9 +43,9 @@ private:
 
 	//std::weak_ptr<GameObject> pcannon;
 	Vec2 speed;
-	float linearSpeed, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
+	float linearSpeed, angle, gravity = 1.0, oppositeAccel, oppositeSpeed, fallSpeed = 0;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, inicio = true;
-	int hp, Stop = 0, Run = 0;
+	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0;
 	bool setaNovoSprite = false, startedMovingR = false, startedMovingL = false, idleR = false, idleL = false;
 
 };
