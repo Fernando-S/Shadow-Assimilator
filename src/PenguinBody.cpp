@@ -92,6 +92,14 @@ void PenguinBody::Update(float dt) {
 				oppositeSpeed = linearSpeed;
 				std::cout << "\n\nPassarvalor1" << endl << endl;
 				Getspeed1 = true;
+				Setidle = false;
+				Setrun = true;
+				Run = 0;
+				Stop = 0;
+			}
+
+			if (Run > -10) {
+				Run--;
 			}
 
 			speed = { -1, 0 };
@@ -128,6 +136,7 @@ void PenguinBody::Update(float dt) {
 				std::cout << "\n\nPassarvalor2" << endl << endl;
 				Getspeed2 = true;
 
+				Run = 0;
 				Stop = 0;
 				Setidle = false;
 				Setrun = true;
@@ -150,20 +159,6 @@ void PenguinBody::Update(float dt) {
 			}
 
 			//cout << "Run: " << Run << endl;
-
-			//std::cout << "linearSpeed2: " << linearSpeed << endl;
-			//std::cout << "oppositeSpeed2: " << oppositeSpeed << endl;
-			//cout << linearSpeed << endl;
-			
-			/*
-			//COISAS DO FERNANDO
-				// Controle de flags de animacao
-				setaNovoSprite = true;
-				startedMovingR = true;
-				startedMovingL = false;
-				idleR = false;
-				idleL = false;
-			*/
 		}
 
 		double atrictSpeedLoss = PENGUIN_ATRICT * dt;
@@ -203,9 +198,7 @@ void PenguinBody::Update(float dt) {
 				linearSpeed -= -1 * atrictSpeedLoss;
 			else
 				linearSpeed -= atrictSpeedLoss;
-
-			//speed = { 1, 0 };
-			associated.box += speed * linearSpeed*dt;
+				associated.box += speed * linearSpeed*dt;
 		}
 		else {
 			linearSpeed = 0;
@@ -213,28 +206,32 @@ void PenguinBody::Update(float dt) {
 			if (Stop < 10) {
 				Stop++;
 			}
-			Run = 0;
 			Setidle = true;
 			Setrun = false;
-
-			//startedMovingR = false;
-			//idleR = true;
-			//setaNovoSprite = true;
 		}
 
-		if ((Stop == 1) || (Run == 1)) {
+		if ((Stop == 1) || (Run == 1) || (Run == -1)) {
 			cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
 		}
 		
+		/*
 		if (inicio == true) {
 			//associated.ChangeComponent(sprite, sprite_idleR);
 			Stop = 2;
 			inicio = false;
 			cout << "\n\nTROCA, PARA > CORRE-INICIO\n\n";
 		}
-		
+		*/
 
-		if ((Setidle == true) && (Setrun == false) && (Stop == 1)) {	//para
+		if ((Setidle == true) && (Setrun == false) && (Stop == 1) && (Run > 0)) {	//para
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+			associated.AddComponent(sprite);
+			
+			cout << "\nTROCA, CORRE > PARA\n\n";
+		}
+
+		if ((Setidle == true) && (Setrun == false) && (Stop == 1) && (Run < 0)) {	//para
 			//associated.ChangeComponent(sprite_runningR, sprite_idleR);
 			//sprite->SetSprite("./assets/img/sprite_idle.png", 12, 0.1);
 
@@ -244,11 +241,12 @@ void PenguinBody::Update(float dt) {
 
 
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
 			associated.AddComponent(sprite);
-			
+
 			cout << "\nTROCA, CORRE > PARA\n\n";
 		}
+
 		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {		//corre
 			//associated.ChangeComponent(sprite_idleR, sprite_runningR);
 			//sprite->SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
@@ -263,9 +261,24 @@ void PenguinBody::Update(float dt) {
 			associated.AddComponent(sprite);
 
 			
-			cout << "\nTROCA, PARA > CORRE\n\n";
+			cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
 		}
-		
+		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {		//corre
+			//associated.ChangeComponent(sprite_idleR, sprite_runningR);
+			//sprite->SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
+
+
+			//associated.RemoveComponent(sprite);
+			//sprite = sprite_runningR;
+			//associated.AddComponent(sprite);
+
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
+			associated.AddComponent(sprite);
+
+
+			cout << "\nTROCA, PARA > CORRE ESQUERDA\n\n";
+		}
 	}
 
 }
