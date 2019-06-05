@@ -34,7 +34,6 @@ public:
 	void SetFrame(int frame);
 	void SetFrameCount(int frameCount);
 	void SetFrameTime(float frameTime);
-	void SetSprite(const char* file, int frameCount = 1, float frameTime = 1, float secondsToSelfDestruct = 0);
 
 	Sprite(const Sprite&) = default;               // Copy constructor
 	Sprite(Sprite&&) = default;                    // Move constructor

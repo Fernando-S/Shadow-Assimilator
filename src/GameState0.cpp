@@ -10,8 +10,6 @@ bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = f
 bool direita1 = false, direita2 = false, mostrando = false;
 
 GameState0::GameState0() {
-//	started = false;
-//	quitRequested = false;
 }
 
 void GameState0::LoadAssets() {
@@ -36,15 +34,14 @@ void GameState0::LoadAssets() {
 	//bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
 	
 	// Seta a escala e posiciona no centro da tela
-//	bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
-
-	
-
-	auto bgCamFollower = new CameraFollower(*bgGO/*, true*/);
-	bgGO->AddComponent(bgCamFollower);
+	//bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
 
 	//bgGO->box.x = (Game::GetInstance().GetWidth() - bg->GetWidth()) / 2;
 	//bgGO->box.y = (Game::GetInstance().GetHeight() - bg->GetHeight()) / 4;
+
+	auto bgCamFollower = new CameraFollower(*bgGO);
+	bgGO->AddComponent(bgCamFollower);
+
 
 	bgGO->box.h = bg->GetHeight();
 	bgGO->box.w = bg->GetWidth();
@@ -54,66 +51,57 @@ void GameState0::LoadAssets() {
 	
 
 ///////////////////////////
-//	  Carrega o Mapa	//
+//	  Carrega o Chao	//
 /////////////////////////
-	auto mapGO = new GameObject();
-	mapGO->box.x = 0;					// todo - resolver posicao
-	mapGO->box.y = 0;					// todo - resolver posicao
+	auto chaoGO = new GameObject();
+	chaoGO->box.x = 0;				
+	chaoGO->box.y = 800;
 	
-	mapGO->box.PlaceCenter(Vec2(0, 800));				// todo - arrumar isso, o render e a box estao mudando de lugar um com o outro
-
 	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
-	//auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);
+	//auto tileMap = new TileMap(*chaoGO, "./assets/map/MEUtileMap.txt", tileSet);
+
 
 	// TileSet de 40 por 40
 //	auto tileSet = new TileSet(40, 40, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-//	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap40x40.txt", tileSet);
+//	auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap40x40.txt", tileSet);
 	
 
 	// TileSet de 80 por 80 do chao
 	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	//auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
-	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
+	//auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap80x80.txt", tileSet);
+	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_Chao80x80.txt", tileSet);
 
-	mapGO->box.w = tileMap->GetWidth() * tileSet->GetTileWidth();
-	mapGO->box.h = tileMap->GetHeight() * tileSet->GetTileHeight() + 10;
-	//mapGO->box.h = 3 * tileSet->GetTileHeight();
+	chaoGO->box.w = tileMap_Chao->GetWidth() * tileSet->GetTileWidth();
+	chaoGO->box.h = tileMap_Chao->GetHeight() * tileSet->GetTileHeight() + 10;	// todo - retirar esse +10 depois (serve para visualizar)
 
-	std::cout << "largura do tileMap: " << tileMap->GetWidth() << "; altura do tileMap: " << tileMap->GetHeight() << std::endl;
-	std::cout << "largura do mapGO: " << mapGO->box.w << "; altura do mapGO: " << mapGO->box.h << std::endl;
-	std::cout << "x do mapGO: " << mapGO->box.x << "; y do mapGO: " << mapGO->box.y << std::endl;
+	std::cout << "largura do tileMap_Chao: " << tileMap_Chao->GetWidth() << "; altura do tileMap_Chao: " << tileMap_Chao->GetHeight() << std::endl;
+	std::cout << "largura do chaoGO: " << chaoGO->box.w << "; altura do chaoGO: " << chaoGO->box.h << std::endl;
+	std::cout << "x do chaoGO: " << chaoGO->box.x << "; y do chaoGO: " << chaoGO->box.y << std::endl;
 
+	chaoGO->AddComponent(tileMap_Chao);
+	objectArray.emplace_back(chaoGO);
 
-	//auto mapCameraFollower = new CameraFollower(*mapGO);
-	//mapGO->AddComponent(mapCameraFollower);
-
-
-	mapGO->AddComponent(tileMap);
-	objectArray.emplace_back(mapGO);
-
-
-	// TileSet de 80 por 80 dos predios
+///////////////////////////////
+//	  Carrega os Predios	//
+/////////////////////////////
 	auto prediosGO = new GameObject();
 
 	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
 	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	auto tileMap_Predios = new TileMap(*mapGO, "./assets/map/tileMap_Predios80x80.txt", tileSet);
+	auto tileMap_Predios = new TileMap(*prediosGO, "./assets/map/tileMap_Predios80x80.txt", tileSet);
 
 	// hitbox que envolve TODOS os predios
 	prediosGO->box.w = tileMap_Predios->GetWidth() * tileSet->GetTileWidth();
 	prediosGO->box.h = tileMap_Predios->GetHeight() * tileSet->GetTileHeight();
-	//prediosGO->box.x = -( tileMap_Predios->GetWidth() * tileSet->GetTileWidth() );
-	//prediosGO->box.y = -(tileMap_Predios->GetHeight() * tileSet->GetTileHeight());
+	prediosGO->box.y = 800 - (tileMap_Predios->GetHeight() * tileSet->GetTileHeight());
 	prediosGO->box.x = 0;
-	prediosGO->box.y = 800;
 
 	prediosGO->AddComponent(tileMap_Predios);
 	objectArray.emplace_back(prediosGO);
 
-
-	std::cout << "largura do tileMap_Predio: " << tileMap_Predios->GetWidth() << "; altura do tileMap_Predio: " << tileMap_Predios->GetHeight() << std::endl;
+	std::cout << "largura do tileMap_Predios: " << tileMap_Predios->GetWidth() << "; altura do tileMap_Predios: " << tileMap_Predios->GetHeight() << std::endl;
 	std::cout << "largura do prediosGO: " << prediosGO->box.w << "; altura do prediosGO: " << prediosGO->box.h << std::endl;
-	std::cout << "x do predioGO: " << prediosGO->box.x << "; y do predioGO: " << prediosGO->box.y << std::endl;
+	std::cout << "x do prediosGO: " << prediosGO->box.x << "; y do prediosGO: " << prediosGO->box.y << std::endl;
 
 
 ////////////////////////////////
@@ -145,11 +133,6 @@ void GameState0::LoadAssets() {
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
-
-///////////////////////////////////
-//		Collider do Chao		//
-/////////////////////////////////
-	//auto chaoGO = new GameObject();
 	
 
 
@@ -306,18 +289,9 @@ void GameState0::Update(float dt){
 	}
 
 
-
-
-
-
-
-
-
-
+	// Colisoes
 	std::vector<Collider*> colliders(objectArray.size(), nullptr);
 	bool collidersArrayFilled = false;
-
-	// todo - ver se precisa mudar esse reconhecimento de colisao
 
 	// Checa colisoes entre os Colliders dos GameObjects
 	for (i = 0; i < objectArray.size() - 1; i++) {

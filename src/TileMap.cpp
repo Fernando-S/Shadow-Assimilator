@@ -11,8 +11,6 @@ TileMap::TileMap(GameObject& associated, std::string file, TileSet *tileSet) : C
 
 	associated.AddComponent(new Collider(associated));
 
-	//std::cout << "associated x: " << associated.box.x << std::endl;
-	//std::cout << "associated y: " << associated.box.y << std::endl;
 }
 
 void TileMap::Load(std::string file) {
@@ -64,16 +62,9 @@ int& TileMap::At(int x, int y, int z) {
 void TileMap::Render() {
 	int i;
 
-	//std::cout << "associated x: " << associated.box.x << std::endl;
-	//std::cout << "associated y: " << associated.box.y << std::endl;
-
 	for (i = 0; i < mapDepth; i++) {
 		RenderLayer(i, (int)this->associated.box.x - Camera::pos.x, (int)this->associated.box.y - Camera::pos.y);	// chama o render de cada layer
 	}
-	/*
-	for (int i = 0; i < mapDepth; ++i) {
-		RenderLayer(i, (int)(Camera::pos.x - 0.2*Camera::pos.x*i), (int)(Camera::pos.y - 0.2*Camera::pos.y*i));
-	}*/
 }
 
 void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
@@ -81,9 +72,6 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
 
 	for (x = 0; x < mapWidth; x++) { 
 		for (y = 0; y < mapHeight; y++) {
-//			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth(), y*tileSet->GetTileHeight()); // renderiza cada tile com efeito de parrallax
-//			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth() - cameraX, y*tileSet->GetTileHeight() - cameraY); // renderiza cada tile com efeito de parrallax
-//			tileSet->RenderTile((unsigned)At(x, y, layer), x*tileSet->GetTileWidth() - cameraX - PARALLAX * layer*cameraX, y*tileSet->GetTileHeight() - cameraY - PARALLAX * layer*cameraY);
 			tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x * 80, cameraY + y * 80);
 		}
 	}

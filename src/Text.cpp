@@ -34,7 +34,7 @@ void Text::Update(float dt) {
 
 void Text::Render() {
 	// only render if the timer is between 0 and intermittenceSeconds
-	// todo - ver melhor a logica dessa
+	// todo - pensar melhor a logica dessa
 //	if (intermittenceCount.Get() < intermittenceSeconds) {
 		SDL_Rect dstRect{};
 		dstRect.x = (int)(associated.box.x - Camera::pos.x);

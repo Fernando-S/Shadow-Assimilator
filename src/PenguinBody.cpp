@@ -18,24 +18,10 @@ PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcan
 	oppositeSpeed = 0;
 	hp = PENGUIN_INITIAL_HP;
 
-	// Carrega o sprite do PenguinBody
-//	auto sprite = new Sprite(associated, "./assets/img/penguin.png");
-//	auto sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
-	//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
-	sprite_runningR = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
-	sprite_runningL = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
-	sprite_idleR = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
-	sprite_idleL = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
-	SetSprite("./assets/img/sprite_idle.png", 12, 0.1);
-
-	//sprite = sprite_idleR;
-	//sprite = sprite_runningR;
+	// Carrega o sprite da personagem idle
+	sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
 
 	associated.AddComponent(sprite);
-	//associated.AddComponent(sprite_idleR);
-	//associated.AddComponent(sprite_runningR);
-	//associated.ChangeComponent(sprite, sprite_idle);
-
 	associated.AddComponent(new Collider(associated));
 	associated.angleDeg = angle * 180 / PI;
 }
@@ -65,9 +51,6 @@ void PenguinBody::Update(float dt) {
 		associated.RequestDelete();
 		//pcannon.lock()->RequestDelete();
 		Camera::Unfollow();				// Camera para de segui-los
-
-
-
 
 	}
 	else {
@@ -131,14 +114,7 @@ void PenguinBody::Update(float dt) {
 
 			std::cout << "linearSpeed1: " << linearSpeed << endl;
 			std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
-			//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
 
-			// Controle de flags de animacao
-			setaNovoSprite = true;
-			startedMovingR = false;
-			startedMovingL = true;
-			idleR = false;
-			idleL = false;
 		}
 		else if (inputManager.IsKeyDown(D_KEY)) {
 			speed = { 1, 0 };
@@ -198,9 +174,6 @@ void PenguinBody::Update(float dt) {
 			//cout << "linearSpeed: " << linearSpeed << endl;
 			//cout << "Stop: " << Stop << endl;
 
-			//startedMovingR = false;
-			//idleR = true;
-			//setaNovoSprite = true;
 		}
 
 		// Aplica atrito no movimento acelerado do Penguin
@@ -291,7 +264,6 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 	}
 
 	// todo - pensar em como fazer essa colisao com o chao
-	
 	if (chao) {
 		cout << "colidiu com o chao\n";
 		//linearSpeed = 0;
@@ -304,8 +276,4 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 
 Vec2 PenguinBody::GetCenter() {
 	return associated.box.Center();
-}
-
-void PenguinBody::SetSprite(const char* file, int frameCount, float frameTime) {
-	sprite = new Sprite(associated, file, frameCount, frameTime);
 }

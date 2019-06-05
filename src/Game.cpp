@@ -47,7 +47,7 @@ void Game::Run() {
 					currentState = &GetCurrentState();		// Pega o estado do topo da pilha e torna esse o estado atual
 					currentState->Resume();					// Resume o novo estado atual no topo da pilha
 				}
-				else                    // todo - tentar refazer isso de uma forma melhor
+				else   
 					break;				// Se a pilha de estados ficou vazia, sai do laco 
 			}
 
@@ -146,8 +146,6 @@ Game::Game(const char* title, int width, int height) {
 		std::cerr << "ERROR: impossible to create render" << std::endl;
 		exit(1);
 	}
-//	SDL_SetRenderDrawColor(renderer, 51, 0, 75, 0);		// Seta a cor de fundo Red, Green, Blue, Alpha
-//	SDL_SetRenderDrawColor(renderer, 25, 0, 75, 0);		// Seta a cor de fundo Red, Green, Blue, Alpha
 	SDL_SetRenderDrawColor(renderer, 25, 0, 51, 0);		// Seta a cor de fundo Red, Green, Blue, Alpha
 
 
