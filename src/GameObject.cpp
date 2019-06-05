@@ -43,7 +43,7 @@ void GameObject::AddComponent(Component* cpt) {
 	this->components.emplace_back(cpt);
 
 	if (started)
-		cpt->Start();				// Chama Start dos components adicionados se stared = true
+		cpt->Start();				// Chama Start dos components adicionados se started = true
 }
 
 void GameObject::ChangeComponent(Component* cpt, Component* newCPT) {
