@@ -32,9 +32,6 @@ PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcan
 	//sprite = sprite_runningR;
 
 	associated.AddComponent(sprite);
-	//associated.AddComponent(sprite_idleR);
-	//associated.AddComponent(sprite_runningR);
-	//associated.ChangeComponent(sprite, sprite_idle);
 
 	//associated.AddComponent(new Collider(associated));
 	//associated.angleDeg = angle * 180 / PI;
@@ -118,7 +115,6 @@ void PenguinBody::Update(float dt) {
 
 			std::cout << "linearSpeed1: " << linearSpeed << endl;
 			std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
-			//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
 
 			// Controle de flags de animacao
 			setaNovoSprite = true;
@@ -184,10 +180,6 @@ void PenguinBody::Update(float dt) {
 
 			//cout << "linearSpeed: " << linearSpeed << endl;
 			//cout << "Stop: " << Stop << endl;
-
-			//startedMovingR = false;
-			//idleR = true;
-			//setaNovoSprite = true;
 		}
 
 		// Aplica atrito no movimento acelerado do Penguin

@@ -3,8 +3,6 @@
 #include "GameData.h"
 
 
-
-
 auto surpriseGO = new GameObject();
 
 bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false;
@@ -60,7 +58,8 @@ void GameState0::LoadAssets() {
 	auto mapGO = new GameObject();
 	mapGO->box.x = 0;					// todo - resolver posicao
 	mapGO->box.y = 0;					// todo - resolver posicao
-	//mapGO->box.PlaceCenter(Vec2(0, 800));				// todo - resolver posicao
+	
+	mapGO->box.PlaceCenter(Vec2(0, 800));				// todo - arrumar isso, o render e a box estao mudando de lugar um com o outro
 
 	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
 	//auto tileMap = new TileMap(*mapGO, "./assets/map/MEUtileMap.txt", tileSet);
@@ -72,8 +71,8 @@ void GameState0::LoadAssets() {
 
 	// TileSet de 80 por 80
 	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	//auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
-	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
+	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
+	//auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
 
 	mapGO->box.w = tileMap->GetWidth() * tileSet->GetTileHeight();
 	mapGO->box.h = tileMap->GetHeight() * tileSet->GetTileHeight() + 10;
@@ -211,12 +210,13 @@ void GameState0::Update(float dt){
 			std::cout << "direita2 = true" << std::endl;
 		}
 
-		if (direita2 && inputManager.KeyPress(SPACE_KEY)) {
+		if (direita2 && inputManager.KeyPress(Z_KEY)) {
 			mostrando = true;
 			surpriseGO->render = true;
 			std::cout << "mostrando = true" << std::endl;
 		}
-		else if (mostrando && inputManager.MouseRelease(LEFT_MOUSE_BUTTON)) {
+		//else if (mostrando && inputManager.MouseRelease(LEFT_MOUSE_BUTTON)) {
+		else if (mostrando && inputManager.KeyPress(X_KEY)) {
 			mostrando = false;
 			surpriseGO->render = false;
 			std::cout << "mostrando = false" << std::endl;
@@ -265,14 +265,14 @@ void GameState0::Update(float dt){
 			std::cout << "oito = true" << std::endl;
 		}
 
-		//if (oito && inputManager.KeyPress(SPACE_KEY)) {
-		if (oito && inputManager.MouseRelease(LEFT_MOUSE_BUTTON)) {
+		if (oito && inputManager.KeyPress(Z_KEY)) {
+		//if (oito && inputManager.MouseRelease(LEFT_MOUSE_BUTTON)) {
 			mostrando = true;
 			surpriseGO->render = true;
 			std::cout << "mostrando = true" << std::endl;
 		}
-		//else if (mostrando && inputManager.KeyPress(A_KEY)) {
-		else if (mostrando && inputManager.MouseRelease(RIGHT_MOUSE_BUTTON)) {
+		else if (mostrando && inputManager.KeyPress(X_KEY)) {
+		//else if (mostrando && inputManager.MouseRelease(RIGHT_MOUSE_BUTTON)) {
 			mostrando = false;
 			surpriseGO->render = false;
 			std::cout << "mostrando = false" << std::endl;
