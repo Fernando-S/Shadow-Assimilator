@@ -21,7 +21,6 @@ PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcan
 	// Carrega o sprite do PenguinBody
 //	auto sprite = new Sprite(associated, "./assets/img/penguin.png");
 //	auto sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
-	//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 	sprite_runningR = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 	sprite_runningL = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 	sprite_idleR = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
@@ -70,17 +69,36 @@ void PenguinBody::Update(float dt) {
 	}
 	else {
 		double accelSpeedGain = PENGUIN_ACCELERATION * dt;
-		/*
+		
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
-		if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
+		if (inputManager.IsKeyDown(W_KEY)) {
+			/*
 			speed = { 0, -1 };
-			linearSpeed += accelSpeedGain;
+			Jump = 0;
+			if (linearSpeed < PLAYER_SPEED) {
+				linearSpeed += accelSpeedGain;
+				Jump++;
+				cout << "Jump: " << Jump << endl;
+			}
+			
+			if (linearSpeed > 0) {
+				linearSpeed -= accelSpeedGain;
+				Jump++;
+				cout << "Jump: " << Jump << endl;
+				if ((linearSpeed < 40) && (linearSpeed > -40)) {
+					linearSpeed = 0;
+				}
+			}
+			*/
+			
 		}
+		
 		else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
 			speed = { 0, -1 };
 			linearSpeed -= accelSpeedGain;		// Acelera
 		}
-		else*/ if (inputManager.IsKeyDown(A_KEY)) {
+		
+		else if (inputManager.IsKeyDown(A_KEY)) {
 
 			if (linearSpeed == 0)
 				oppositeSpeed = 0;
@@ -89,6 +107,15 @@ void PenguinBody::Update(float dt) {
 				oppositeSpeed = linearSpeed;
 				std::cout << "\n\nPassarvalor1" << endl << endl;
 				Getspeed1 = true;
+
+				Run = 0;
+				Stop = 0;
+				Setidle = false;
+				Setrun = true;
+			}
+
+			if (Run > -10) {
+				Run--;
 			}
 
 			speed = { -1, 0 };
@@ -106,16 +133,8 @@ void PenguinBody::Update(float dt) {
 			else
 				linearSpeed = -oppositeSpeed;
 
-			std::cout << "linearSpeed1: " << linearSpeed << endl;
-			std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
-			//SetSprite("./assets/img/sprite_corrida.png", 12, 0.1);
-
-			// Controle de flags de animacao
-			setaNovoSprite = true;
-			startedMovingR = false;
-			startedMovingL = true;
-			idleR = false;
-			idleL = false;
+			cout << "Run: " << Run << endl;
+			
 		}
 		else if (inputManager.IsKeyDown(D_KEY)) {
 			speed = { 1, 0 };
@@ -125,6 +144,7 @@ void PenguinBody::Update(float dt) {
 				std::cout << "\n\nPassarvalor2" << endl << endl;
 				Getspeed2 = true;
 
+				Run = 0;
 				Stop = 0;
 				Setidle = false;
 				Setrun = true;
@@ -147,20 +167,6 @@ void PenguinBody::Update(float dt) {
 			}
 
 			cout << "Run: " << Run << endl;
-
-			//std::cout << "linearSpeed2: " << linearSpeed << endl;
-			//std::cout << "oppositeSpeed2: " << oppositeSpeed << endl;
-			//cout << linearSpeed << endl;
-			
-			/*
-			//COISAS DO FERNANDO
-				// Controle de flags de animacao
-				setaNovoSprite = true;
-				startedMovingR = true;
-				startedMovingL = false;
-				idleR = false;
-				idleL = false;
-			*/
 		}
 
 		double atrictSpeedLoss = PENGUIN_ATRICT * dt;
@@ -186,7 +192,7 @@ void PenguinBody::Update(float dt) {
 			
 
 			//cout << "linearSpeed: " << linearSpeed << endl;
-			cout << "Stop: " << Stop << endl;
+			//cout << "Stop: " << Stop << endl;
 
 			//startedMovingR = false;
 			//idleR = true;
@@ -219,30 +225,74 @@ void PenguinBody::Update(float dt) {
 			//setaNovoSprite = true;
 		}
 
-		if ((Stop == 1) || (Run == 1)) {
-			cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
+		if ((Stop == 1) || (Run == 1) || (Run == -1)) {
+			//cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
 		}
-		
+		/*
 		if (inicio == true) {
-			//associated.ChangeComponent(sprite, sprite_idleR);
+			associated.ChangeComponent(sprite, sprite_idleR);
 			Stop = 2;
 			inicio = false;
 			cout << "\n\nTROCA, PARA > CORRE-INICIO\n\n";
 		}
-		
+		*/
 
 		if ((Setidle == true) && (Setrun == false) && (Stop == 1)) {	//para
-			//associated.ChangeComponent(sprite_runningR, sprite_idleR);
-		//	sprite->SetSprite("./assets/img/sprite_idle.png", 12, 0.1);
+			associated.ChangeComponent(sprite_runningR, sprite_idleR);
 			cout << "\nTROCA, CORRE > PARA\n\n";
 		}
-		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {		//corre
-			//associated.ChangeComponent(sprite_idleR, sprite_runningR);
-			sprite->SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
-			cout << "\nTROCA, PARA > CORRE\n\n";
+		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {		//corre direita
+			associated.ChangeComponent(sprite, sprite_runningR);
+			cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
+		}
+		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {		//corre esquerda
+			associated.ChangeComponent(sprite, sprite_runningL);
+			cout << "\nTROCA, PARA > CORRE ESQUERDA\n\n";
 		}
 		
 	}
+
+	
+
+	//COISAS DO FERNANDO
+			// todo - pensar em como trocar de parado para andando e de andando para parado
+	//		if (setaNovoSprite) {
+			//	associated.RemoveComponent(sprite);
+			//	if (startedMoving && !alreadyMoving) {
+			//		SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
+			//		startedMoving = false;
+			//		alreadyMoving = true;
+			//6	}
+			//	else if (idle) {
+			//		SetSprite("./assets/img/sprite_idle.png", 12, 0.1);
+			//		idle = false;
+			//	}
+				//associated.AddComponent(sprite);
+	//			if (startedMovingR) {
+	//				associated.ChangeComponent(sprite, sprite_runningR);
+					//associated.ChangeComponent(sprite_idleR, sprite_runningR);
+			
+					//sprite->Open("./assets/img/sprite_corrida2.png");
+					//sprite->SetFrameCount(12);
+					//sprite->SetFrameTime(0.1);
+					//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
+	//				cout << "move" << endl;
+	//		}
+	//			else if (idleR) {
+	//				associated.ChangeComponent(sprite_runningR, sprite_idleR);
+					//associated.ChangeComponent(sprite_runningR, sprite);
+	//				cout << "para" << endl;
+	//			}
+				/*else if (startedMovingL) {
+					//associated.ChangeComponent(sprite, sprite_runningR);
+					associated.ChangeComponent(sprite_idleR, sprite_runningR);
+				}
+				else if (idleR)
+					associated.ChangeComponent(sprite_runningR, sprite_idleR);
+				*/
+
+	//			setaNovoSprite = false;
+	//		}
 
 	
 }
