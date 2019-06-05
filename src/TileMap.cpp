@@ -100,3 +100,7 @@ bool TileMap::Is(std::string type) {
 	else
 		return false;
 }
+
+float TileMap::GetY() {
+	return this->associated.box.y;
+}

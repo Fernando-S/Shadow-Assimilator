@@ -255,7 +255,7 @@ bool PenguinBody::Is(std::string type) {
 
 void PenguinBody::NotifyCollision(GameObject& other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
-	auto chao = (TileMap*)other.GetComponent("TileMap");
+	auto tile = (TileMap*)other.GetComponent("TileMap");
 
 	// Prosfere dano ao jogador se o tiro for dos Aliens
 	if ((bullet && bullet->targetsPlayer) && bullet->alienBullet) {
@@ -264,13 +264,21 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 	}
 
 	// todo - pensar em como fazer essa colisao com o chao
-	if (chao) {
-		cout << "colidiu com o chao\n";
-		//linearSpeed = 0;
-		// todo - parar a gravidade aqui
-		//associated.box.y -=;
+	if (tile) {
+		if (tile->floor) {
+			cout << "colidiu com o chao\n";
+			//this->associated.box.y = tile->GetY() - this->associated.box.h - 1;	// flica q nem louco
+			this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
+			//linearSpeed = 0;
+			// todo - parar a gravidade aqui
+			//associated.box.y -=;
+		}
+		else if (tile->wall) {
+			cout << "colidiu com a parede\n";
+		}
 	
 	}
+
 	
 }
 

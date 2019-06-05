@@ -70,6 +70,7 @@ void GameState0::LoadAssets() {
 	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	//auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap80x80.txt", tileSet);
 	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_Chao80x80.txt", tileSet);
+	tileMap_Chao->floor = true;
 
 	chaoGO->box.w = tileMap_Chao->GetWidth() * tileSet->GetTileWidth();
 	chaoGO->box.h = tileMap_Chao->GetHeight() * tileSet->GetTileHeight() + 10;	// todo - retirar esse +10 depois (serve para visualizar)
@@ -89,6 +90,7 @@ void GameState0::LoadAssets() {
 	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
 	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	auto tileMap_Predios = new TileMap(*prediosGO, "./assets/map/tileMap_Predios80x80.txt", tileSet);
+	tileMap_Predios->wall = true;
 
 	// hitbox que envolve TODOS os predios
 	prediosGO->box.w = tileMap_Predios->GetWidth() * tileSet->GetTileWidth();
