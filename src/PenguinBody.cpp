@@ -9,7 +9,7 @@ using namespace std;
 
 PenguinBody* PenguinBody::player = nullptr;
 
-PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcannon() */{
+PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	player = this;
 	speed = { 1, 0 };
 	linearSpeed = 0;
@@ -30,7 +30,7 @@ PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcan
 
 	//sprite = sprite_idleR;
 	//sprite = sprite_runningR;
-	
+
 	associated.AddComponent(sprite);
 	//associated.AddComponent(sprite_idleR);
 	//associated.AddComponent(sprite_runningR);
@@ -51,7 +51,6 @@ void PenguinBody::Start() {
 	//	auto cannon = new PenguinCannon(*cannonGO, Game::GetInstance().GetState().GetObjectPtr(&associated));
 	auto cannon = new PenguinCannon(*cannonGO, Game::GetInstance().GetCurrentState().GetObjectPtr(&associated));
 	cannonGO->AddComponent(cannon);
-
 	//	pcannon = Game::GetInstance().GetState().AddObject(cannonGO);
 	pcannon = Game::GetInstance().GetCurrentState().AddObject(cannonGO);
 	*/
@@ -66,7 +65,7 @@ void PenguinBody::Update(float dt) {
 		associated.RequestDelete();
 		//pcannon.lock()->RequestDelete();
 		Camera::Unfollow();				// Camera para de segui-los
-		
+
 
 
 
@@ -130,7 +129,7 @@ void PenguinBody::Update(float dt) {
 		}
 		else if (inputManager.IsKeyDown(D_KEY)) {
 			speed = { 1, 0 };
-			
+
 			if (Getspeed2 == false) {
 				oppositeSpeed = linearSpeed;
 				std::cout << "\n\nPassarvalor2" << endl << endl;
@@ -140,7 +139,7 @@ void PenguinBody::Update(float dt) {
 				Stop = 0;
 				Setidle = false;
 				Setrun = true;
-				
+
 			}
 
 			if (Run < 10) {
@@ -181,7 +180,7 @@ void PenguinBody::Update(float dt) {
 			if ((linearSpeed < 40) && (linearSpeed > -40)) {
 				linearSpeed = 0;
 			}
-			
+
 
 			//cout << "linearSpeed: " << linearSpeed << endl;
 			//cout << "Stop: " << Stop << endl;
@@ -198,48 +197,34 @@ void PenguinBody::Update(float dt) {
 				linearSpeed -= -1 * atrictSpeedLoss;
 			else
 				linearSpeed -= atrictSpeedLoss;
-				associated.box += speed * linearSpeed*dt;
+			associated.box += speed * linearSpeed*dt;
 		}
 		else {
 			linearSpeed = 0;
 
 			if (Stop < 10) {
 				Stop++;
+				if (Stop == 1) {
+					Setrun = false;
+				}
 			}
 			Setidle = true;
-			Setrun = false;
+
 		}
 
-		if ((Stop == 1) || (Run == 1) || (Run == -1)) {
+		if ((Stop == 2) || (Run == 1) || (Run == -1)) {
 			cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
 		}
-		
-		/*
-		if (inicio == true) {
-			//associated.ChangeComponent(sprite, sprite_idleR);
-			Stop = 2;
-			inicio = false;
-			cout << "\n\nTROCA, PARA > CORRE-INICIO\n\n";
-		}
-		*/
 
-		if ((Setidle == true) && (Setrun == false) && (Stop == 1) && (Run > 0)) {	//para
+		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run > 0)) {	//para pra direita
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
 			associated.AddComponent(sprite);
-			
+
 			cout << "\nTROCA, CORRE > PARA\n\n";
 		}
 
-		if ((Setidle == true) && (Setrun == false) && (Stop == 1) && (Run < 0)) {	//para
-			//associated.ChangeComponent(sprite_runningR, sprite_idleR);
-			//sprite->SetSprite("./assets/img/sprite_idle.png", 12, 0.1);
-
-			//associated.RemoveComponent(sprite);
-			//sprite = sprite_idleR;
-			//associated.AddComponent(sprite);
-
-
+		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run < 0)) {	//para pra esquerda
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
 			associated.AddComponent(sprite);
@@ -248,30 +233,14 @@ void PenguinBody::Update(float dt) {
 		}
 
 		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {		//corre
-			//associated.ChangeComponent(sprite_idleR, sprite_runningR);
-			//sprite->SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
-			
-			
-			//associated.RemoveComponent(sprite);
-			//sprite = sprite_runningR;
-			//associated.AddComponent(sprite);
-
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 			associated.AddComponent(sprite);
 
-			
+
 			cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
 		}
 		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {		//corre
-			//associated.ChangeComponent(sprite_idleR, sprite_runningR);
-			//sprite->SetSprite("./assets/img/sprite_corrida2.png", 12, 0.1);
-
-
-			//associated.RemoveComponent(sprite);
-			//sprite = sprite_runningR;
-			//associated.AddComponent(sprite);
-
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 			associated.AddComponent(sprite);
@@ -308,7 +277,6 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 	// todo - pensar em como fazer essa colisao com o chao
 	/*
 	if (chao->associated.box.y) {
-
 	}
 	*/
 }
