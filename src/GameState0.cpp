@@ -70,7 +70,7 @@ void GameState0::LoadAssets() {
 //	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap40x40.txt", tileSet);
 	
 
-	// TileSet de 80 por 80
+	// TileSet de 80 por 80 do chao
 	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	//auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x80.txt", tileSet);
 	auto tileMap = new TileMap(*mapGO, "./assets/map/tileMap80x802.txt", tileSet);
@@ -90,6 +90,30 @@ void GameState0::LoadAssets() {
 
 	mapGO->AddComponent(tileMap);
 	objectArray.emplace_back(mapGO);
+
+
+	// TileSet de 80 por 80 dos predios
+	auto prediosGO = new GameObject();
+
+	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
+	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	auto tileMap_Predios = new TileMap(*mapGO, "./assets/map/tileMap_Predios80x80.txt", tileSet);
+
+	// hitbox que envolve TODOS os predios
+	prediosGO->box.w = tileMap_Predios->GetWidth() * tileSet->GetTileWidth();
+	prediosGO->box.h = tileMap_Predios->GetHeight() * tileSet->GetTileHeight();
+	//prediosGO->box.x = -( tileMap_Predios->GetWidth() * tileSet->GetTileWidth() );
+	//prediosGO->box.y = -(tileMap_Predios->GetHeight() * tileSet->GetTileHeight());
+	prediosGO->box.x = 0;
+	prediosGO->box.y = 800;
+
+	prediosGO->AddComponent(tileMap_Predios);
+	objectArray.emplace_back(prediosGO);
+
+
+	std::cout << "largura do tileMap_Predio: " << tileMap_Predios->GetWidth() << "; altura do tileMap_Predio: " << tileMap_Predios->GetHeight() << std::endl;
+	std::cout << "largura do prediosGO: " << prediosGO->box.w << "; altura do prediosGO: " << prediosGO->box.h << std::endl;
+	std::cout << "x do predioGO: " << prediosGO->box.x << "; y do predioGO: " << prediosGO->box.y << std::endl;
 
 
 ////////////////////////////////
