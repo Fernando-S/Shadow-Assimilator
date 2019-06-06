@@ -86,8 +86,8 @@ void PenguinBody::Update(float dt) {
 
 
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
-		if (inputManager.IsKeyDown(W_KEY) && (Floorgrab == true)) {
-			Jump = 0;
+		if (inputManager.IsKeyDown(W_KEY) && (Floorgrab == true) && (Jump == 0)) {
+			Jump++;
 			verticalSpeed = 0;
 			tchfloor = false;
 			verticalSpeed = PLAYER_JUMP;
@@ -211,6 +211,10 @@ void PenguinBody::Update(float dt) {
 		//}
 		associated.box += speedV * verticalSpeed*dt;
 
+		//cout << "Centro: " << GetCenter().y << endl;
+		cout << "Centro: " << chao << endl;
+		
+
 		//////////////////////////////////////////////////////////////
 
 		if ((Stop == 2) || (Run == 1) || (Run == -1) || (Jump == 1)) {
@@ -291,6 +295,8 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 		hp -= bullet->GetDamage();
 	}
 
+	//tile.DistRecs(associated.box.y);
+
 	// todo - pensar em como fazer essa colisao com o chao
 	if (tile) {
 		if (tile->floor) {
@@ -301,6 +307,7 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 			associated.box += speedV * verticalSpeed*0.035;
 			verticalSpeed = 0;
 			Jump = 0;
+
 
 			Setjump = false;
 			tchfloor = true;
@@ -325,4 +332,8 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 
 Vec2 PenguinBody::GetCenter() {
 	return associated.box.Center();
+}
+
+Vec2 PenguinBody::GetFloor() {
+	//return floor.box.DistRecs(associated.box.y);
 }

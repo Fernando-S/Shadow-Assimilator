@@ -29,6 +29,7 @@ public:
 	void Start() override;
 	void Pause() override;
 	void Resume() override;
+	void LoadBuildings();
 	
 
 private:	

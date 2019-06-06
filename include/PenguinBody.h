@@ -27,6 +27,7 @@ public:
 	bool Is(std::string type) override;
 	void NotifyCollision(GameObject& other) override;
 	Vec2 GetCenter();			// Funcao para poder pegar a posicao do penguin
+	Vec2 GetFloor();			// Função para achar a distância do personagem pro chao
 
 	static PenguinBody* player;
 	//float secondsToSelfDestruction = 1.5;
@@ -40,7 +41,7 @@ private:
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true,
 		Wallgrab = false, Floorgrab = false, Quedalivre = true, tchfloor = false,
 		Setjump = false;
-	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1;
+	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1, chao = 0;
 
 };
 
