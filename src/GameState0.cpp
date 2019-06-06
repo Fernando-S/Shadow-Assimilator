@@ -363,7 +363,7 @@ void GameState0::LoadBuildings() {
 	// hitbox que envolve TODOS os predios
 	prediosGO->box.w = tileMap_Predios->GetWidth() * tileSet->GetTileWidth();
 	prediosGO->box.h = tileMap_Predios->GetHeight() * tileSet->GetTileHeight();
-	prediosGO->box.y = 800 - (tileMap_Predios->GetHeight() * tileSet->GetTileHeight());
+	prediosGO->box.y = chaoGO->box.y - (tileMap_Predios->GetHeight() * tileSet->GetTileHeight());
 	prediosGO->box.x = 0;
 
 	prediosGO->AddComponent(tileMap_Predios);
@@ -383,7 +383,7 @@ void GameState0::LoadBuildings() {
 	// posicao em relacao ao tileMap_Chao e tamanho da hitbox do predio
 	predioSimplesGO->box.w = tileMap_PredioSimples->GetWidth() * tileSet->GetTileWidth();
 	predioSimplesGO->box.h = tileMap_PredioSimples->GetHeight() * tileSet->GetTileHeight();
-	predioSimplesGO->box.y = 800 - (tileMap_Chao->GetHeight() * tileSet->GetTileHeight());
+	predioSimplesGO->box.y = chaoGO->box.y - (tileMap_Chao->GetHeight() * tileSet->GetTileHeight());
 	predioSimplesGO->box.x = 30 * tileMap_Chao->GetWidth();
 
 	predioSimplesGO->AddComponent(tileMap_PredioSimples);
@@ -395,22 +395,32 @@ void GameState0::LoadBuildings() {
 //	  Carrega o Lixao		//
 /////////////////////////////
 	auto lixaoGO = new GameObject();
-	auto tetoLixaoGO = new GameObject();
+	auto lixaoTetoGO = new GameObject();
 
 	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
 	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	auto tileMap_Lixao = new TileMap(*lixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
-	auto tileMap_TetoLixao = new TileMap(*tetoLixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
+	auto tileMap_LixaoTeto = new TileMap(*lixaoTetoGO, "./assets/map/tileMap_LixaoTeto80x80.txt", tileSet);
 	//tileMap_Lixao->wall = true;
+	tileMap_LixaoTeto->floor = true;
 
 	// hitbox que envolve o lixao
 	lixaoGO->box.w = tileMap_Lixao->GetWidth() * tileSet->GetTileWidth();
 	lixaoGO->box.h = tileMap_Lixao->GetHeight() * tileSet->GetTileHeight();
-	lixaoGO->box.y = 800 - (tileMap_Lixao->GetHeight() * tileSet->GetTileHeight());
-	lixaoGO->box.x = 0;
+	lixaoGO->box.y = chaoGO->box.y - (tileMap_Lixao->GetHeight() * tileSet->GetTileHeight());
+	lixaoGO->box.x = chaoGO->box.x;
+
+	// hitbox do teto do lixao
+	lixaoTetoGO->box.w = tileMap_LixaoTeto->GetWidth() * tileSet->GetTileWidth();
+	lixaoTetoGO->box.h = tileMap_LixaoTeto->GetHeight() * tileSet->GetTileHeight();
+	lixaoTetoGO->box.y = lixaoGO->box.y;
+	lixaoTetoGO->box.x = lixaoGO->box.x + 3 * tileSet->GetTileWidth();
 
 	lixaoGO->AddComponent(tileMap_Lixao);
+	lixaoTetoGO->AddComponent(tileMap_LixaoTeto);
+
 	objectArray.emplace_back(lixaoGO);
+	objectArray.emplace_back(lixaoTetoGO);
 
 
 }

@@ -29,10 +29,11 @@ public:
 	void Start() override;
 	void Pause() override;
 	void Resume() override;
-	void LoadBuildings();
 	
 
-private:	
+private:
+	void LoadBuildings();
+
 	TileSet* tileSet;
 	Music backgroundMusic;
 	

@@ -334,6 +334,6 @@ Vec2 PenguinBody::GetCenter() {
 	return associated.box.Center();
 }
 
-Vec2 PenguinBody::GetFloor() {
+//Vec2 PenguinBody::GetFloor() {
 	//return floor.box.DistRecs(associated.box.y);
-}
+//}
