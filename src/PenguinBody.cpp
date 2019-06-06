@@ -4,6 +4,7 @@
 #define MAX_SPEED 400
 #define SPEED_STEP 50
 #define PLAYER_SPEED 400
+#define PLAYER_JUMP 600
 
 using namespace std;
 
@@ -11,7 +12,8 @@ PenguinBody* PenguinBody::player = nullptr;
 
 PenguinBody::PenguinBody(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	player = this;
-	speed = { 1, 0 };
+	speedH = { 1, 0 };
+	speedV = { 0, -1 };
 	linearSpeed = 0;
 	angle = 0;
 	oppositeAccel = 0;
@@ -57,24 +59,42 @@ void PenguinBody::Update(float dt) {
 		double accelSpeedGain = PENGUIN_ACCELERATION * dt;
 
 		// todo - ver se esse eh o lugar certo da gravidade
-		associated.box.y += 100 * dt;
+		//associated.box.y += 100 * dt;
 
-		/*
-		if (Jump > 0) {
-			speed = { 0, -1 };
-			linearSpeed += accelSpeedGain;
+		
+		if (verticalSpeed == PLAYER_JUMP) {
+				Quedalivre = true;
 		}
-		*/
+		//cout << "\nJump: " << Jump << endl;
+
+		if ((verticalSpeed <= PLAYER_JUMP) && (verticalSpeed > 0)) {
+			if (Jump < 10) {
+				Jump++;
+				//cout << "\nJump: " << Jump;
+			}
+		}
+		//cout << "\nverticalSpeed: " << verticalSpeed;
+		if ((tchfloor == false) && (Quedalivre == true) ) {
+			if (verticalSpeed > -900) {
+				verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
+				//cout << "\ndecrementa\n";
+				//cout << "\nverticalSpeed: " << verticalSpeed;
+			}
+			
+		}
+		
+		
+
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
-		if (inputManager.IsKeyDown(W_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-			//if (Jump < 10) {
-			//	Jump++;
-			//}
-			speed = { 0, -1 };
-			linearSpeed += accelSpeedGain;
+		if (inputManager.IsKeyDown(W_KEY) && (Floorgrab == true)) {
+			Jump = 0;
+			verticalSpeed = 0;
+			tchfloor = false;
+			verticalSpeed = PLAYER_JUMP;
+			Setjump = true;
 		}
 		else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-			speed = { 0, -1 };
+
 			linearSpeed -= accelSpeedGain;		// Acelera
 		}
 		else
@@ -97,7 +117,7 @@ void PenguinBody::Update(float dt) {
 				Run--;
 			}
 
-			speed = { -1, 0 };
+			speedH = { -1, 0 };
 			if (oppositeSpeed > -PLAYER_SPEED) {
 
 				if (oppositeSpeed > 0) {
@@ -112,12 +132,12 @@ void PenguinBody::Update(float dt) {
 			else
 				linearSpeed = -oppositeSpeed;
 
-			std::cout << "linearSpeed1: " << linearSpeed << endl;
-			std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
+			//std::cout << "linearSpeed1: " << linearSpeed << endl;
+			//std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
 
 		}
 		else if (inputManager.IsKeyDown(D_KEY)) {
-			speed = { 1, 0 };
+			speedH = { 1, 0 };
 
 			if (Getspeed2 == false) {
 				oppositeSpeed = linearSpeed;
@@ -146,6 +166,7 @@ void PenguinBody::Update(float dt) {
 
 			}
 
+			//cout << "linearSpeed: " << linearSpeed << endl;
 			//cout << "Run: " << Run << endl;
 		}
 
@@ -161,35 +182,15 @@ void PenguinBody::Update(float dt) {
 		if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
 
 			if (linearSpeed > 40) {
-				linearSpeed -= accelSpeedGain;
+				linearSpeed -= accelSpeedGain * 1.5;
+				
 			}
 			if (linearSpeed < -40) {
-				linearSpeed += accelSpeedGain;
+				linearSpeed += accelSpeedGain * 1.5;
 			}
 			if ((linearSpeed < 40) && (linearSpeed > -40)) {
 				linearSpeed = 0;
 			}
-
-
-			//cout << "linearSpeed: " << linearSpeed << endl;
-			//cout << "Stop: " << Stop << endl;
-
-		}
-
-		// Aplica atrito no movimento acelerado do Penguin
-
-		if (abs(linearSpeed) > atrictSpeedLoss) {
-			if (linearSpeed < 0)
-				linearSpeed -= -1 * atrictSpeedLoss;
-			else
-				linearSpeed -= atrictSpeedLoss;
-			associated.box += speed * linearSpeed*dt;
-
-			// todo - Colocar no lugar certo da graviade
-			//associated.box += speed * 100*dt;
-		}
-		else {
-			linearSpeed = 0;
 
 			if (Stop < 10) {
 				Stop++;
@@ -199,9 +200,20 @@ void PenguinBody::Update(float dt) {
 			}
 			Setidle = true;
 
-		}
+			//cout << "Stop: " << Stop << endl;
 
-		if ((Stop == 2) || (Run == 1) || (Run == -1)) {
+		}
+		//////////////////////////////////////////////////////////////
+		/////////////////////VELOCIDADE///////////////////////////////
+
+		//if (Wallgrab == false) {
+			associated.box += speedH * linearSpeed*dt;
+		//}
+			associated.box += speedV * verticalSpeed*dt;
+
+		//////////////////////////////////////////////////////////////
+
+		if ((Stop == 2) || (Run == 1) || (Run == -1) || (Jump == 1)) {
 			cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
 		}
 
@@ -217,7 +229,6 @@ void PenguinBody::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
 			associated.AddComponent(sprite);
-
 			cout << "\nTROCA, CORRE > PARA\n\n";
 		}
 
@@ -225,7 +236,7 @@ void PenguinBody::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 			associated.AddComponent(sprite);
-
+			
 
 			cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
 		}
@@ -233,10 +244,27 @@ void PenguinBody::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 			associated.AddComponent(sprite);
-
+			
 
 			cout << "\nTROCA, PARA > CORRE ESQUERDA\n\n";
 		}
+		if ((Setidle == false) && (Setjump == true)) {		//corre
+			////////////////////////
+			//	SPRITE DE PULO PARA A DIREITA
+			////////////////////////
+
+
+			cout << "\nTROCA, PULO DIREITA\n\n";
+		}
+		if ((Setidle == false) && (Setjump == true) && (Run == -1)) {		//corre
+			////////////////////////
+			//	SPRITE DE PULO PARA A ESQUERDA
+			////////////////////////
+
+			cout << "\nTROCA, PULO ESQUERDA\n\n";
+		}
+
+
 	}
 
 }
@@ -266,15 +294,28 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 	// todo - pensar em como fazer essa colisao com o chao
 	if (tile) {
 		if (tile->floor) {
-			cout << "colidiu com o chao\n";
 			//this->associated.box.y = tile->GetY() - this->associated.box.h - 1;	// flica q nem louco
 			this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
-			//linearSpeed = 0;
-			// todo - parar a gravidade aqui
-			//associated.box.y -=;
+			cout << "colidiu com o chao\n";
+			verticalSpeed = 100;
+			associated.box += speedV * verticalSpeed*0.035;
+			verticalSpeed = 0;
+			Jump = 0;
+
+			Setjump = false;
+			tchfloor = true;
+			Quedalivre = false;
+			Floorgrab = true;
 		}
-		else if (tile->wall) {
-			cout << "colidiu com a parede\n";
+		else if(!(tile->floor) && (tchfloor == false)) {
+			Floorgrab = false;
+		}
+		if (tile->wall) {
+			Wallgrab = true;
+			cout << "colidiu com o parede\n";
+		}
+		else {
+			Wallgrab = false;
 		}
 	
 	}
