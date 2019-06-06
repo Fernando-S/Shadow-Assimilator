@@ -48,76 +48,10 @@ void GameState0::LoadAssets() {
 
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
+
+	// Chama funcao que carrega todas as contrucoes (chaos e predios) 
+	LoadBuildings();
 	
-
-///////////////////////////
-//	  Carrega o Chao	//
-/////////////////////////
-	auto chaoGO = new GameObject();
-	chaoGO->box.x = 0;				
-	chaoGO->box.y = 800;
-	
-	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
-	//auto tileMap = new TileMap(*chaoGO, "./assets/map/MEUtileMap.txt", tileSet);
-
-
-	// TileSet de 40 por 40
-//	auto tileSet = new TileSet(40, 40, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-//	auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap40x40.txt", tileSet);
-	
-
-	// TileSet de 80 por 80 do chao
-	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	//auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap80x80.txt", tileSet);
-	//auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_Chao80x80.txt", tileSet);
-	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_ChaoInfinito80x80.txt", tileSet);
-	tileMap_Chao->floor = true;
-
-	chaoGO->box.w = tileMap_Chao->GetWidth() * tileSet->GetTileWidth();
-	chaoGO->box.h = tileMap_Chao->GetHeight() * tileSet->GetTileHeight() + 10;	// todo - retirar esse +10 depois (serve para visualizar)
-
-	chaoGO->AddComponent(tileMap_Chao);
-	objectArray.emplace_back(chaoGO);
-
-///////////////////////////////
-//	  Carrega os Predios	//
-/////////////////////////////
-	auto prediosGO = new GameObject();
-
-	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
-	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	auto tileMap_Predios = new TileMap(*prediosGO, "./assets/map/tileMap_Predios80x80.txt", tileSet);
-	tileMap_Predios->wall = true;
-
-	// hitbox que envolve TODOS os predios
-	prediosGO->box.w = tileMap_Predios->GetWidth() * tileSet->GetTileWidth();
-	prediosGO->box.h = tileMap_Predios->GetHeight() * tileSet->GetTileHeight();
-	prediosGO->box.y = 800 - (tileMap_Predios->GetHeight() * tileSet->GetTileHeight());
-	prediosGO->box.x = 0;
-
-	prediosGO->AddComponent(tileMap_Predios);
-	//objectArray.emplace_back(prediosGO);
-
-
-///////////////////////////////
-//	  Carrega o Lixao		//
-/////////////////////////////
-	auto lixaoGO = new GameObject();
-
-	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
-	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
-	auto tileMap_Lixao = new TileMap(*lixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
-	//tileMap_Lixao->wall = true;
-
-	// hitbox que envolve o galpao
-	lixaoGO->box.w = tileMap_Lixao->GetWidth() * tileSet->GetTileWidth();
-	lixaoGO->box.h = tileMap_Lixao->GetHeight() * tileSet->GetTileHeight();
-	lixaoGO->box.y = 800 - (tileMap_Lixao->GetHeight() * tileSet->GetTileHeight());
-	lixaoGO->box.x = 0;
-
-	lixaoGO->AddComponent(tileMap_Lixao);
-	objectArray.emplace_back(lixaoGO);
-
 
 ////////////////////////////////
 //	   Carrega o Ricardo	 //
@@ -381,5 +315,102 @@ void GameState0::Pause() {
 }
 
 void GameState0::Resume() {
+
+}
+
+void GameState0::LoadBuildings() {
+/////////////////
+//	  Chao	  //
+///////////////
+	auto chaoGO = new GameObject();
+	chaoGO->box.x = 0;
+	chaoGO->box.y = 800;
+
+	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
+	//auto tileMap = new TileMap(*chaoGO, "./assets/map/MEUtileMap.txt", tileSet);
+
+
+	// TileSet de 40 por 40
+//	auto tileSet = new TileSet(40, 40, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+//	auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap40x40.txt", tileSet);
+
+
+	// TileSet de 80 por 80 do chao
+	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	//auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap80x80.txt", tileSet);
+	//auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_Chao80x80.txt", tileSet);
+	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_ChaoInfinito80x80.txt", tileSet);
+	tileMap_Chao->floor = true;
+
+	chaoGO->box.w = tileMap_Chao->GetWidth() * tileSet->GetTileWidth();
+	chaoGO->box.h = tileMap_Chao->GetHeight() * tileSet->GetTileHeight();
+
+	chaoGO->AddComponent(tileMap_Chao);
+	objectArray.emplace_back(chaoGO);
+
+
+
+///////////////////////////////
+//	  Conjunto de Predios	//
+/////////////////////////////
+	auto prediosGO = new GameObject();
+
+	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
+	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	auto tileMap_Predios = new TileMap(*prediosGO, "./assets/map/tileMap_Predios80x80.txt", tileSet);
+	tileMap_Predios->wall = true;
+
+	// hitbox que envolve TODOS os predios
+	prediosGO->box.w = tileMap_Predios->GetWidth() * tileSet->GetTileWidth();
+	prediosGO->box.h = tileMap_Predios->GetHeight() * tileSet->GetTileHeight();
+	prediosGO->box.y = 800 - (tileMap_Predios->GetHeight() * tileSet->GetTileHeight());
+	prediosGO->box.x = 0;
+
+	prediosGO->AddComponent(tileMap_Predios);
+	//objectArray.emplace_back(prediosGO);
+
+
+/////////////////////////////////
+//	  Predio Mais Simples	  //
+///////////////////////////////
+	auto predioSimplesGO = new GameObject();
+
+	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
+	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	auto tileMap_PredioSimples = new TileMap(*predioSimplesGO, "./assets/map/tileMap_PredioSimples80x80.txt", tileSet);
+	tileMap_PredioSimples->floor = true;
+
+	// posicao em relacao ao tileMap_Chao e tamanho da hitbox do predio
+	predioSimplesGO->box.w = tileMap_PredioSimples->GetWidth() * tileSet->GetTileWidth();
+	predioSimplesGO->box.h = tileMap_PredioSimples->GetHeight() * tileSet->GetTileHeight();
+	predioSimplesGO->box.y = 800 - (tileMap_Chao->GetHeight() * tileSet->GetTileHeight());
+	predioSimplesGO->box.x = 30 * tileMap_Chao->GetWidth();
+
+	predioSimplesGO->AddComponent(tileMap_PredioSimples);
+	objectArray.emplace_back(predioSimplesGO);
+
+
+
+///////////////////////////////
+//	  Carrega o Lixao		//
+/////////////////////////////
+	auto lixaoGO = new GameObject();
+	auto tetoLixaoGO = new GameObject();
+
+	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
+	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	auto tileMap_Lixao = new TileMap(*lixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
+	auto tileMap_TetoLixao = new TileMap(*tetoLixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
+	//tileMap_Lixao->wall = true;
+
+	// hitbox que envolve o lixao
+	lixaoGO->box.w = tileMap_Lixao->GetWidth() * tileSet->GetTileWidth();
+	lixaoGO->box.h = tileMap_Lixao->GetHeight() * tileSet->GetTileHeight();
+	lixaoGO->box.y = 800 - (tileMap_Lixao->GetHeight() * tileSet->GetTileHeight());
+	lixaoGO->box.x = 0;
+
+	lixaoGO->AddComponent(tileMap_Lixao);
+	objectArray.emplace_back(lixaoGO);
+
 
 }

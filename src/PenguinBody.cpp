@@ -61,9 +61,9 @@ void PenguinBody::Update(float dt) {
 		// todo - ver se esse eh o lugar certo da gravidade
 		//associated.box.y += 100 * dt;
 
-		
+
 		if (verticalSpeed == PLAYER_JUMP) {
-				Quedalivre = true;
+			Quedalivre = true;
 		}
 		//cout << "\nJump: " << Jump << endl;
 
@@ -74,16 +74,16 @@ void PenguinBody::Update(float dt) {
 			}
 		}
 		//cout << "\nverticalSpeed: " << verticalSpeed;
-		if ((tchfloor == false) && (Quedalivre == true) ) {
+		if ((tchfloor == false) && (Quedalivre == true)) {
 			if (verticalSpeed > -900) {
 				verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
 				//cout << "\ndecrementa\n";
 				//cout << "\nverticalSpeed: " << verticalSpeed;
 			}
-			
+
 		}
-		
-		
+
+
 
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
 		if (inputManager.IsKeyDown(W_KEY) && (Floorgrab == true)) {
@@ -98,77 +98,77 @@ void PenguinBody::Update(float dt) {
 			linearSpeed -= accelSpeedGain;		// Acelera
 		}
 		else
-		if (inputManager.IsKeyDown(A_KEY)) {
+			if (inputManager.IsKeyDown(A_KEY)) {
 
-			if (linearSpeed == 0)
-				oppositeSpeed = 0;
+				if (linearSpeed == 0)
+					oppositeSpeed = 0;
 
-			if (Getspeed1 == false) {
-				oppositeSpeed = linearSpeed;
-				std::cout << "\n\nPassarvalor1" << endl << endl;
-				Getspeed1 = true;
-				Setidle = false;
-				Setrun = true;
-				Run = 0;
-				Stop = 0;
-			}
-
-			if (Run > -10) {
-				Run--;
-			}
-
-			speedH = { -1, 0 };
-			if (oppositeSpeed > -PLAYER_SPEED) {
-
-				if (oppositeSpeed > 0) {
-					oppositeSpeed -= accelSpeedGain;
-					linearSpeed = -oppositeSpeed;
+				if (Getspeed1 == false) {
+					oppositeSpeed = linearSpeed;
+					std::cout << "\n\nPassarvalor1" << endl << endl;
+					Getspeed1 = true;
+					Setidle = false;
+					Setrun = true;
+					Run = 0;
+					Stop = 0;
 				}
-				if (oppositeSpeed <= 0) {
-					oppositeSpeed -= accelSpeedGain;
-					linearSpeed = -oppositeSpeed;
+
+				if (Run > -10) {
+					Run--;
 				}
-			}
-			else
-				linearSpeed = -oppositeSpeed;
 
-			//std::cout << "linearSpeed1: " << linearSpeed << endl;
-			//std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
+				speedH = { -1, 0 };
+				if (oppositeSpeed > -PLAYER_SPEED) {
 
-		}
-		else if (inputManager.IsKeyDown(D_KEY)) {
-			speedH = { 1, 0 };
-
-			if (Getspeed2 == false) {
-				oppositeSpeed = linearSpeed;
-				std::cout << "\n\nPassarvalor2" << endl << endl;
-				Getspeed2 = true;
-
-				Run = 0;
-				Stop = 0;
-				Setidle = false;
-				Setrun = true;
-
-			}
-
-			if (Run < 10) {
-				Run++;
-			}
-
-			if (linearSpeed < PLAYER_SPEED + 50) {
-
-				if (oppositeSpeed >= 0) {
-					oppositeSpeed -= accelSpeedGain;
-					linearSpeed = -oppositeSpeed;
+					if (oppositeSpeed > 0) {
+						oppositeSpeed -= accelSpeedGain;
+						linearSpeed = -oppositeSpeed;
+					}
+					if (oppositeSpeed <= 0) {
+						oppositeSpeed -= accelSpeedGain;
+						linearSpeed = -oppositeSpeed;
+					}
 				}
 				else
-					linearSpeed += accelSpeedGain;
+					linearSpeed = -oppositeSpeed;
+
+				//std::cout << "linearSpeed1: " << linearSpeed << endl;
+				//std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
 
 			}
+			else if (inputManager.IsKeyDown(D_KEY)) {
+				speedH = { 1, 0 };
 
-			//cout << "linearSpeed: " << linearSpeed << endl;
-			//cout << "Run: " << Run << endl;
-		}
+				if (Getspeed2 == false) {
+					oppositeSpeed = linearSpeed;
+					std::cout << "\n\nPassarvalor2" << endl << endl;
+					Getspeed2 = true;
+
+					Run = 0;
+					Stop = 0;
+					Setidle = false;
+					Setrun = true;
+
+				}
+
+				if (Run < 10) {
+					Run++;
+				}
+
+				if (linearSpeed < PLAYER_SPEED + 50) {
+
+					if (oppositeSpeed >= 0) {
+						oppositeSpeed -= accelSpeedGain;
+						linearSpeed = -oppositeSpeed;
+					}
+					else
+						linearSpeed += accelSpeedGain;
+
+				}
+
+				//cout << "linearSpeed: " << linearSpeed << endl;
+				//cout << "Run: " << Run << endl;
+			}
 
 		double atrictSpeedLoss = PENGUIN_ATRICT * dt;
 
@@ -183,7 +183,7 @@ void PenguinBody::Update(float dt) {
 
 			if (linearSpeed > 40) {
 				linearSpeed -= accelSpeedGain * 1.5;
-				
+
 			}
 			if (linearSpeed < -40) {
 				linearSpeed += accelSpeedGain * 1.5;
@@ -207,9 +207,9 @@ void PenguinBody::Update(float dt) {
 		/////////////////////VELOCIDADE///////////////////////////////
 
 		//if (Wallgrab == false) {
-			associated.box += speedH * linearSpeed*dt;
+		associated.box += speedH * linearSpeed*dt;
 		//}
-			associated.box += speedV * verticalSpeed*dt;
+		associated.box += speedV * verticalSpeed*dt;
 
 		//////////////////////////////////////////////////////////////
 
@@ -236,7 +236,7 @@ void PenguinBody::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 			associated.AddComponent(sprite);
-			
+
 
 			cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
 		}
@@ -244,7 +244,7 @@ void PenguinBody::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 			associated.AddComponent(sprite);
-			
+
 
 			cout << "\nTROCA, PARA > CORRE ESQUERDA\n\n";
 		}
@@ -307,7 +307,7 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 			Quedalivre = false;
 			Floorgrab = true;
 		}
-		else if(!(tile->floor) && (tchfloor == false)) {
+		else if (!(tile->floor) && (tchfloor == false)) {
 			Floorgrab = false;
 		}
 		if (tile->wall) {
@@ -317,10 +317,10 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 		else {
 			Wallgrab = false;
 		}
-	
+
 	}
 
-	
+
 }
 
 Vec2 PenguinBody::GetCenter() {
