@@ -72,7 +72,20 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
 
 	for (x = 0; x < mapWidth; x++) { 
 		for (y = 0; y < mapHeight; y++) {
-			tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x * 80, cameraY + y * 80);
+		// sem PARALLAX para 2D chapado
+			tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x * tileSet->GetTileWidth(), cameraY + y * tileSet->GetTileHeight());
+		
+		// - PARALLAX para perspectiva esquerda acima
+			// Dinamico
+			//tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x*tileSet->GetTileWidth() - PARALLAX * layer*cameraX, cameraY +  y*tileSet->GetTileHeight() - PARALLAX * layer*cameraY);
+			// Fixo
+			//tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x * tileSet->GetTileWidth() - PARALLAX * layer, cameraY + y * tileSet->GetTileHeight() - PARALLAX * layer);
+		// + PARALLAX para perspectiva direita abaixo
+			// Dinamico
+			//tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x*tileSet->GetTileWidth() + PARALLAX * layer*cameraX, cameraY +  y*tileSet->GetTileHeight() + PARALLAX * layer*cameraY);
+			// Fixo
+			//tileSet->RenderTile((unsigned)At(x, y, layer), cameraX + x*tileSet->GetTileWidth() + PARALLAX * layer, cameraY +  y*tileSet->GetTileHeight() + PARALLAX * layer);
+			
 		}
 	}
 	

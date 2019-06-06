@@ -69,15 +69,12 @@ void GameState0::LoadAssets() {
 	// TileSet de 80 por 80 do chao
 	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	//auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap80x80.txt", tileSet);
-	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_Chao80x80.txt", tileSet);
+	//auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_Chao80x80.txt", tileSet);
+	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_ChaoInfinito80x80.txt", tileSet);
 	tileMap_Chao->floor = true;
 
 	chaoGO->box.w = tileMap_Chao->GetWidth() * tileSet->GetTileWidth();
 	chaoGO->box.h = tileMap_Chao->GetHeight() * tileSet->GetTileHeight() + 10;	// todo - retirar esse +10 depois (serve para visualizar)
-
-	std::cout << "largura do tileMap_Chao: " << tileMap_Chao->GetWidth() << "; altura do tileMap_Chao: " << tileMap_Chao->GetHeight() << std::endl;
-	std::cout << "largura do chaoGO: " << chaoGO->box.w << "; altura do chaoGO: " << chaoGO->box.h << std::endl;
-	std::cout << "x do chaoGO: " << chaoGO->box.x << "; y do chaoGO: " << chaoGO->box.y << std::endl;
 
 	chaoGO->AddComponent(tileMap_Chao);
 	objectArray.emplace_back(chaoGO);
@@ -99,11 +96,27 @@ void GameState0::LoadAssets() {
 	prediosGO->box.x = 0;
 
 	prediosGO->AddComponent(tileMap_Predios);
-	objectArray.emplace_back(prediosGO);
+	//objectArray.emplace_back(prediosGO);
 
-	std::cout << "largura do tileMap_Predios: " << tileMap_Predios->GetWidth() << "; altura do tileMap_Predios: " << tileMap_Predios->GetHeight() << std::endl;
-	std::cout << "largura do prediosGO: " << prediosGO->box.w << "; altura do prediosGO: " << prediosGO->box.h << std::endl;
-	std::cout << "x do prediosGO: " << prediosGO->box.x << "; y do prediosGO: " << prediosGO->box.y << std::endl;
+
+///////////////////////////////
+//	  Carrega o Lixao		//
+/////////////////////////////
+	auto lixaoGO = new GameObject();
+
+	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
+	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	auto tileMap_Lixao = new TileMap(*lixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
+	//tileMap_Lixao->wall = true;
+
+	// hitbox que envolve o galpao
+	lixaoGO->box.w = tileMap_Lixao->GetWidth() * tileSet->GetTileWidth();
+	lixaoGO->box.h = tileMap_Lixao->GetHeight() * tileSet->GetTileHeight();
+	lixaoGO->box.y = 800 - (tileMap_Lixao->GetHeight() * tileSet->GetTileHeight());
+	lixaoGO->box.x = 0;
+
+	lixaoGO->AddComponent(tileMap_Lixao);
+	objectArray.emplace_back(lixaoGO);
 
 
 ////////////////////////////////
