@@ -221,38 +221,65 @@ void PenguinBody::Update(float dt) {
 			cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
 		}
 
-		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run > 0)) {	//para pra direita
+		// Idle para a direita
+		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+
+			// arruma a hitbox da personagem animacao idle
+			associated.box.w = 80;
+			//associated.box.x += 64;
+
 			associated.AddComponent(sprite);
 
 			cout << "\nTROCA, CORRE > PARA\n\n";
 		}
 
-		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run < 0)) {	//para pra esquerda
+		// Idle para a esquerda
+		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run < 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
+
+			// arruma a hitbox da personagem para animacao idle
+			associated.box.w = 80;
+			//associated.box.x += 64;
+
 			associated.AddComponent(sprite);
 			cout << "\nTROCA, CORRE > PARA\n\n";
 		}
 
-		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {		//corre
+		// Corrida para a direita
+		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
+
+			// arruma a hitbox da personagem
+			//associated.box.w = 80;
+			//associated.box.x += 64;
+
 			associated.AddComponent(sprite);
 
 
 			cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
 		}
-		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {		//corre
+
+		// Corrida para a esquerda
+		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
+
+			// arruma a hitbox da personagem
+			//associated.box.w = 80;
+			//associated.box.x += 64;
+
 			associated.AddComponent(sprite);
 
 
 			cout << "\nTROCA, PARA > CORRE ESQUERDA\n\n";
 		}
-		if ((Setidle == false) && (Setjump == true)) {		//corre
+
+		// Pulo para a direita
+		if ((Setidle == false) && (Setjump == true)) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A DIREITA
 			////////////////////////
@@ -260,7 +287,9 @@ void PenguinBody::Update(float dt) {
 
 			cout << "\nTROCA, PULO DIREITA\n\n";
 		}
-		if ((Setidle == false) && (Setjump == true) && (Run == -1)) {		//corre
+
+		// Pulo para a esquerda
+		if ((Setidle == false) && (Setjump == true) && (Run == -1)) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A ESQUERDA
 			////////////////////////

@@ -79,6 +79,11 @@ void GameState0::LoadAssets() {
 	//penguinGO->box.PlaceCenter(Vec2(704, 741));
 	penguinGO->box.PlaceCenter(Vec2(704, 600));
 	//penguinGO->box.PlaceCenter(Vec2(704, -59));
+
+	penguinGO->box.w = 80;
+	std::cout << "largura da personagem: " << penguinGO->box.w << std::endl;
+	std::cout << "altura da personagem: " << penguinGO->box.h << std::endl;
+
 	objectArray.emplace_back(penguinGO);
 
 	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
