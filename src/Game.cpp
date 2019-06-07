@@ -83,7 +83,7 @@ Game& Game::GetInstance() {
 	if (instance != nullptr)
 		return *instance;		// retorna a instancia se ja existir uma
 	else {
-		instance = new Game("Shadow Assimilator", 1280, 480);		// instancia um novo jogo
+		instance = new Game("Shadow Assimilator", 1280, 640);		// instancia um novo jogo
 		return *instance;		// retorna a nova instancia instancia
 	}
 }

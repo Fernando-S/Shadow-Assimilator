@@ -57,9 +57,8 @@ void PenguinBody::Update(float dt) {
 	}
 	else {
 		double accelSpeedGain = PENGUIN_ACCELERATION * dt;
-
-		// todo - ver se esse eh o lugar certo da gravidade
-		//associated.box.y += 100 * dt;
+		cout << "pos X da personagem: " << associated.box.x << endl;
+		cout << "pos Y da personagem: " << associated.box.y << endl;
 
 		//if(!tchfloor/* && Setjump*/)
 			//verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
@@ -79,9 +78,11 @@ void PenguinBody::Update(float dt) {
 			//airbone = true;
 		}
 
-		if (inputManager.KeyRelease(SPACE_KEY))
-			associated.box.PlaceCenter(Vec2(704, 600));
-		
+		if (inputManager.KeyRelease(SPACE_KEY)) {
+			associated.box.PlaceCenter(Vec2(704, 500));
+			airbone = true;
+			tchfloor = false;
+		}
 
 
 
@@ -125,19 +126,14 @@ void PenguinBody::Update(float dt) {
 		}*/
 
 
-		/*/
+		
 		// todo - ver se eh pra mexer nessa condicao especifica para fazer o double jump
-		if (inputManager.IsKeyDown(W_KEY) && tchfloor && Setjump/* && !Quedalivre/) {
-
-			verticalSpeed = PLAYER_JUMP;
-			//associated.box += speedV * verticalSpeed*dt;
-			
-			associated.box.y -= 1;
-			tchfloor = false;
-			Setjump = true;
-		}
-		*/
-		if (inputManager.IsKeyDown(W_KEY) && tchfloor && !Setjump && !airbone/* && !Quedalivre*/) {
+		//if (inputManager.KeyPress(W_KEY) && !inputManager.IsKeyDown(W_KEY) && !tchfloor && airbone /*&& !doubleJump*/) {
+		//	verticalSpeed = PLAYER_JUMP;
+			//doubleJump = true;
+		//}
+		
+		if (inputManager.IsKeyDown(W_KEY) && tchfloor /*&& !Setjump*/ && !airbone/* && !Quedalivre*/) {
 
 			verticalSpeed = PLAYER_JUMP;
 			//associated.box += speedV * verticalSpeed*dt;
@@ -146,6 +142,7 @@ void PenguinBody::Update(float dt) {
 			tchfloor = false;
 			//Setjump = true;
 			airbone = true;
+			doubleJump = false;
 		}
 		else
 			if (inputManager.IsKeyDown(A_KEY)) {
@@ -385,11 +382,11 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 			//verticalSpeed = 100;
 			//associated.box += speedV * verticalSpeed*0.035;
 			//if(airbone)
-				verticalSpeed = 0;
-		
+			//verticalSpeed = 0;
+
 			if (!airbone && tchfloor) {
 				this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
-				//verticalSpeed = 0;
+				verticalSpeed = 0;
 			}
 			//else {
 			//	tchfloor = true;
@@ -415,6 +412,7 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 		//else if (!(tile->floor) && (tchfloor == false)) {
 			//Floorgrab = false;
 		//}
+		/*
 		if (tile->wall) {
 			Wallgrab = true;
 			cout << "colidiu com o parede\n";
@@ -422,6 +420,7 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 		else {
 			Wallgrab = false;
 		}
+		*/
 
 	}
 

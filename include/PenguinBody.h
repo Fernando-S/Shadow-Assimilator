@@ -38,9 +38,8 @@ private:
 	//std::weak_ptr<GameObject> pcannon;
 	Vec2 speedH, speedV;
 	float linearSpeed, verticalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
-	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true,
-		Wallgrab = false, Floorgrab = false, Quedalivre = true, tchfloor = false,
-		Setjump = false, airbone = false;
+	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, Setjump = false,
+		Wallgrab = false,/*Floorgrab = false, Quedalivre = true,*/ tchfloor = false, airbone = true, doubleJump = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1, chao = 0;
 
 };

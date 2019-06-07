@@ -30,7 +30,8 @@ void GameState0::LoadAssets() {
 	auto bgGO = new GameObject();
 	//auto bg = new Sprite(*bgGO, "./assets/img/Art_logo_mono3x.png");
 	//auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
-	auto bg = new Sprite(*bgGO, "./assets/img/teste.jpg");
+	//auto bg = new Sprite(*bgGO, "./assets/img/teste.jpg");
+	auto bg = new Sprite(*bgGO, "./assets/img/cinza.jpg");
 	//bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
 	
 	// Seta a escala e posiciona no centro da tela
@@ -77,7 +78,7 @@ void GameState0::LoadAssets() {
 
 	penguinGO->AddComponent(penguin);
 	//penguinGO->box.PlaceCenter(Vec2(704, 741));
-	penguinGO->box.PlaceCenter(Vec2(704, 600));
+	penguinGO->box.PlaceCenter(Vec2(704, 500));
 	//penguinGO->box.PlaceCenter(Vec2(704, -59));
 
 	//penguinGO->box.w = 80;
