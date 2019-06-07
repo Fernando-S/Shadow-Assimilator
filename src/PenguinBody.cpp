@@ -1,5 +1,6 @@
 #include "PenguinBody.h"
 #include "Game.h"
+#include <iostream>
 
 #define MAX_SPEED 400
 #define SPEED_STEP 50
@@ -62,9 +63,7 @@ void PenguinBody::Update(float dt) {
 		//associated.box.y += 100 * dt;
 
 
-		if (verticalSpeed == PLAYER_JUMP) {
-			Quedalivre = true;
-		}
+
 		//cout << "\nJump: " << Jump << endl;
 
 		if ((verticalSpeed <= PLAYER_JUMP) && (verticalSpeed > 0)) {
@@ -74,7 +73,9 @@ void PenguinBody::Update(float dt) {
 			}
 		}
 		//cout << "\nverticalSpeed: " << verticalSpeed;
-		if ((tchfloor == false) && (Quedalivre == true)) {
+
+		//GRAVIDADE
+		if (tchfloor == false) { // && (Quedalivre == true) //tirar a variavel Queda livre
 			if (verticalSpeed > -900) {
 				verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
 				//cout << "\ndecrementa\n";
@@ -88,7 +89,6 @@ void PenguinBody::Update(float dt) {
 		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
 		if (inputManager.IsKeyDown(W_KEY) && (Floorgrab == true) && (Jump == 0)) {
 			Jump++;
-			verticalSpeed = 0;
 			tchfloor = false;
 			verticalSpeed = PLAYER_JUMP;
 			Setjump = true;
@@ -212,7 +212,8 @@ void PenguinBody::Update(float dt) {
 		associated.box += speedV * verticalSpeed*dt;
 
 		//cout << "Centro: " << GetCenter().y << endl;
-		cout << "Centro: " << chao << endl;
+
+		//cout << "chao: " << chao << endl;
 		
 
 		//////////////////////////////////////////////////////////////
@@ -324,17 +325,18 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 		hp -= bullet->GetDamage();
 	}
 
-	//tile.DistRecs(associated.box.y);
-
 	// todo - pensar em como fazer essa colisao com o chao
 	if (tile) {
 		if (tile->floor) {
+
 			//this->associated.box.y = tile->GetY() - this->associated.box.h - 1;	// flica q nem louco
 			this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
-			cout << "colidiu com o chao\n";
-			verticalSpeed = 100;
-			associated.box += speedV * verticalSpeed*0.035;
+			//cout << "colidiu com o chao\n";
+
+			this->associated.box.y -= 1;
 			verticalSpeed = 0;
+
+			chao = 0;
 			Jump = 0;
 
 
@@ -343,9 +345,11 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 			Quedalivre = false;
 			Floorgrab = true;
 		}
-		else if (!(tile->floor) && (tchfloor == false)) {
+		else if (!(tile->floor) && (tchfloor == false)) { //&& (tchfloor == false)
 			Floorgrab = false;
+			cout << "não colide\n";
 		}
+
 		if (tile->wall) {
 			Wallgrab = true;
 			cout << "colidiu com o parede\n";
@@ -356,13 +360,8 @@ void PenguinBody::NotifyCollision(GameObject& other) {
 
 	}
 
-
 }
 
 Vec2 PenguinBody::GetCenter() {
 	return associated.box.Center();
 }
-
-//Vec2 PenguinBody::GetFloor() {
-	//return floor.box.DistRecs(associated.box.y);
-//}
