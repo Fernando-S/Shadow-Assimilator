@@ -80,7 +80,7 @@ void GameState0::LoadAssets() {
 	penguinGO->box.PlaceCenter(Vec2(704, 600));
 	//penguinGO->box.PlaceCenter(Vec2(704, -59));
 
-	penguinGO->box.w = 80;
+	//penguinGO->box.w = 80;
 	std::cout << "largura da personagem: " << penguinGO->box.w << std::endl;
 	std::cout << "altura da personagem: " << penguinGO->box.h << std::endl;
 
@@ -391,6 +391,10 @@ void GameState0::LoadBuildings() {
 	predioSimplesGO->box.y = chaoGO->box.y - (tileMap_Chao->GetHeight() * tileSet->GetTileHeight());
 	predioSimplesGO->box.x = 30 * tileMap_Chao->GetWidth();
 
+
+	//Build(*chaoGO, *predioSimplesGO, *tileSet, *tileMap_PredioSimples, true, false, false, false, false,
+		//chaoGO->box.y - (tileMap_Chao->GetHeight() * tileSet->GetTileHeight()), 30 * tileMap_Chao->GetWidth());
+
 	predioSimplesGO->AddComponent(tileMap_PredioSimples);
 	objectArray.emplace_back(predioSimplesGO);
 
@@ -428,4 +432,95 @@ void GameState0::LoadBuildings() {
 	objectArray.emplace_back(lixaoTetoGO);
 
 
+}
+
+
+void GameState0::Build(GameObject chaoGO, GameObject go, TileSet tileSet, TileMap tileMap, bool background, bool chao, bool teto, bool paredeEsquerda, bool paredeDireita, int ntilesX, int ntilesY) {
+	
+	if (background && !chao && !teto && !paredeEsquerda && !paredeDireita) {
+		/*
+		go->box.w = tileMap->GetWidth() * tileSet->GetTileWidth();
+		go->box.h = tileMap->GetHeight() * tileSet->GetTileHeight();
+		//go->box.y = chaoGO->box.y - (tileMap->GetHeight() * tileSet->GetTileHeight());
+		//go->box.x = 30 * tileMap->GetWidth();
+		go->box.y = ntilesY;
+		go->box.x = ntilesX;
+
+		go->AddComponent(tileMap);
+		*/
+
+		go.box.w = tileMap.GetWidth() * tileSet.GetTileWidth();
+		go.box.h = tileMap.GetHeight() * tileSet.GetTileHeight();
+		//go->box.y = chaoGO->box.y - (tileMap->GetHeight() * tileSet->GetTileHeight());
+		//go->box.x = 30 * tileMap->GetWidth();
+		go.box.y = ntilesY;
+		go.box.x = ntilesX;
+
+		go.AddComponent(&tileMap);
+	}
+	else if (background && chao && !teto && !paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (background && !chao && teto && !paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (background && !chao && !teto && paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (background && !chao && !teto && !paredeEsquerda && paredeDireita) {
+
+	}
+	else if (background && chao && teto && !paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (background && chao && !teto && paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (background && chao && !teto && !paredeEsquerda && paredeDireita) {
+
+	}
+	else if (background && chao && teto && paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (background && chao && teto && !paredeEsquerda && paredeDireita) {
+
+	}
+	else if (background && chao && teto && paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (!background && !chao && !teto && !paredeEsquerda && !paredeDireita) {	// Nao faz sentido existir esse daqui
+
+	}
+	else if (!background && chao && !teto && !paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (!background && !chao && teto && !paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (!background && !chao && !teto && paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (!background && !chao && !teto && !paredeEsquerda && paredeDireita) {
+
+	}
+	else if (!background && chao && teto && !paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (!background && chao && !teto && paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (!background && chao && !teto && !paredeEsquerda && paredeDireita) {
+
+	}
+	else if (!background && chao && teto && paredeEsquerda && !paredeDireita) {
+
+	}
+	else if (!background && chao && teto && !paredeEsquerda && paredeDireita) {
+
+	}
+	else if (!background && chao && teto && paredeEsquerda && !paredeDireita) {
+
+	}
+
+	
 }
