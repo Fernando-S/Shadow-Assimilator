@@ -21,7 +21,8 @@ Player::Player(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	hp = PLAYER_INITIAL_HP;
 
 	// Carrega o sprite da personagem idle
-	sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+	//sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+	sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
 
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
@@ -274,7 +275,8 @@ void Player::Update(float dt) {
 		// Idle para a direita
 		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+			//sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
 
 			// arruma a hitbox da personagem animacao idle
 			//associated.box.w = 80;
@@ -301,7 +303,8 @@ void Player::Update(float dt) {
 		// Corrida para a direita
 		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
+			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida(142x128).png", 12, 0.1);
 
 			// arruma a hitbox da personagem
 			//associated.box.w = 80;

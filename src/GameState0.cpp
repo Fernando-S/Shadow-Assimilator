@@ -31,11 +31,13 @@ void GameState0::LoadAssets() {
 	//auto bg = new Sprite(*bgGO, "./assets/img/Art_logo_mono3x.png");
 	//auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
 	//auto bg = new Sprite(*bgGO, "./assets/img/teste.jpg");
-	auto bg = new Sprite(*bgGO, "./assets/img/cinza.jpg");
+	//auto bg = new Sprite(*bgGO, "./assets/img/cinza.jpg");
+	auto bg = new Sprite(*bgGO, "./assets/img/background.png");
 	//bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
 	
 	// Seta a escala e posiciona no centro da tela
 	//bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
+	bg->SetScale(1, 1.3333);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
 
 	//bgGO->box.x = (Game::GetInstance().GetWidth() - bg->GetWidth()) / 2;
 	//bgGO->box.y = (Game::GetInstance().GetHeight() - bg->GetHeight()) / 4;
