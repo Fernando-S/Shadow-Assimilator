@@ -2,8 +2,8 @@
 #include "Game.h"
 
 
-PenguinCannon::PenguinCannon(GameObject& associated, std::weak_ptr<GameObject> penguinBody) : Component(associated) {
-	pbody = penguinBody;
+PenguinCannon::PenguinCannon(GameObject& associated, std::weak_ptr<GameObject> playerBody) : Component(associated) {
+	pbody = playerBody;
 	angle = 0;
 
 	// Carrega o sprite do PenguinCannon
@@ -15,12 +15,12 @@ PenguinCannon::PenguinCannon(GameObject& associated, std::weak_ptr<GameObject> p
 
 void PenguinCannon::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
-	auto penguinBody = pbody.lock();
+	auto playerBody = pbody.lock();
 
 	// Checa se o Penguin ainda existe
-	if (penguinBody) {
+	if (playerBody) {
 		// Calculo do angulo para o canhao seguir o mouse
-		associated.box.PlaceCenter(penguinBody->box.Center());
+		associated.box.PlaceCenter(playerBody->box.Center());
 		angle = Vec2(inputManager.GetMouseX() + Camera::pos.x, inputManager.GetMouseY() + Camera::pos.y).InclinacaoDaDiferenca(associated.box.Center());
 		associated.angleDeg = angle * 180 / PI;
 		cooldownTimer.Update(dt);

@@ -114,6 +114,10 @@ bool TileMap::Is(std::string type) {
 		return false;
 }
 
-float TileMap::GetY() {
-	return this->associated.box.y;
+int TileMap::GetY() {
+	return (int)this->associated.box.y;
+}
+
+int TileMap::GetX() {
+	return (int)this->associated.box.x;
 }

@@ -19,7 +19,7 @@
 
 class PenguinCannon : public Component{
 public:
-	PenguinCannon(GameObject& associated, std::weak_ptr<GameObject> penguinBody);
+	PenguinCannon(GameObject& associated, std::weak_ptr<GameObject> playerBody);
 	void Update(float dt) override;
 	void Render() override;
 	bool Is(std::string type) override;

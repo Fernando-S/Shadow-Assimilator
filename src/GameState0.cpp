@@ -73,21 +73,21 @@ void GameState0::LoadAssets() {
 ///////////////////////////////////
 //		Carrega a Personagem	//
 /////////////////////////////////
-	auto penguinGO = new GameObject();
-	auto penguin = new PenguinBody(*penguinGO);
+	auto playerGO = new GameObject();
+	auto player = new Player(*playerGO);
 
-	penguinGO->AddComponent(penguin);
-	//penguinGO->box.PlaceCenter(Vec2(704, 741));
-	penguinGO->box.PlaceCenter(Vec2(704, 500));
-	//penguinGO->box.PlaceCenter(Vec2(704, -59));
+	playerGO->AddComponent(player);
+	//playerGO->box.PlaceCenter(Vec2(704, 741));
+	//playerGO->box.PlaceCenter(Vec2(704, 500));
+	playerGO->box.PlaceCenter(Vec2(1600, -59));
 
-	//penguinGO->box.w = 80;
-	std::cout << "largura da personagem: " << penguinGO->box.w << std::endl;
-	std::cout << "altura da personagem: " << penguinGO->box.h << std::endl;
+	//playerGO->box.w = 80;
+	std::cout << "largura da personagem: " << playerGO->box.w << std::endl;
+	std::cout << "altura da personagem: " << playerGO->box.h << std::endl;
 
-	objectArray.emplace_back(penguinGO);
+	objectArray.emplace_back(playerGO);
 
-	Camera::Follow(penguinGO);			// Coloca a camera para seguir o Penguin
+	Camera::Follow(playerGO);			// Coloca a camera para seguir o Penguin
 	
 
 
@@ -279,13 +279,13 @@ void GameState0::Update(float dt){
 	/*
 	
 	// Tela de GAME OVER
-	if (!PenguinBody::player) {
+	if (!Player::player) {
 		GameData::playerVictory = false;
 		popRequested = true;
 
 		// todo - pensar melhor em como mudar de tela apenas apos o termino da animacao de explosao
 //		TimeToEndPlayerAnimation.Update(dt);
-//		if (PenguinBody::secondsToSelfDestruction/*, selfDestructCount.Get() > secondsToSelfDestruct/)
+//		if (Player::secondsToSelfDestruction/*, selfDestructCount.Get() > secondsToSelfDestruct/)
 //		if (TimeToEndPlayerAnimation.Get() > secondsToEndPlayerAnimation)
 			Game::GetInstance().Push(new EndState());
 	}	// Tela de WIN
@@ -346,7 +346,8 @@ void GameState0::LoadBuildings() {
 	//auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap80x80.txt", tileSet);
 	//auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_Chao80x80.txt", tileSet);
 	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_ChaoInfinito80x80.txt", tileSet);
-	tileMap_Chao->floor = true;
+	//tileMap_Chao->floor = true;
+	tileMap_Chao->colide = true;
 
 	chaoGO->box.w = tileMap_Chao->GetWidth() * tileSet->GetTileWidth();
 	chaoGO->box.h = tileMap_Chao->GetHeight() * tileSet->GetTileHeight();
@@ -364,7 +365,7 @@ void GameState0::LoadBuildings() {
 	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
 	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	auto tileMap_Predios = new TileMap(*prediosGO, "./assets/map/tileMap_Predios80x80.txt", tileSet);
-	tileMap_Predios->wall = true;
+	tileMap_Predios->colide = true;
 
 	// hitbox que envolve TODOS os predios
 	prediosGO->box.w = tileMap_Predios->GetWidth() * tileSet->GetTileWidth();
@@ -384,7 +385,8 @@ void GameState0::LoadBuildings() {
 	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
 	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	auto tileMap_PredioSimples = new TileMap(*predioSimplesGO, "./assets/map/tileMap_PredioSimples80x80.txt", tileSet);
-	tileMap_PredioSimples->floor = true;
+	//tileMap_PredioSimples->floor = true;
+	tileMap_PredioSimples->colide = true;
 
 	// posicao em relacao ao tileMap_Chao e tamanho da hitbox do predio
 	predioSimplesGO->box.w = tileMap_PredioSimples->GetWidth() * tileSet->GetTileWidth();
@@ -406,13 +408,17 @@ void GameState0::LoadBuildings() {
 /////////////////////////////
 	auto lixaoGO = new GameObject();
 	auto lixaoTetoGO = new GameObject();
+	auto lixaoParedeEsquerdaGO = new GameObject();
 
 	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
 	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	auto tileMap_Lixao = new TileMap(*lixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
 	auto tileMap_LixaoTeto = new TileMap(*lixaoTetoGO, "./assets/map/tileMap_LixaoTeto80x80.txt", tileSet);
-	//tileMap_Lixao->wall = true;
-	tileMap_LixaoTeto->floor = true;
+	auto tileMap_LixaoParedeEsquerda = new TileMap(*lixaoParedeEsquerdaGO, "./assets/map/tileMap_LixaoParedeEsquerda80x80.txt", tileSet);
+	//tileMap_Lixao->colide = true;
+	//tileMap_LixaoTeto->floor = true;
+	tileMap_LixaoTeto->colide = true;
+	tileMap_LixaoParedeEsquerda->colide = true;
 
 	// hitbox que envolve o lixao
 	lixaoGO->box.w = tileMap_Lixao->GetWidth() * tileSet->GetTileWidth();
@@ -424,18 +430,26 @@ void GameState0::LoadBuildings() {
 	lixaoTetoGO->box.w = tileMap_LixaoTeto->GetWidth() * tileSet->GetTileWidth();
 	lixaoTetoGO->box.h = tileMap_LixaoTeto->GetHeight() * tileSet->GetTileHeight();
 	lixaoTetoGO->box.y = lixaoGO->box.y;
-	lixaoTetoGO->box.x = lixaoGO->box.x + 3 * tileSet->GetTileWidth();
+	lixaoTetoGO->box.x = lixaoGO->box.x + 4 * tileSet->GetTileWidth();
+
+	// hitbox da parede esquerda do lixao
+	lixaoParedeEsquerdaGO->box.w = tileMap_LixaoParedeEsquerda->GetWidth() * tileSet->GetTileWidth();
+	lixaoParedeEsquerdaGO->box.h = tileMap_LixaoParedeEsquerda->GetHeight() * tileSet->GetTileHeight();
+	lixaoParedeEsquerdaGO->box.y = lixaoGO->box.y;
+	lixaoParedeEsquerdaGO->box.x = lixaoGO->box.x;
 
 	lixaoGO->AddComponent(tileMap_Lixao);
 	lixaoTetoGO->AddComponent(tileMap_LixaoTeto);
+	lixaoParedeEsquerdaGO->AddComponent(tileMap_LixaoParedeEsquerda);
 
 	objectArray.emplace_back(lixaoGO);
 	objectArray.emplace_back(lixaoTetoGO);
+	objectArray.emplace_back(lixaoParedeEsquerdaGO);
 
 
 }
 
-
+// Loucura loucura
 void GameState0::Build(GameObject chaoGO, GameObject go, TileSet tileSet, TileMap tileMap, bool background, bool chao, bool teto, bool paredeEsquerda, bool paredeDireita, int ntilesX, int ntilesY) {
 	
 	if (background && !chao && !teto && !paredeEsquerda && !paredeDireita) {

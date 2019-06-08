@@ -8,7 +8,7 @@
 #include "GameObject.h"
 #include "Sprite.h"
 #include "Collider.h"
-#include "PenguinBody.h"
+#include "Player.h"
 #include "Alien.h"
 
 class Bullet : public Component{

@@ -59,12 +59,12 @@ void Alien::Update(float dt) {
 	else {
 		associated.angleDeg += ALIEN_ANGULAR_SPEED * dt;
 
-		if (PenguinBody::player) {
+		if (Player::player) {
 			// Descansa enquanto o timer ainda nao terminou
 			if (state == RESTING && restTimer.Get() < ALIEN_RESTING_TIME)
 				restTimer.Update(dt);
 			else if (state == RESTING) {		// Obtem posicao do jogador
-				destination = PenguinBody::player->GetCenter();
+				destination = Player::player->GetCenter();
 
 				speed = { 1, 0 };
 				speed = speed.GetRotated(destination.InclinacaoDaDiferenca(associated.box.Center()));
@@ -75,7 +75,7 @@ void Alien::Update(float dt) {
 			else if (state == MOVING && destination.Distancia(associated.box.Center()) <= ALIEN_SPEED * dt) {
 				associated.box.PlaceCenter(destination);
 
-				destination = PenguinBody::player->GetCenter();
+				destination = Player::player->GetCenter();
 
 				if (Minions > 0) {
 					auto closestMinionGO = minionArray[0].lock();

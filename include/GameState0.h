@@ -11,7 +11,7 @@
 #include "CameraFollower.h"
 #include "Camera.h"
 #include "Alien.h"
-#include "PenguinBody.h"
+#include "Player.h"
 #include "Collision.h"
 #include "State.h"
 #include "EndState.h"

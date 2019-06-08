@@ -41,7 +41,7 @@ int Bullet::GetDamage() {
 }
 
 void Bullet::NotifyCollision(GameObject& other) {
-	auto player = (PenguinBody*)other.GetComponent("PenguinBody");
+	auto player = (Player*)other.GetComponent("Player");
 	auto alien = (Alien*)other.GetComponent("Alien");
 	auto minion = (Minion*)other.GetComponent("Minion");
 

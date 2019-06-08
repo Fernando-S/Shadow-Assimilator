@@ -25,9 +25,10 @@ public:
 		int GetDepth();
 		void Update(float dt) override;
 		bool Is(std::string type) override;
-		float GetY();
+		int GetY();
+		int GetX();
 
-		bool floor = false, wall = false;
+		bool floor = false, colide = false;
 
 private:
 		std::vector<int> tileMatrix;
