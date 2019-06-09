@@ -73,6 +73,18 @@ void GameState0::LoadAssets() {
 
 
 ///////////////////////////////////
+//		Carrega um Robo			//
+/////////////////////////////////
+	auto robotGO = new GameObject();
+	auto robot = new Robot(*robotGO);
+
+	robotGO->AddComponent(robot);
+	robotGO->box.PlaceCenter(Vec2(1590, -59));
+
+	objectArray.emplace_back(robotGO);
+
+
+///////////////////////////////////
 //		Carrega a Personagem	//
 /////////////////////////////////
 	auto playerGO = new GameObject();
@@ -83,9 +95,8 @@ void GameState0::LoadAssets() {
 	//playerGO->box.PlaceCenter(Vec2(704, 500));
 	playerGO->box.PlaceCenter(Vec2(1600, -59));
 
-	//playerGO->box.w = 80;
-	std::cout << "largura da personagem: " << playerGO->box.w << std::endl;
-	std::cout << "altura da personagem: " << playerGO->box.h << std::endl;
+	//std::cout << "largura da personagem: " << playerGO->box.w << std::endl;
+	//std::cout << "altura da personagem: " << playerGO->box.h << std::endl;
 
 	objectArray.emplace_back(playerGO);
 
@@ -131,7 +142,7 @@ void GameState0::Update(float dt){
 	popRequested = inputManager.KeyPress(ESCAPE_KEY);		// Seta o popRequested para retornar a TitleSet ao apertar ESC
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray
 
-
+	/*
 	// KONAMI CODE
 	// todo - Apertar 2 teclas seguidas nao funciona (reconhece as duas apertando soh uma vez). Usar um timer pra resolver isso
 	if (surpriseGO) {
@@ -188,7 +199,7 @@ void GameState0::Update(float dt){
 			std::cout << "mostrando = false" << std::endl;
 		}
 	}
-
+	*/
 
 
 

@@ -94,6 +94,6 @@ void Minion::NotifyCollision(GameObject& other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
 
 	// conseguir nao bugar isso e dar dano no Alien
-	if ((bullet && !bullet->targetsPlayer) && bullet->playerBullet)
+	if (bullet /*&& !bullet->targetsPlayer*/ && bullet->playerBullet)
 		std::cout << "Minion acertado! Mas nao deu dano..." << std::endl;
 }

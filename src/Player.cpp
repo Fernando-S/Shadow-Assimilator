@@ -223,14 +223,14 @@ void Player::Update(float dt) {
 
 		double atrictSpeedLoss = PLAYER_ATRICT * dt;
 
-		if (!(inputManager.IsKeyDown(A_KEY)))
+		if (!inputManager.IsKeyDown(A_KEY))
 			Getspeed1 = false;
 
-		if (!(inputManager.IsKeyDown(D_KEY))) {
+		if (!inputManager.IsKeyDown(D_KEY)) {
 			Getspeed2 = false;
 		}
 
-		if ((!(inputManager.IsKeyDown(A_KEY))) && (!(inputManager.IsKeyDown(D_KEY))) && (!(inputManager.IsKeyDown(W_KEY))) && (!(inputManager.IsKeyDown(S_KEY)))) {
+		if (!inputManager.IsKeyDown(A_KEY) && !inputManager.IsKeyDown(D_KEY)/* && !inputManager.IsKeyDown(W_KEY) && !inputManager.IsKeyDown(S_KEY)*/) {
 
 			if (linearSpeed > 40) {
 				linearSpeed -= accelSpeedGain * 1.5;
@@ -362,8 +362,9 @@ void Player::NotifyCollision(GameObject& other) {
 	auto tile = (TileMap*)other.GetComponent("TileMap");
 
 	// Prosfere dano ao jogador se o tiro for dos Aliens
-	if ((bullet && bullet->targetsPlayer) && bullet->alienBullet) {
-		std::cout << "Vida do Penguin: " << hp << std::endl;
+	//if ((bullet && bullet->targetsPlayer) && bullet->alienBullet) {
+	if (bullet && bullet->robotBullet) {
+		std::cout << "Vida do Jogador: " << hp << std::endl;
 		hp -= bullet->GetDamage();
 	}
 

@@ -123,7 +123,7 @@ void Alien::NotifyCollision(GameObject &other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
 
 	// Prosfere dano ao Alien se o tiro for do jogador
-	if ((bullet && !bullet->targetsPlayer) && bullet->playerBullet /*|| minionHit*//* || MinionGotHit()*/) {
+	if (bullet /*&& !bullet->targetsPlayer*/ && bullet->playerBullet /*|| minionHit*//* || MinionGotHit()*/) {
 		hp -= bullet->GetDamage();
 		std::cout << "Vida do ALIEN: " << hp << std::endl;
 	}

@@ -20,6 +20,10 @@
 #define A_KEY               SDLK_a
 #define S_KEY               SDLK_s
 #define D_KEY               SDLK_d
+#define I_KEY               SDLK_i
+#define J_KEY               SDLK_j
+#define K_KEY               SDLK_k
+#define L_KEY               SDLK_l
 #define Z_KEY               SDLK_z
 #define X_KEY               SDLK_x
 #define ZERO_KEY            SDLK_0

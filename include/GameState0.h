@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "Alien.h"
 #include "Player.h"
+#include "Robot.h"
 #include "Collision.h"
 #include "State.h"
 #include "EndState.h"

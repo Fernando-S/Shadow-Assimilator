@@ -21,7 +21,7 @@ public:
 	void NotifyCollision(GameObject& other) override;
 	int GetDamage();
 
-	bool targetsPlayer, playerBullet = false, alienBullet = false;
+	bool /*targetsPlayer,*/ playerBullet = false, alienBullet = false, robotBullet = false;
 		
 private:
 	Vec2 speed;
