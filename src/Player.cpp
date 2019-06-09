@@ -55,6 +55,15 @@ void Player::Update(float dt) {
 		//pcannon.lock()->RequestDelete();
 		Camera::Unfollow();				// Camera para de segui-los
 
+		// Toca o som e mostra a explosao
+		auto explosionGO = new GameObject();
+		auto explosionSound = new Sound(*explosionGO, "./assets/audio/boom.wav");
+		explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/penguindeath.png", 5, 0.1, 1.5));
+		explosionGO->AddComponent(explosionSound);
+		explosionSound->Play();
+		explosionGO->box.PlaceCenter(associated.box.Center());
+		Game::GetInstance().GetCurrentState().AddObject(explosionGO);
+
 	}
 	else {
 		double accelSpeedGain = PLAYER_ACCELERATION * dt;
@@ -339,7 +348,10 @@ void Player::Update(float dt) {
 
 			//cout << "\nTROCA, PULO ESQUERDA\n\n";
 		}
-
+		if (inputManager.IsKeyDown(Q_KEY)) {
+			if (Player::player)
+				Shoot(Player::player->GetCenter());
+		}
 
 	}
 
@@ -526,6 +538,7 @@ void Player::NotifyCollision(GameObject& other) {
 
 }
 
+
 Vec2 Player::GetCenter() {
 	return associated.box.Center();
 }
@@ -533,3 +546,17 @@ Vec2 Player::GetCenter() {
 //Vec2 Player::GetFloor() {
 	//return floor.box.DistRecs(associated.box.y);
 //}
+
+
+void Player::Shoot(Vec2 target) {
+	// Carrega um Tiro do Robo
+	auto bulletGO = new GameObject();
+	bulletGO->box = associated.box.Center();
+
+	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(associated.box.Center()), BULLET_SPEED,
+		std::rand() % 11 + BULLET_MAX_DAMAGE - 10, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+	bullet->playerBullet = true;
+	bulletGO->AddComponent(bullet);
+
+	Game::GetInstance().GetCurrentState().AddObject(bulletGO);
+}

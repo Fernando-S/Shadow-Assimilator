@@ -44,10 +44,11 @@ void Bullet::NotifyCollision(GameObject& other) {
 	auto player = (Player*)other.GetComponent("Player");
 	auto alien = (Alien*)other.GetComponent("Alien");
 	auto minion = (Minion*)other.GetComponent("Minion");
+	auto robot = (Robot*)other.GetComponent("Robot");
 
 	// Deleta o tiro apenas se colidir com o inimigo do atirador
 	if (player && /*this->alienBullet*/ this->robotBullet)
 		associated.RequestDelete();
-	else if ( (alien /*|| minion*/) && this->playerBullet)
+	else if ( /*(alien /*|| minion)*/ robot && this->playerBullet)
 		associated.RequestDelete();
 }

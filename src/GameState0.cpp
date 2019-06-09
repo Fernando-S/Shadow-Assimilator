@@ -389,6 +389,18 @@ void GameState0::LoadBuildings() {
 	prediosGO->AddComponent(tileMap_Predios);
 	//objectArray.emplace_back(prediosGO);
 
+		auto testeGO = new GameObject();
+	auto tileMap_teste = new TileMap(*testeGO, "./assets/map/TESTE.txt", tileSet);
+
+	// hitbox do background
+	//testeGO->box.w = tileMap_teste->GetWidth() * tileSet->GetTileWidth();
+	//testeGO->box.h = tileMap_teste->GetHeight() * tileSet->GetTileHeight();
+	testeGO->box.y = chaoGO->box.y - (tileMap_teste->GetHeight() * tileSet->GetTileHeight());
+	testeGO->box.x = chaoGO->box.x;
+
+	testeGO->AddComponent(tileMap_teste);
+	//objectArray.emplace_back(testeGO);
+
 
 /////////////////////////////////
 //	  Predio Mais Simples	  //
@@ -458,8 +470,6 @@ void GameState0::LoadBuildings() {
 	objectArray.emplace_back(lixaoGO);
 	objectArray.emplace_back(lixaoTetoGO);
 	objectArray.emplace_back(lixaoParedeEsquerdaGO);
-
-
 }
 
 // Loucura loucura

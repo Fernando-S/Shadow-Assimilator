@@ -51,7 +51,16 @@ void Robot::Update(float dt) {
 		// Deleta os Penguins se o hp deles acabou
 		associated.RequestDelete();
 		//pcannon.lock()->RequestDelete();
-		Camera::Unfollow();				// Camera para de segui-los
+	//	Camera::Unfollow();				// Camera para de segui-los
+
+		// Carrega a animacao e som de explosao da morte do Alien
+		auto explosionGO = new GameObject();
+		auto explosionSound = new Sound(*explosionGO, "./assets/audio/boom.wav");
+		explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/aliendeath.png", 4, 0.15, 1.2));
+		explosionGO->AddComponent(explosionSound);
+		explosionSound->Play();
+		explosionGO->box.PlaceCenter(associated.box.Center());
+		Game::GetInstance().GetCurrentState().AddObject(explosionGO);
 
 	}
 	else {
@@ -155,28 +164,24 @@ void Robot::Update(float dt) {
 		if (!inputManager.IsKeyDown(J_KEY))
 			Getspeed1 = false;
 
-		if (!inputManager.IsKeyDown(L_KEY)) {
+		if (!inputManager.IsKeyDown(L_KEY))
 			Getspeed2 = false;
-		}
 
 		if (!inputManager.IsKeyDown(J_KEY) && !inputManager.IsKeyDown(L_KEY) /*&& !inputManager.IsKeyDown(I_KEY)/* && !inputManager.IsKeyDown(K_KEY)*/) {
 
-			if (linearSpeed > 40) {
+			if (linearSpeed > 40)
 				linearSpeed -= accelSpeedGain * 1.5;
 
-			}
-			if (linearSpeed < -40) {
+			if (linearSpeed < -40)
 				linearSpeed += accelSpeedGain * 1.5;
-			}
-			if ((linearSpeed < 40) && (linearSpeed > -40)) {
+
+			if ((linearSpeed < 40) && (linearSpeed > -40))
 				linearSpeed = 0;
-			}
 
 			if (Stop < 10) {
 				Stop++;
-				if (Stop == 1) {
+				if (Stop == 1)
 					Setrun = false;
-				}
 			}
 			Setidle = true;
 
@@ -284,14 +289,13 @@ bool Robot::Is(std::string type) {
 void Robot::NotifyCollision(GameObject& other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
-
+	
 	// Prosfere dano ao jogador se o tiro for dos Aliens
-	if (bullet /*&& bullet->targetsPlayer*/ && bullet->alienBullet) {
+	if (bullet && bullet->playerBullet) {
 		std::cout << "Vida do Robo: " << hp << std::endl;
 		hp -= bullet->GetDamage();
 	}
-
-	//tile.DistRecs(associated.box.y);
+	
 
 	// todo - pensar em como fazer essa colisao com o chao
 	if (tile) {
