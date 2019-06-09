@@ -467,14 +467,14 @@ void Player::NotifyCollision(GameObject& other) {
 				  (tile->GetY() <= this->associated.box.y /*+ this->associated.box.h*2/4 /*<= tile->GetY() * tile->GetHeight() * 80*/) ) {
 				// Paredes a ESQUERDA da personagem
 				if (tile->GetX() <= this->associated.box.x) {
-					cout << " << Parede a esquerda\n\n";
+					//cout << " << Parede a esquerda\n\n";
 					this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
 				}
 				// Paredes a DIREITA da personagem
 				else if (this->associated.box.x + this->associated.box.w >= tile->GetX()) {
-					cout << " << Parede a direita\n\n";
+					//cout << " << Parede a direita\n\n";
 					this->associated.box.x = tile->GetX() - this->associated.box.w;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
@@ -482,16 +482,22 @@ void Player::NotifyCollision(GameObject& other) {
 			}
 			// Colisao com o chao
 			else if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h) &&
-					  /*(*/ (tile->GetX() + tile->GetWidth()*80 >= this->associated.box.x) /*||
-					    (this->associated.box.x <= tile->GetX() + tile->GetHeight()*80) ) */) {
-
+					  (this->associated.box.x <= tile->GetX() + tile->GetWidth()*80) &&
+					  (tile->GetX() <= this->associated.box.x + this->associated.box.w) ) {
 				if (!airbone && tchfloor) {
 					this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
 					verticalSpeed = 0;
 				}
 				tchfloor = true;
 				airbone = false;
-				cout << "Chao abaixo\n\n";
+				//cout << "Chao abaixo\n\n";
+			}
+			// Momento que sai da colisao com o chao para impedir pulo aereo
+			else //if (!(tile->GetY() <= this->associated.box.y + this->associated.box.h) &&
+					// !(this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80)) {
+			{
+				airbone = true;
+				tchfloor = false;
 			}
 
 		
