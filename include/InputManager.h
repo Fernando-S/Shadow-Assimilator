@@ -26,6 +26,8 @@
 #define L_KEY               SDLK_l
 #define Z_KEY               SDLK_z
 #define X_KEY               SDLK_x
+#define Q_KEY               SDLK_q
+#define E_KEY               SDLK_e
 #define ZERO_KEY            SDLK_0
 #define ONE_KEY				SDLK_1
 #define TWO_KEY             SDLK_2

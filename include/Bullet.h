@@ -10,6 +10,7 @@
 #include "Collider.h"
 #include "Player.h"
 #include "Alien.h"
+#include "Robot.h"
 
 class Bullet : public Component{
 public:

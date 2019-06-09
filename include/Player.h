@@ -27,6 +27,7 @@ public:
 	bool Is(std::string type) override;
 	void NotifyCollision(GameObject& other) override;
 	Vec2 GetCenter();			// Funcao para poder pegar a posicao do player
+	void Shoot(Vec2 target);
 	//Vec2 GetFloor();			// Função para achar a distância do personagem pro chao
 
 	static Player* player;
