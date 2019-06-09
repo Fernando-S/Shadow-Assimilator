@@ -26,7 +26,7 @@ Player::Player(GameObject& associated) : Component(associated)/*, pcannon() */ {
 
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-	associated.angleDeg = angle * 180 / PI;
+//	associated.angleDeg = angle * 180 / PI;
 }
 
 Player::~Player() {
@@ -277,10 +277,10 @@ void Player::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
-
-			// arruma a hitbox da personagem animacao idle
-			//associated.box.w = 80;
-			//associated.box.x += 64;
+			
+			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
+			// arruma a posicao para o sprite do personagem idle aparecer do pe mais a frente apos a corrida
+			//associated.box.x += associated.box.w;//121;
 
 			associated.AddComponent(sprite);
 
@@ -290,11 +290,8 @@ void Player::Update(float dt) {
 		// Idle para a esquerda
 		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run < 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
-
-			// arruma a hitbox da personagem para animacao idle
-			//associated.box.w = 80;
-			//associated.box.x += 64;
+			//srite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
 
 			associated.AddComponent(sprite);
 			//cout << "\nTROCA, CORRE > PARA\n\n";
@@ -306,10 +303,6 @@ void Player::Update(float dt) {
 			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida(142x128).png", 12, 0.1);
 
-			// arruma a hitbox da personagem
-			//associated.box.w = 80;
-			//associated.box.x += 64;
-
 			associated.AddComponent(sprite);
 
 
@@ -319,11 +312,8 @@ void Player::Update(float dt) {
 		// Corrida para a esquerda
 		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
-
-			// arruma a hitbox da personagem
-			//associated.box.w = 80;
-			//associated.box.x += 64;
+			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida_invertida.png", 12, 0.1);
 
 			associated.AddComponent(sprite);
 
@@ -381,14 +371,14 @@ void Player::NotifyCollision(GameObject& other) {
 
 	// todo - pensar em como fazer essa colisao com o chao
 	if (tile) {
-		if (tile->floor) {
+		/*if (tile->floor) {
 
 			//std::cout << "y do chao: " << tile->GetY() << std::endl;
 
 			// Checa se o personagem colidiu com o tile por cima, ou seja, eh um chao
 			//verticalSpeed = 0;
-			//if ((this->associated.box.y + this->associated.box.h <= tile->GetY() +80/*+100 /* + 128*/)/* && !airbone && tchfloor*/) {
-			//if ((this->associated.box.y /*+128*/+ this->associated.box.h == tile->GetY() /*-150 /* + 128*/)/* && !airbone && tchfloor*/) {
+			//if ((this->associated.box.y + this->associated.box.h <= tile->GetY() +80/*+100 /* + 128/)/* && !airbone && tchfloor/) {
+			//if ((this->associated.box.y /*+128/+ this->associated.box.h == tile->GetY() /*-150 /* + 128/)/* && !airbone && tchfloor/) {
 			
 				if (!airbone && tchfloor) {
 					this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
@@ -427,7 +417,7 @@ void Player::NotifyCollision(GameObject& other) {
 				this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
 				tchfloor = true;
 				verticalSpeed = 0;
-			}*/
+			}/
 			//Jump = 0;
 
 
@@ -440,7 +430,7 @@ void Player::NotifyCollision(GameObject& other) {
 		//else if (!(tile->floor) && (tchfloor == false)) {
 			//Floorgrab = false;
 		//}
-		
+		*/
 		if (tile->colide) {
 			//Wallgrab = true;
 			//cout << "colidiu com o parede\n";
@@ -491,8 +481,8 @@ void Player::NotifyCollision(GameObject& other) {
 				}
 			}
 			// Colisao com o chao
-			else if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h) /*&&
-					  ( (tile->GetX() <= this->associated.box.x + this->associated.box.w) ||
+			else if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h) &&
+					  /*(*/ (tile->GetX() + tile->GetWidth()*80 >= this->associated.box.x) /*||
 					    (this->associated.box.x <= tile->GetX() + tile->GetHeight()*80) ) */) {
 
 				if (!airbone && tchfloor) {
@@ -504,34 +494,7 @@ void Player::NotifyCollision(GameObject& other) {
 				cout << "Chao abaixo\n\n";
 			}
 
-
-
-
-			/*
-			if ( (this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80) &&
-				 (tile->GetX() <= this->associated.box.x)) {
-				cout << " << Parede a esquerda\n\n";
-				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-			}
-			else if ( (this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80) &&
-					  (this->associated.box.x + this->associated.box.w >= tile->GetX()) ){
-				cout << " << Parede a direita\n\n";
-				this->associated.box.x = tile->GetX() - this->associated.box.w;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-			}
-			*/
-			
-
-
-
-
-
-
-
-
+		
 		}
 		/*
 		else {

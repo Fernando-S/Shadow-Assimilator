@@ -28,7 +28,7 @@ public:
 		int GetY();
 		int GetX();
 
-		bool floor = false, colide = false;
+		bool /*floor = false,*/ colide = false;
 
 private:
 		std::vector<int> tileMatrix;
