@@ -8,6 +8,9 @@
 
 using namespace std;
 
+bool moveDireita = false;
+bool moveEsquerda = false;
+
 Robot* Robot::robot = nullptr;
 
 Robot::Robot(GameObject& associated) : Component(associated)/*, pcannon() */ {
@@ -67,9 +70,8 @@ void Robot::Update(float dt) {
 		double accelSpeedGain = ROBOT_ACCELERATION * dt;
 
 		// aplica gravidade funcional a todo momento
-		if (verticalSpeed > -900) {
+		if (verticalSpeed > -900)
 			verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
-		}
 
 		if (inputManager.KeyRelease(SPACE_KEY)) {
 			associated.box.PlaceCenter(Vec2(694, 100));
@@ -77,7 +79,23 @@ void Robot::Update(float dt) {
 			tchfloor = false;
 		}
 
-		
+		// Tentativa de IA apenas quando esta no chao
+		if (!airbone && tchfloor) {
+			mudaDeLado.Update(dt);
+
+			if (mudaDeLado.Get() < ROBOT_TIME) {
+				moveDireita = true;
+				moveEsquerda = false;
+			}
+			else if (mudaDeLado.Get() < 2 * ROBOT_TIME) {
+				moveDireita = false;
+				moveEsquerda = true;
+			}
+			else if (mudaDeLado.Get() >= 2 * ROBOT_TIME)
+				mudaDeLado.Restart();
+		}
+
+		/*
 		if (inputManager.IsKeyDown(I_KEY) && tchfloor && !airbone) {
 
 			verticalSpeed = ROBOT_JUMP;
@@ -86,8 +104,8 @@ void Robot::Update(float dt) {
 			airbone = true;
 			doubleJump = false;
 		}
-		else
-			if (inputManager.IsKeyDown(J_KEY)) {
+		else*/
+			if (inputManager.IsKeyDown(J_KEY) || moveEsquerda) {
 
 				if (linearSpeed == 0)
 					oppositeSpeed = 0;
@@ -102,9 +120,8 @@ void Robot::Update(float dt) {
 					Stop = 0;
 				}
 
-				if (Run > -10) {
+				if (Run > -10)
 					Run--;
-				}
 
 				speedH = { -1, 0 };
 				if (oppositeSpeed > -ROBOT_SPEED) {
@@ -125,7 +142,7 @@ void Robot::Update(float dt) {
 				//std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
 
 			}
-			else if (inputManager.IsKeyDown(L_KEY)) {
+			else if (inputManager.IsKeyDown(L_KEY) || moveDireita) {
 				speedH = { 1, 0 };
 
 				if (Getspeed2 == false) {
@@ -140,9 +157,8 @@ void Robot::Update(float dt) {
 
 				}
 
-				if (Run < 10) {
+				if (Run < 10)
 					Run++;
-				}
 
 				if (linearSpeed < ROBOT_SPEED + 50) {
 
@@ -158,7 +174,7 @@ void Robot::Update(float dt) {
 				//cout << "linearSpeed: " << linearSpeed << endl;
 				//cout << "Run: " << Run << endl;
 			}
-
+		/*
 		double atrictSpeedLoss = ROBOT_ATRICT * dt;
 
 		if (!inputManager.IsKeyDown(J_KEY))
@@ -167,7 +183,7 @@ void Robot::Update(float dt) {
 		if (!inputManager.IsKeyDown(L_KEY))
 			Getspeed2 = false;
 
-		if (!inputManager.IsKeyDown(J_KEY) && !inputManager.IsKeyDown(L_KEY) /*&& !inputManager.IsKeyDown(I_KEY)/* && !inputManager.IsKeyDown(K_KEY)*/) {
+		if (!inputManager.IsKeyDown(J_KEY) && !inputManager.IsKeyDown(L_KEY) /*&& !inputManager.IsKeyDown(I_KEY)/* && !inputManager.IsKeyDown(K_KEY)/) {
 
 			if (linearSpeed > 40)
 				linearSpeed -= accelSpeedGain * 1.5;
@@ -187,7 +203,7 @@ void Robot::Update(float dt) {
 
 			//cout << "Stop: " << Stop << endl;
 
-		}
+		}*/
 		//////////////////////////////////////////////////////////////
 		/////////////////////VELOCIDADE///////////////////////////////
 
@@ -270,6 +286,7 @@ void Robot::Update(float dt) {
 			if(Player::player)
 				Shoot(Player::player->GetCenter());
 		}
+
 	}
 
 }
@@ -289,6 +306,7 @@ bool Robot::Is(std::string type) {
 void Robot::NotifyCollision(GameObject& other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
+	
 	
 	// Prosfere dano ao jogador se o tiro for dos Aliens
 	if (bullet && bullet->playerBullet) {
@@ -325,10 +343,36 @@ void Robot::NotifyCollision(GameObject& other) {
 				if (!airbone && tchfloor) {
 					this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
 					verticalSpeed = 0;
+					/*
+					mudaDeLado.Update(dt);
+				
+					// Tentativa de IA apenas quando esta no chao
+					if (mudaDeLado.Get() < ROBOT_TIME) {
+						moveDireita = true;
+						moveEsquerda = false;
+					}
+					else if(mudaDeLado.Get() < 2*ROBOT_TIME){
+						moveDireita = false;
+						moveEsquerda = true;
+					}
+					else
+						mudaDeLado.Restart();
+					*/
 				}
+				
 				tchfloor = true;
 				airbone = false;
 				//cout << "Chao abaixo\n\n";
+
+
+
+
+
+
+
+
+
+
 			}
 			// Momento que sai da colisao com o chao para impedir pulo aereo
 			else

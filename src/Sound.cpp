@@ -37,7 +37,7 @@ Sound::~Sound() {
 	if (chunk != nullptr) {
 		Mix_HaltChannel(channel);
 //		Mix_FreeChunk(chunk);
-		Mix_FreeChunk(chunk.get());
+//		Mix_FreeChunk(chunk.get());
 	}
 }
 

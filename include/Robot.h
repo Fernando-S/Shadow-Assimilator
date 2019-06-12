@@ -14,9 +14,10 @@
 
 #define ROBOT_MAX_LINEAR_SPEED 500	// em pixels/s
 #define ROBOT_ACCELERATION 1000		// em pixels/s²
-#define ROBOT_ATRICT 150				// em pixels/s²
+#define ROBOT_ATRICT 150			// em pixels/s²
 #define ROBOT_ANGULAR_SPEED PI		// em rads/s
-#define ROBOT_INITIAL_HP 100			// em hit points
+#define ROBOT_INITIAL_HP 100		// em hit points
+#define ROBOT_TIME 0.5				// tempo em segundos
 
 class Robot : public Component {
 public:
@@ -37,6 +38,7 @@ public:
 private:
 
 	//std::weak_ptr<GameObject> pcannon;
+	Timer mudaDeLado;
 	Vec2 speedH, speedV;
 	float linearSpeed, verticalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, Setjump = false,
