@@ -15,6 +15,7 @@ Player::Player(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	player = this;
 	speedH = { 1, 0 };
 	speedV = { 0, -1 };
+	speedD = { 1, -1 };
 	linearSpeed = 0;
 	angle = 0;
 	oppositeAccel = 0;
@@ -101,20 +102,28 @@ void Player::Update(float dt) {
 		//		DOUBLE JUMP
 		///////////////////////////////////////////////////////////////
 
-		if ((airbone) && !(inputManager.IsKeyDown(W_KEY)) && (Jump != 0) ) {
+		if ((airbone) && !(inputManager.IsKeyDown(W_KEY)) && (Jump == 1) ) {
 			doubleJump = true; // setar para 0 quando encostar no chão
-			Jump = 0;
 		}
 
 		if ((doubleJump) && (airbone) && (inputManager.IsKeyDown(W_KEY))) {
-			Jump--;
-			Jump--;
+			Jump++;
 			verticalSpeed = PLAYER_JUMP * 0.7;
 			doubleJump = false;
 		}
 		//////////////////////////////////////////////////
 		
-		if (inputManager.IsKeyDown(W_KEY) && tchfloor /*&& !Setjump*/ && !airbone/* && !Quedalivre*/) {
+		//////////////////////////////////////////////////////////////
+		//		WALL JUMP
+		///////////////////////////////////////////////////////////////
+		//if ((WallgrabL) && (airbone) && (inputManager.IsKeyDown(W_KEY))) {
+			//speedD = { 1, -1 };
+			//diagonalSpeed = PLAYER_JUMP;
+			//associated.box += speedD * diagonalSpeed*dt;
+		//}
+		///////////////////////////////////////////////////////////////
+
+		if (inputManager.IsKeyDown(W_KEY) && tchfloor  && !airbone && (Jump == 0)) {
 
 			verticalSpeed = PLAYER_JUMP;
 			//associated.box += speedV * verticalSpeed*dt;
@@ -123,7 +132,6 @@ void Player::Update(float dt) {
 			tchfloor = false;
 			//Setjump = true;
 			airbone = true;
-			Jump++;
 			Jump++;
 		}
 		else
@@ -235,9 +243,9 @@ void Player::Update(float dt) {
 		//////////////////////////////////////////////////////////////
 		/////////////////////VELOCIDADE///////////////////////////////
 
-		//if (Wallgrab == false) {
+		
 		associated.box += speedH * linearSpeed*dt;
-		//}
+		
 		associated.box += speedV * verticalSpeed*dt;
 
 		//cout << "Centro: " << GetCenter().y << endl;
@@ -289,7 +297,7 @@ void Player::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida(142x128).png", 12, 0.1);
-
+			associated.AddComponent(sprite);
 			//SFX//
 			//PlayerSFX_Run->Play();
 
@@ -464,6 +472,8 @@ void Player::NotifyCollision(GameObject& other) {
 					this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
+					WallgrabL = true;
+					WallgrabR = false;
 				}
 				// Paredes a DIREITA da personagem
 				else if (this->associated.box.x + this->associated.box.w >= tile->GetX()) {
@@ -471,6 +481,12 @@ void Player::NotifyCollision(GameObject& other) {
 					this->associated.box.x = tile->GetX() - this->associated.box.w;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
+					WallgrabL = false;
+					WallgrabR = true;
+				}
+				else {
+					WallgrabL = false;
+					WallgrabR = false;
 				}
 			}
 			// Colisao com o chao
