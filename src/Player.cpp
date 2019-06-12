@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Game.h"
+#include "Sound.h"
 
 #define MAX_SPEED 400
 #define SPEED_STEP 50
@@ -96,55 +97,22 @@ void Player::Update(float dt) {
 			airbone = true;
 			tchfloor = false;
 		}
+		//////////////////////////////////////////////////////////////
+		//		DOUBLE JUMP
+		///////////////////////////////////////////////////////////////
 
-
-
-		
-		//if (verticalSpeed == PLAYER_JUMP) {
-		//	Quedalivre = true;
-		//}
-		//cout << "\nJump: " << Jump << endl;
-		/*
-		if ((verticalSpeed <= PLAYER_JUMP) && (verticalSpeed > 0)) {
-			if (Jump < 10) {
-				Jump++;
-				cout << "\nJump: " << Jump;
-			}
+		if ((airbone) && !(inputManager.IsKeyDown(W_KEY)) && (Jump != 0) ) {
+			doubleJump = true; // setar para 0 quando encostar no chão
+			Jump = 0;
 		}
-		//cout << "\nverticalSpeed: " << verticalSpeed;
-		/*
-		if ((tchfloor == false) && (Quedalivre == true)) {
-			if (verticalSpeed > -900) {
-				verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
-				//cout << "\ndecrementa\n";
-				//cout << "\nverticalSpeed: " << verticalSpeed;
-			}
 
+		if ((doubleJump) && (airbone) && (inputManager.IsKeyDown(W_KEY))) {
+			Jump--;
+			Jump--;
+			verticalSpeed = PLAYER_JUMP * 0.7;
+			doubleJump = false;
 		}
-		
-
-
-		/*
-		// Acelera ou Desacelera os Penguins dependendo da tecla pressionada
-		if (inputManager.IsKeyDown(W_KEY) && (Floorgrab == true) && (Jump == 0)) {
-			Jump++;
-			verticalSpeed = 0;
-			tchfloor = false;
-			verticalSpeed = PLAYER_JUMP;
-			Setjump = true;
-		}
-		/*else if (inputManager.IsKeyDown(S_KEY) && (PENGUIN_MAX_LINEAR_SPEED - abs(linearSpeed) > accelSpeedGain)) {
-
-			linearSpeed -= accelSpeedGain;		// Acelera
-		}*/
-
-
-		
-		// todo - ver se eh pra mexer nessa condicao especifica para fazer o double jump
-		//if (inputManager.KeyPress(W_KEY) && !inputManager.IsKeyDown(W_KEY) && !tchfloor && airbone /*&& !doubleJump*/) {
-		//	verticalSpeed = PLAYER_JUMP;
-			//doubleJump = true;
-		//}
+		//////////////////////////////////////////////////
 		
 		if (inputManager.IsKeyDown(W_KEY) && tchfloor /*&& !Setjump*/ && !airbone/* && !Quedalivre*/) {
 
@@ -155,7 +123,8 @@ void Player::Update(float dt) {
 			tchfloor = false;
 			//Setjump = true;
 			airbone = true;
-			doubleJump = false;
+			Jump++;
+			Jump++;
 		}
 		else
 			if (inputManager.IsKeyDown(A_KEY)) {
@@ -281,12 +250,18 @@ void Player::Update(float dt) {
 		//	cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
 		}
 
+		//SFX//
+		//auto PlayerSFX_Run = new Sound(associated, "./assets/audio/Caminhada_1.wav");
+
 		// Idle para a direita
 		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
-			
+
+			//SFX//
+			//PlayerSFX_Run->Stop();
+
 			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
 			// arruma a posicao para o sprite do personagem idle aparecer do pe mais a frente apos a corrida
 			//associated.box.x += associated.box.w;//121;
@@ -302,6 +277,9 @@ void Player::Update(float dt) {
 			//srite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
 
+			//SFX//
+			//PlayerSFX_Run->Stop();
+
 			associated.AddComponent(sprite);
 			//cout << "\nTROCA, CORRE > PARA\n\n";
 		}
@@ -312,8 +290,8 @@ void Player::Update(float dt) {
 			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida(142x128).png", 12, 0.1);
 
-			associated.AddComponent(sprite);
-
+			//SFX//
+			//PlayerSFX_Run->Play();
 
 			//cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
 		}
@@ -323,7 +301,9 @@ void Player::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida_invertida.png", 12, 0.1);
-
+			
+			//SFX//
+			//PlayerSFX_Run->Play();
 			associated.AddComponent(sprite);
 
 
@@ -331,7 +311,7 @@ void Player::Update(float dt) {
 		}
 
 		// Pulo para a direita
-		if ((Setidle == false) && (Setjump == true)) {
+		if ((Setidle == false) && (Jump == 1)) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A DIREITA
 			////////////////////////
@@ -341,7 +321,7 @@ void Player::Update(float dt) {
 		}
 
 		// Pulo para a esquerda
-		if ((Setidle == false) && (Setjump == true) && (Run == -1)) {
+		if ((Setidle == false) && (Jump == 1) && (Run < 0)) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A ESQUERDA
 			////////////////////////
@@ -503,6 +483,8 @@ void Player::NotifyCollision(GameObject& other) {
 				}
 				tchfloor = true;
 				airbone = false;
+				Jump = 0;
+				doubleJump = false;
 				//cout << "Chao abaixo\n\n";
 			}
 			// Momento que sai da colisao com o chao para impedir pulo aereo

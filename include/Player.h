@@ -10,6 +10,8 @@
 #include "Collider.h"
 #include "PenguinCannon.h"
 #include "InputManager.h"
+#include "Music.h"
+
 
 #define PLAYER_MAX_LINEAR_SPEED 500	// em pixels/s
 #define PLAYER_ACCELERATION 1000		// em pixels/s²
@@ -40,7 +42,7 @@ private:
 	Vec2 speedH, speedV;
 	float linearSpeed, verticalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, Setjump = false,
-		Wallgrab = false,/*Floorgrab = false, Quedalivre = true,*/ tchfloor = false, airbone = true, doubleJump = false;
+		Wallgrab = false, tchfloor = false, airbone = true, doubleJump = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1, chao = 0;
 
 };
