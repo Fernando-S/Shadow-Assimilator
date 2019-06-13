@@ -71,7 +71,7 @@ void GameState0::LoadAssets() {
 	auto robot = new Robot(*robotGO);
 
 	robotGO->AddComponent(robot);
-	robotGO->box.PlaceCenter(Vec2(1600, -59));
+	robotGO->box.PlaceCenter(Vec2(1600, 800 - robotGO->box.h));
 
 	objectArray.emplace_back(robotGO);
 
@@ -84,8 +84,8 @@ void GameState0::LoadAssets() {
 	auto player = new Player(*playerGO);
 
 	playerGO->AddComponent(player);
-	//playerGO->box.PlaceCenter(Vec2(704, 500));
-	playerGO->box.PlaceCenter(Vec2(1600, -59));
+	playerGO->box.PlaceCenter(Vec2(1600, 800 - playerGO->box.h));
+	//playerGO->box.PlaceCenter(Vec2(1600, -59));
 
 	objectArray.emplace_back(playerGO);
 

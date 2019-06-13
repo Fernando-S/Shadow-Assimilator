@@ -404,6 +404,11 @@ void Player::NotifyCollision(GameObject& other) {
 			else {
 				WallgrabL = false;
 				WallgrabR = false;
+
+				/// todo - nao esta funcionando
+				// Momento que sai da colisao com o chao para impedir pulo aereo
+				airbone = true;
+				tchfloor = false;
 			}
 		}
 		/*

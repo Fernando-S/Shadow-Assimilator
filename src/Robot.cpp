@@ -324,55 +324,42 @@ void Robot::NotifyCollision(GameObject& other) {
 
 	if (tile) {
 		if (tile->colide) {
-			// Colisoes laterais
-			if ((this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80) &&
-				(tile->GetY() <= this->associated.box.y /*+ this->associated.box.h*2/4 /*<= tile->GetY() * tile->GetHeight() * 80*/)) {
-				// Paredes a ESQUERDA da personagem
-				if (tile->GetX() <= this->associated.box.x) {
-					this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
-					linearSpeed = 0;
-					oppositeSpeed = 0;
-				}
-				// Paredes a DIREITA da personagem
-				else if (this->associated.box.x + this->associated.box.w >= tile->GetX()) {
-					this->associated.box.x = tile->GetX() - this->associated.box.w;
-					linearSpeed = 0;
-					oppositeSpeed = 0;
-				}
-			}
+
 			// Colisao com o chao
-			else if ((tile->GetY() <= this->associated.box.y + this->associated.box.h) &&
-				(this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80) &&
-				(tile->GetX() <= this->associated.box.x + this->associated.box.w)) {
+			if ((tile->GetY() <= this->associated.box.y + this->associated.box.h)
+				&& (this->associated.box.y + this->associated.box.h <= tile->GetY() + 149)) {
 				if (!airbone && tchfloor) {
-					this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
+					this->associated.box.y = tile->GetY() - this->associated.box.h;
 					verticalSpeed = 0;
-					/*
-					mudaDeLado.Update(dt);
-				
-					// Tentativa de IA apenas quando esta no chao
-					if (mudaDeLado.Get() < ROBOT_TIME) {
-						moveDireita = true;
-						moveEsquerda = false;
-					}
-					else if(mudaDeLado.Get() < 2*ROBOT_TIME){
-						moveDireita = false;
-						moveEsquerda = true;
-					}
-					else
-						mudaDeLado.Restart();
-					*/
 				}
-				
 				tchfloor = true;
 				airbone = false;
+				Jump = 0;
+				doubleJump = false;
 			}
+			// Colisao com uma parede A DIREITA
+			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w)
+				&& (this->associated.box.x + this->associated.box.w <= tile->GetX() + 90)) {
+				this->associated.box.x = tile->GetX() - this->associated.box.w;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+			}
+			// Coliscao com uma parede A ESQUERDA
+			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
+				&& (tile->GetX() + tile->GetWidth() * 80 - 80 <= associated.box.x)) {
+				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+			}
+			
+			/// todo - nao esta funcionando
 			// Momento que sai da colisao com o chao para impedir pulo aereo
 			else
 			{
 				airbone = true;
 				tchfloor = false;
 			}
+			
 		}
 	}
 }
