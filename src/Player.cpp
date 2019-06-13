@@ -368,99 +368,14 @@ void Player::NotifyCollision(GameObject& other) {
 
 
 	if (tile) {
-		/*if (tile->floor) {
-
-			//std::cout << "y do chao: " << tile->GetY() << std::endl;
-
-			// Checa se o personagem colidiu com o tile por cima, ou seja, eh um chao
-			//verticalSpeed = 0;
-			//if ((this->associated.box.y + this->associated.box.h <= tile->GetY() +80/*+100 /* + 128/)/* && !airbone && tchfloor/) {
-			//if ((this->associated.box.y /*+128/+ this->associated.box.h == tile->GetY() /*-150 /* + 128/)/* && !airbone && tchfloor/) {
-			
-				if (!airbone && tchfloor) {
-					this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
-					verticalSpeed = 0;
-				}
-				tchfloor = true;
-				airbone = false;
-				//cout << "Entra na condicao de colisao com o chao\n\n";
-			//}
-			
-
-
-
-
-
-
-			//verticalSpeed = 100;
-			//associated.box += speedV * verticalSpeed*0.035;
-
-	//		if (!airbone && tchfloor) {
-		//		this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
-			//	verticalSpeed = 0;
-//			}
-
-
-
-
-			//else {
-			//	tchfloor = true;
-			//}
-
-
-
-			/*
-			if (Jump == 10) {
-				this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
-				tchfloor = true;
-				verticalSpeed = 0;
-			}/
-			//Jump = 0;
-
-
-			//Setjump = false;
-//			tchfloor = true;
-//			airbone = false;
-			//Quedalivre = false;
-			//Floorgrab = true;
-		}
-		//else if (!(tile->floor) && (tchfloor == false)) {
-			//Floorgrab = false;
-		//}
-		*/
 		if (tile->colide) {
 			//Wallgrab = true;
-			
-			// Colisoes laterais
-			if ( (this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80) &&
-				  (tile->GetY() <= this->associated.box.y /*- this->associated.box.h/2 /*+ this->associated.box.h*2/4 /*<= tile->GetY() * tile->GetHeight() * 80*/) ) {
-				// Paredes a ESQUERDA da personagem
-				if (tile->GetX() <= this->associated.box.x) {
-					this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
-					linearSpeed = 0;
-					oppositeSpeed = 0;
-					WallgrabL = true;
-					WallgrabR = false;
-				}
-				// Paredes a DIREITA da personagem
-				else if (this->associated.box.x + this->associated.box.w >= tile->GetX()) {
-					this->associated.box.x = tile->GetX() - this->associated.box.w;
-					linearSpeed = 0;
-					oppositeSpeed = 0;
-					WallgrabL = false;
-					WallgrabR = true;
-				}
-				else {
-					WallgrabL = false;
-					WallgrabR = false;
-				}
-			}
+
 			// Colisao com o chao
-			else if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h) &&
-					  (this->associated.box.x <= tile->GetX() + tile->GetWidth()*80) &&
-					  (tile->GetX() <= this->associated.box.x + this->associated.box.w) ) {
+			if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h)
+				&& (this->associated.box.y + this->associated.box.h <= tile->GetY() + 149) ) {
 				if (!airbone && tchfloor) {
-					this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
+					this->associated.box.y = tile->GetY() - this->associated.box.h;
 					verticalSpeed = 0;
 				}
 				tchfloor = true;
@@ -468,12 +383,27 @@ void Player::NotifyCollision(GameObject& other) {
 				Jump = 0;
 				doubleJump = false;
 			}
-			// Momento que sai da colisao com o chao para impedir pulo aereo
-			else //if (!(tile->GetY() <= this->associated.box.y + this->associated.box.h) &&
-					// !(this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80)) {
-			{
-				airbone = true;
-				tchfloor = false;
+			// Colisao com uma parede A DIREITA
+			else if ( (tile->GetX() <= this->associated.box.x + this->associated.box.w)
+					  && (this->associated.box.x + this->associated.box.w <= tile->GetX() + 90) ) {
+				this->associated.box.x = tile->GetX() - this->associated.box.w;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+				WallgrabL = false;
+				WallgrabR = true;
+			}
+			// Coliscao com uma parede A ESQUERDA
+			else if ( (associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
+				      && (tile->GetX() + tile->GetWidth() * 80 - 80 <= associated.box.x) ) {
+				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+				WallgrabL = true;
+				WallgrabR = false;
+			}
+			else {
+				WallgrabL = false;
+				WallgrabR = false;
 			}
 		}
 		/*
