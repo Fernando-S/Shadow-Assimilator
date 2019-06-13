@@ -28,19 +28,11 @@ void GameState0::LoadAssets() {
 ///////////////////////////////
 	
 	auto bgGO = new GameObject();
-	//auto bg = new Sprite(*bgGO, "./assets/img/Art_logo_mono3x.png");
-	//auto bg = new Sprite(*bgGO, "./assets/img/ocean.jpg");
-	//auto bg = new Sprite(*bgGO, "./assets/img/teste.jpg");
-	//auto bg = new Sprite(*bgGO, "./assets/img/cinza.jpg");
 	auto bg = new Sprite(*bgGO, "./assets/img/background.png");
 	//bg->background = true;				// Seta a flag de que eh o background que vai ser seguido	
 	
 	// Seta a escala e posiciona no centro da tela
-	//bg->SetScale(0.2789, 0.2416);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
 	bg->SetScale(1.3333, 1.3333);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
-
-	//bgGO->box.x = (Game::GetInstance().GetWidth() - bg->GetWidth()) / 2;
-	//bgGO->box.y = (Game::GetInstance().GetHeight() - bg->GetHeight()) / 4;
 
 	auto bgCamFollower = new CameraFollower(*bgGO);
 	bgGO->AddComponent(bgCamFollower);
@@ -79,9 +71,10 @@ void GameState0::LoadAssets() {
 	auto robot = new Robot(*robotGO);
 
 	robotGO->AddComponent(robot);
-	robotGO->box.PlaceCenter(Vec2(1590, -59));
+	robotGO->box.PlaceCenter(Vec2(1600, -59));
 
 	objectArray.emplace_back(robotGO);
+
 
 
 ///////////////////////////////////
@@ -91,12 +84,8 @@ void GameState0::LoadAssets() {
 	auto player = new Player(*playerGO);
 
 	playerGO->AddComponent(player);
-	//playerGO->box.PlaceCenter(Vec2(704, 741));
 	//playerGO->box.PlaceCenter(Vec2(704, 500));
 	playerGO->box.PlaceCenter(Vec2(1600, -59));
-
-	//std::cout << "largura da personagem: " << playerGO->box.w << std::endl;
-	//std::cout << "altura da personagem: " << playerGO->box.h << std::endl;
 
 	objectArray.emplace_back(playerGO);
 
@@ -402,6 +391,7 @@ void GameState0::LoadBuildings() {
 	//objectArray.emplace_back(testeGO);
 
 
+
 /////////////////////////////////
 //	  Predio Mais Simples	  //
 ///////////////////////////////
@@ -420,17 +410,14 @@ void GameState0::LoadBuildings() {
 	predioSimplesGO->box.x = 30 * tileMap_Chao->GetWidth();
 
 
-	//Build(*chaoGO, *predioSimplesGO, *tileSet, *tileMap_PredioSimples, true, false, false, false, false,
-		//chaoGO->box.y - (tileMap_Chao->GetHeight() * tileSet->GetTileHeight()), 30 * tileMap_Chao->GetWidth());
-
 	predioSimplesGO->AddComponent(tileMap_PredioSimples);
 	objectArray.emplace_back(predioSimplesGO);
 
 
 
-///////////////////////////////
-//	  Carrega o Lixao		//
-/////////////////////////////
+///////////////////////
+//	   Lixao		//
+/////////////////////
 	auto lixaoGO = new GameObject();
 	auto lixaoTetoGO = new GameObject();
 	auto lixaoParedeEsquerdaGO = new GameObject();
@@ -470,95 +457,24 @@ void GameState0::LoadBuildings() {
 	objectArray.emplace_back(lixaoGO);
 	objectArray.emplace_back(lixaoTetoGO);
 	objectArray.emplace_back(lixaoParedeEsquerdaGO);
+
+
+
+///////////////////////////////////
+//	Plataforma de 3 quadrados	//
+/////////////////////////////////
+	auto plataformaGO = new GameObject();
+	auto tileMap_Plataforma = new TileMap(*plataformaGO, "./assets/map/tileMap_Plataforma80x80.txt", tileSet);
+	tileMap_Plataforma->colide = true;
+
+
+	// hitbox da plataforma
+	plataformaGO->box.w = tileMap_Plataforma->GetWidth() * tileSet->GetTileWidth();
+	plataformaGO->box.h = tileMap_Plataforma->GetHeight() * tileSet->GetTileHeight();
+	plataformaGO->box.y = predioSimplesGO->box.y - 3 * tileSet->GetTileHeight();
+	plataformaGO->box.x = predioSimplesGO->box.x - 5 * tileSet->GetTileWidth();
+
+	plataformaGO->AddComponent(tileMap_Plataforma);
+	objectArray.emplace_back(plataformaGO);
 }
 
-// Loucura loucura
-void GameState0::Build(GameObject chaoGO, GameObject go, TileSet tileSet, TileMap tileMap, bool background, bool chao, bool teto, bool paredeEsquerda, bool paredeDireita, int ntilesX, int ntilesY) {
-	
-	if (background && !chao && !teto && !paredeEsquerda && !paredeDireita) {
-		/*
-		go->box.w = tileMap->GetWidth() * tileSet->GetTileWidth();
-		go->box.h = tileMap->GetHeight() * tileSet->GetTileHeight();
-		//go->box.y = chaoGO->box.y - (tileMap->GetHeight() * tileSet->GetTileHeight());
-		//go->box.x = 30 * tileMap->GetWidth();
-		go->box.y = ntilesY;
-		go->box.x = ntilesX;
-
-		go->AddComponent(tileMap);
-		*/
-
-		go.box.w = tileMap.GetWidth() * tileSet.GetTileWidth();
-		go.box.h = tileMap.GetHeight() * tileSet.GetTileHeight();
-		//go->box.y = chaoGO->box.y - (tileMap->GetHeight() * tileSet->GetTileHeight());
-		//go->box.x = 30 * tileMap->GetWidth();
-		go.box.y = ntilesY;
-		go.box.x = ntilesX;
-
-		go.AddComponent(&tileMap);
-	}
-	else if (background && chao && !teto && !paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (background && !chao && teto && !paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (background && !chao && !teto && paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (background && !chao && !teto && !paredeEsquerda && paredeDireita) {
-
-	}
-	else if (background && chao && teto && !paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (background && chao && !teto && paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (background && chao && !teto && !paredeEsquerda && paredeDireita) {
-
-	}
-	else if (background && chao && teto && paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (background && chao && teto && !paredeEsquerda && paredeDireita) {
-
-	}
-	else if (background && chao && teto && paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (!background && !chao && !teto && !paredeEsquerda && !paredeDireita) {	// Nao faz sentido existir esse daqui
-
-	}
-	else if (!background && chao && !teto && !paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (!background && !chao && teto && !paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (!background && !chao && !teto && paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (!background && !chao && !teto && !paredeEsquerda && paredeDireita) {
-
-	}
-	else if (!background && chao && teto && !paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (!background && chao && !teto && paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (!background && chao && !teto && !paredeEsquerda && paredeDireita) {
-
-	}
-	else if (!background && chao && teto && paredeEsquerda && !paredeDireita) {
-
-	}
-	else if (!background && chao && teto && !paredeEsquerda && paredeDireita) {
-
-	}
-	else if (!background && chao && teto && paredeEsquerda && !paredeDireita) {
-
-	}
-
-	
-}

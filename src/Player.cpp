@@ -102,11 +102,11 @@ void Player::Update(float dt) {
 		//		DOUBLE JUMP
 		///////////////////////////////////////////////////////////////
 
-		if ((airbone) && !(inputManager.IsKeyDown(W_KEY)) && (Jump == 1) ) {
+		if (airbone && !inputManager.IsKeyDown(W_KEY) && (Jump == 1) ) {
 			doubleJump = true; // setar para 0 quando encostar no chão
 		}
 
-		if ((doubleJump) && (airbone) && (inputManager.IsKeyDown(W_KEY))) {
+		if (doubleJump && airbone && inputManager.IsKeyDown(W_KEY)) {
 			Jump++;
 			verticalSpeed = PLAYER_JUMP * 0.7;
 			doubleJump = false;
@@ -218,22 +218,20 @@ void Player::Update(float dt) {
 
 		if (!inputManager.IsKeyDown(A_KEY) && !inputManager.IsKeyDown(D_KEY)/* && !inputManager.IsKeyDown(W_KEY) && !inputManager.IsKeyDown(S_KEY)*/) {
 
-			if (linearSpeed > 40) {
+			if (linearSpeed > 40)
 				linearSpeed -= accelSpeedGain * 1.5;
 
-			}
-			if (linearSpeed < -40) {
+			if (linearSpeed < -40)
 				linearSpeed += accelSpeedGain * 1.5;
-			}
-			if ((linearSpeed < 40) && (linearSpeed > -40)) {
+			
+			if ((linearSpeed < 40) && (linearSpeed > -40))
 				linearSpeed = 0;
-			}
+		
 
 			if (Stop < 10) {
 				Stop++;
-				if (Stop == 1) {
+				if (Stop == 1)
 					Setrun = false;
-				}
 			}
 			Setidle = true;
 
@@ -254,15 +252,15 @@ void Player::Update(float dt) {
 
 		//////////////////////////////////////////////////////////////
 
-		if ((Stop == 2) || (Run == 1) || (Run == -1) || (Jump == 1)) {
+		//if ((Stop == 2) || (Run == 1) || (Run == -1) || (Jump == 1)) {
 		//	cout << "\n\nSetidle: " << Setidle << "\nSetrun: " << Setrun << "\nStop: " << Stop << "\nlinearspeed: " << linearSpeed << "\n\n";
-		}
+		//}
 
 		//SFX//
 		//auto PlayerSFX_Run = new Sound(associated, "./assets/audio/Caminhada_1.wav");
 
 		// Idle para a direita
-		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run > 0)) {
+		if ( Setidle && !Setrun && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
@@ -280,7 +278,7 @@ void Player::Update(float dt) {
 		}
 
 		// Idle para a esquerda
-		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run < 0)) {
+		if (Setidle && !Setrun && (Stop == 2) && (Run < 0)) {
 			associated.RemoveComponent(sprite);
 			//srite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
@@ -293,7 +291,7 @@ void Player::Update(float dt) {
 		}
 
 		// Corrida para a direita
-		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {
+		if (!Setidle && Setrun && (Run == 1)) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida(142x128).png", 12, 0.1);
@@ -305,7 +303,7 @@ void Player::Update(float dt) {
 		}
 
 		// Corrida para a esquerda
-		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {
+		if (!Setidle && Setrun && (Run == -1)) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida_invertida.png", 12, 0.1);
@@ -319,7 +317,7 @@ void Player::Update(float dt) {
 		}
 
 		// Pulo para a direita
-		if ((Setidle == false) && (Jump == 1)) {
+		if (!Setidle && (Jump == 1)) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A DIREITA
 			////////////////////////
@@ -329,7 +327,7 @@ void Player::Update(float dt) {
 		}
 
 		// Pulo para a esquerda
-		if ((Setidle == false) && (Jump == 1) && (Run < 0)) {
+		if (!Setidle && (Jump == 1) && (Run < 0)) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A ESQUERDA
 			////////////////////////
@@ -368,9 +366,7 @@ void Player::NotifyCollision(GameObject& other) {
 		hp -= bullet->GetDamage();
 	}
 
-	//tile.DistRecs(associated.box.y);
 
-	// todo - pensar em como fazer essa colisao com o chao
 	if (tile) {
 		/*if (tile->floor) {
 
@@ -434,41 +430,12 @@ void Player::NotifyCollision(GameObject& other) {
 		*/
 		if (tile->colide) {
 			//Wallgrab = true;
-			//cout << "colidiu com o parede\n";
-			//std::cout << "x da parede: " << tile->GetX() + tile->GetWidth()*80 << std::endl << std::endl;
-			
-			// COLISAO BONITA COM PAREDE A ESQUERDA
-			/*
-			if (this->associated.box.x <= tile->GetX() + tile->GetWidth()*80) {
-				cout << " << Parede a esquerda\n\n";
-				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-			}
-			*/
-
-
-
-
-
-			// HORA DE DAS EPIFANIAS
-			//if ((this->associated.box.y /*+128*/+ this->associated.box.h == tile->GetY() /*-150 /* + 128*/)/* && !airbone && tchfloor*/) {
-			/*	if (!airbone && tchfloor) {
-					this->associated.box.y = tile->GetY() - this->associated.box.h;		// trava sem poder fazer o pulo
-					verticalSpeed = 0;
-				}
-				tchfloor = true;
-				airbone = false;
-				cout << "Entra na condicao de colisao com o chao\n\n";
-			//}
-			*/
 			
 			// Colisoes laterais
 			if ( (this->associated.box.x <= tile->GetX() + tile->GetWidth() * 80) &&
-				  (tile->GetY() <= this->associated.box.y /*+ this->associated.box.h*2/4 /*<= tile->GetY() * tile->GetHeight() * 80*/) ) {
+				  (tile->GetY() <= this->associated.box.y /*- this->associated.box.h/2 /*+ this->associated.box.h*2/4 /*<= tile->GetY() * tile->GetHeight() * 80*/) ) {
 				// Paredes a ESQUERDA da personagem
 				if (tile->GetX() <= this->associated.box.x) {
-					//cout << " << Parede a esquerda\n\n";
 					this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
@@ -477,7 +444,6 @@ void Player::NotifyCollision(GameObject& other) {
 				}
 				// Paredes a DIREITA da personagem
 				else if (this->associated.box.x + this->associated.box.w >= tile->GetX()) {
-					//cout << " << Parede a direita\n\n";
 					this->associated.box.x = tile->GetX() - this->associated.box.w;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
@@ -501,7 +467,6 @@ void Player::NotifyCollision(GameObject& other) {
 				airbone = false;
 				Jump = 0;
 				doubleJump = false;
-				//cout << "Chao abaixo\n\n";
 			}
 			// Momento que sai da colisao com o chao para impedir pulo aereo
 			else //if (!(tile->GetY() <= this->associated.box.y + this->associated.box.h) &&
@@ -510,40 +475,19 @@ void Player::NotifyCollision(GameObject& other) {
 				airbone = true;
 				tchfloor = false;
 			}
-
-		
 		}
 		/*
 		else {
 			Wallgrab = false;
 		}
 		*/
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
-
-
 }
 
 
 Vec2 Player::GetCenter() {
 	return associated.box.Center();
 }
-
-//Vec2 Player::GetFloor() {
-	//return floor.box.DistRecs(associated.box.y);
-//}
 
 
 void Player::Shoot(Vec2 target) {

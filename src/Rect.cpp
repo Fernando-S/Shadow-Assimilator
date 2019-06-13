@@ -63,8 +63,3 @@ void Rect::PlaceCenter(Vec2 pos) {
 	x = pos.x - (w/2);
 	y = pos.y - (h/2);
 }
-
-float Rect::DistRecs(Rect r) {
-	Vec2 v = this->Center();
-	return v.Distancia(r.Center());
-}

@@ -44,6 +44,8 @@ void Robot::Start() {
 	//	pcannon = Game::GetInstance().GetState().AddObject(cannonGO);
 	pcannon = Game::GetInstance().GetCurrentState().AddObject(cannonGO);
 	*/
+	initialX = associated.box.x;
+	initialY = associated.box.y;
 }
 
 void Robot::Update(float dt) {
@@ -81,18 +83,23 @@ void Robot::Update(float dt) {
 
 		// Tentativa de IA apenas quando esta no chao
 		if (!airbone && tchfloor) {
-			mudaDeLado.Update(dt);
+			//mudaDeLado.Update(dt);
 
-			if (mudaDeLado.Get() < ROBOT_TIME) {
+			if (!moveDireita && !moveEsquerda)
+				moveEsquerda = true;
+
+			//if (mudaDeLado.Get() < ROBOT_TIME) {
+			if (associated.box.x < initialX - 250) {
 				moveDireita = true;
 				moveEsquerda = false;
 			}
-			else if (mudaDeLado.Get() < 2 * ROBOT_TIME) {
+			//else if (mudaDeLado.Get() < 2 * ROBOT_TIME) {
+			else if (associated.box.x > initialX + 250) {
 				moveDireita = false;
 				moveEsquerda = true;
 			}
-			else if (mudaDeLado.Get() >= 2 * ROBOT_TIME)
-				mudaDeLado.Restart();
+			//else if (mudaDeLado.Get() >= 2 * ROBOT_TIME)
+			//	mudaDeLado.Restart();
 		}
 
 		/*
@@ -219,7 +226,7 @@ void Robot::Update(float dt) {
 		//////////////////////////////////////////////////////////////
 
 		// Idle para a direita
-		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run > 0)) {
+		if (Setidle && !Setrun && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
 			
@@ -233,7 +240,7 @@ void Robot::Update(float dt) {
 		}
 
 		// Idle para a esquerda
-		if ((Setidle == true) && (Setrun == false) && (Stop == 2) && (Run < 0)) {
+		if (Setidle && !Setrun && (Stop == 2) && (Run < 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
 
@@ -242,7 +249,7 @@ void Robot::Update(float dt) {
 		}
 
 		// Corrida para a direita
-		if ((Setidle == false) && (Setrun == true) && (Run == 1)) {
+		if (!Setidle && Setrun && (Run == 1)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
 
@@ -253,7 +260,7 @@ void Robot::Update(float dt) {
 		}
 
 		// Corrida para a esquerda
-		if ((Setidle == false) && (Setrun == true) && (Run == -1)) {
+		if (!Setidle && Setrun && (Run == -1)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 
@@ -264,7 +271,7 @@ void Robot::Update(float dt) {
 		}
 
 		// Pulo para a direita
-		if ((Setidle == false) && (Setjump == true)) {
+		if (!Setidle && Setjump) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A DIREITA
 			////////////////////////
@@ -274,7 +281,7 @@ void Robot::Update(float dt) {
 		}
 
 		// Pulo para a esquerda
-		if ((Setidle == false) && (Setjump == true) && (Run == -1)) {
+		if (!Setidle && Setjump && (Run == -1)) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A ESQUERDA
 			////////////////////////
@@ -315,7 +322,6 @@ void Robot::NotifyCollision(GameObject& other) {
 	}
 	
 
-	// todo - pensar em como fazer essa colisao com o chao
 	if (tile) {
 		if (tile->colide) {
 			// Colisoes laterais
@@ -323,14 +329,12 @@ void Robot::NotifyCollision(GameObject& other) {
 				(tile->GetY() <= this->associated.box.y /*+ this->associated.box.h*2/4 /*<= tile->GetY() * tile->GetHeight() * 80*/)) {
 				// Paredes a ESQUERDA da personagem
 				if (tile->GetX() <= this->associated.box.x) {
-					//cout << " << Parede a esquerda\n\n";
 					this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
 				}
 				// Paredes a DIREITA da personagem
 				else if (this->associated.box.x + this->associated.box.w >= tile->GetX()) {
-					//cout << " << Parede a direita\n\n";
 					this->associated.box.x = tile->GetX() - this->associated.box.w;
 					linearSpeed = 0;
 					oppositeSpeed = 0;
@@ -362,17 +366,6 @@ void Robot::NotifyCollision(GameObject& other) {
 				
 				tchfloor = true;
 				airbone = false;
-				//cout << "Chao abaixo\n\n";
-
-
-
-
-
-
-
-
-
-
 			}
 			// Momento que sai da colisao com o chao para impedir pulo aereo
 			else
