@@ -382,6 +382,11 @@ void Player::NotifyCollision(GameObject& other) {
 				oppositeSpeed = 0;
 				WallgrabL = false;
 				WallgrabR = true;
+
+				// Checa se esta desencostando da parede A DIREITA
+				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
+					cout << "desencostou dessa parede >>\n";
+				}
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ( (associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
@@ -391,11 +396,28 @@ void Player::NotifyCollision(GameObject& other) {
 				oppositeSpeed = 0;
 				WallgrabL = true;
 				WallgrabR = false;
+
+				// Checa se esta desencostando da parede A ESQUERDA
+				if (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x) {
+					cout << "desencostou dessa parede <<\n";
+				}
 			}
+
 			/// todo - checar se isso ainda funciona
 			else {
 				WallgrabL = false;
 				WallgrabR = false;
+				cout << "desencostou do tile\n";
+
+				// Checa se esta desencostando da parede A ESQUERDA
+				if (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x) {
+					cout << "desencostou dessa parede <<\n";
+				}
+
+				// Checa se esta desencostando da parede A DIREITA
+				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
+					cout << "desencostou dessa parede >>\n";
+				}
 			}
 		}
 		/*

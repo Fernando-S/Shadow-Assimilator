@@ -290,7 +290,7 @@ void Robot::Update(float dt) {
 		}
 
 		if (inputManager.IsKeyDown(NUMPAD_ONE_KEY)) {
-			if(Player::player)
+		//	if(Player::player && (Player::player->GetCenter() ))
 				Shoot(Player::player->GetCenter());
 		}
 

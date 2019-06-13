@@ -5,9 +5,8 @@
 
 auto surpriseGO = new GameObject();
 
-bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false;
-bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false;
-bool direita1 = false, direita2 = false, mostrando = false;
+bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
+bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false, direita1 = false, direita2 = false;
 
 GameState0::GameState0() {
 }
@@ -71,7 +70,7 @@ void GameState0::LoadAssets() {
 	auto robot = new Robot(*robotGO);
 
 	robotGO->AddComponent(robot);
-	robotGO->box.PlaceCenter(Vec2(1600, 800 - robotGO->box.h));
+	robotGO->box.PlaceCenter(Vec2(3000, 800 - robotGO->box.h));
 
 	objectArray.emplace_back(robotGO);
 
