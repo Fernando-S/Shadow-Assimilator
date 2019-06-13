@@ -336,6 +336,12 @@ void Robot::NotifyCollision(GameObject& other) {
 				airbone = false;
 				Jump = 0;
 				doubleJump = false;
+
+				// Checa se esta saindo de uma plataforma
+				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x)) {
+					airbone = true;
+					tchfloor = false;
+				}
 			}
 			// Colisao com uma parede A DIREITA
 			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w)
@@ -352,7 +358,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				oppositeSpeed = 0;
 			}
 			
-			/// todo - nao esta funcionando
+			/// todo - checar se isso ainda funciona
 			// Momento que sai da colisao com o chao para impedir pulo aereo
 			else
 			{

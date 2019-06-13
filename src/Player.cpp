@@ -69,21 +69,6 @@ void Player::Update(float dt) {
 	}
 	else {
 		double accelSpeedGain = PLAYER_ACCELERATION * dt;
-		//cout << "pos X da personagem: " << associated.box.x << endl;
-		//cout << "pos Y da personagem: " << associated.box.y << endl;
-
-		//std::cout << "largura + x da personagem: " << this->associated.box.w + this->associated.box.x << std::endl;
-		//std::cout << "altura + y da personagem: " << this->associated.box.h + this->associated.box.y << std::endl;
-
-		//if(!tchfloor/* && Setjump*/)
-			//verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
-
-
-
-		// todo - ver se eh pra mexer nessa condicao especifica para fazer o double jump
-		//if (verticalSpeed > -900) {
-		//	verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
-		//}
 
 		// aplica gravidade funcional a todo momento
 		if (verticalSpeed > -900 /*&& !tchfloor*/) {
@@ -123,7 +108,7 @@ void Player::Update(float dt) {
 		//}
 		///////////////////////////////////////////////////////////////
 
-		if (inputManager.IsKeyDown(W_KEY) && tchfloor  && !airbone && (Jump == 0)) {
+		if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
 
 			verticalSpeed = PLAYER_JUMP;
 			//associated.box += speedV * verticalSpeed*dt;
@@ -382,6 +367,12 @@ void Player::NotifyCollision(GameObject& other) {
 				airbone = false;
 				Jump = 0;
 				doubleJump = false;
+
+				// Checa se esta saindo de uma plataforma
+				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x)) {
+					airbone = true;
+					tchfloor = false;
+				}
 			}
 			// Colisao com uma parede A DIREITA
 			else if ( (tile->GetX() <= this->associated.box.x + this->associated.box.w)
@@ -401,14 +392,10 @@ void Player::NotifyCollision(GameObject& other) {
 				WallgrabL = true;
 				WallgrabR = false;
 			}
+			/// todo - checar se isso ainda funciona
 			else {
 				WallgrabL = false;
 				WallgrabR = false;
-
-				/// todo - nao esta funcionando
-				// Momento que sai da colisao com o chao para impedir pulo aereo
-				airbone = true;
-				tchfloor = false;
 			}
 		}
 		/*
