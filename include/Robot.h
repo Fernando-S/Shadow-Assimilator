@@ -38,9 +38,9 @@ public:
 private:
 
 	//std::weak_ptr<GameObject> pcannon;
-	Timer mudaDeLado;
+	//Timer mudaDeLado;
 	Vec2 speedH, speedV;
-	float linearSpeed, verticalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
+	float linearSpeed, verticalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed, initialX, initialY;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, Setjump = false,
 		Wallgrab = false,/*Floorgrab = false, Quedalivre = true,*/ tchfloor = false, airbone = true, doubleJump = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1, chao = 0;

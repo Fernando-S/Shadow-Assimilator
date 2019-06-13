@@ -19,7 +19,6 @@ public:
 	Rect operator=(Vec2 vec);
 	Rect operator+=(Vec2 vec);
 	
-	float DistRecs(Rect r);
 
 };
 

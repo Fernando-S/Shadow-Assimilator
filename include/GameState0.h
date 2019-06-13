@@ -34,7 +34,6 @@ public:
 
 private:
 	void LoadBuildings();
-	void Build(GameObject chaoGO, GameObject go, TileSet tileSet, TileMap tileMap, bool background, bool chao, bool teto, bool paredeEsquerda, bool paredeDireita, int ntilesX, int ntilesY);
 
 	TileSet* tileSet;
 	Music backgroundMusic;
