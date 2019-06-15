@@ -41,7 +41,7 @@ private:
 	Vec2 speedH, speedV, speedD;
 	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false,
-		WallgrabR = false, tchfloor = false, airbone = true, doubleJump = false;
+		WallgrabR = false, tchfloor = false, airbone = true, doubleJump = false, encostouTeto = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1;
 
 };
