@@ -336,6 +336,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				airbone = false;
 				Jump = 0;
 				doubleJump = false;
+				encostouTeto = false;
 
 				// Checa se esta saindo de uma plataforma
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x)) {
@@ -343,12 +344,18 @@ void Robot::NotifyCollision(GameObject& other) {
 					tchfloor = false;
 				}
 			}
+			// Colisao com tetos
+			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h) && encostouTeto) {
+				this->associated.box.y = tile->GetY() + 80;
+				verticalSpeed = 0;
+			}
 			// Colisao com uma parede A DIREITA
 			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w)
 				&& (this->associated.box.x + this->associated.box.w <= tile->GetX() + 90)) {
 				this->associated.box.x = tile->GetX() - this->associated.box.w;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
+				encostouTeto = false;
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
@@ -356,6 +363,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
+				encostouTeto = false;
 			}
 			
 			/// todo - checar se isso ainda funciona

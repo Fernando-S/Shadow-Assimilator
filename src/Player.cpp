@@ -135,9 +135,8 @@ void Player::Update(float dt) {
 					Stop = 0;
 				}
 
-				if (Run > -10) {
+				if (Run > -10)
 					Run--;
-				}
 
 				speedH = { -1, 0 };
 				if (oppositeSpeed > -PLAYER_SPEED) {
@@ -173,9 +172,8 @@ void Player::Update(float dt) {
 
 				}
 
-				if (Run < 10) {
+				if (Run < 10)
 					Run++;
-				}
 
 				if (linearSpeed < PLAYER_SPEED + 50) {
 
@@ -197,9 +195,8 @@ void Player::Update(float dt) {
 		if (!inputManager.IsKeyDown(A_KEY))
 			Getspeed1 = false;
 
-		if (!inputManager.IsKeyDown(D_KEY)) {
+		if (!inputManager.IsKeyDown(D_KEY)) 
 			Getspeed2 = false;
-		}
 
 		if (!inputManager.IsKeyDown(A_KEY) && !inputManager.IsKeyDown(D_KEY)/* && !inputManager.IsKeyDown(W_KEY) && !inputManager.IsKeyDown(S_KEY)*/) {
 
@@ -356,7 +353,7 @@ void Player::NotifyCollision(GameObject& other) {
 		if (tile->colide) {
 			//Wallgrab = true;
 
-			// Colisao com o chao
+			// Colisao com chaos
 			if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h)
 				&& (this->associated.box.y + this->associated.box.h <= tile->GetY() + 149) ) {
 				if (!airbone && tchfloor) {
@@ -367,12 +364,18 @@ void Player::NotifyCollision(GameObject& other) {
 				airbone = false;
 				Jump = 0;
 				doubleJump = false;
+				encostouTeto = false;
 
 				// Checa se esta saindo de uma plataforma
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x)) {
 					airbone = true;
 					tchfloor = false;
 				}
+			}
+			// Colisao com tetos
+			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h) && encostouTeto) {
+					this->associated.box.y = tile->GetY() + 80;
+					verticalSpeed = 0;
 			}
 			// Colisao com uma parede A DIREITA
 			else if ( (tile->GetX() <= this->associated.box.x + this->associated.box.w)
@@ -382,6 +385,7 @@ void Player::NotifyCollision(GameObject& other) {
 				oppositeSpeed = 0;
 				WallgrabL = false;
 				WallgrabR = true;
+				encostouTeto = false;
 
 				// Checa se esta desencostando da parede A DIREITA
 				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
@@ -396,6 +400,7 @@ void Player::NotifyCollision(GameObject& other) {
 				oppositeSpeed = 0;
 				WallgrabL = true;
 				WallgrabR = false;
+				encostouTeto = false;
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x) {
@@ -408,6 +413,12 @@ void Player::NotifyCollision(GameObject& other) {
 				WallgrabL = false;
 				WallgrabR = false;
 				cout << "desencostou do tile\n";
+				
+				
+				// Checa se saiu de algum chao/plataforma e bateu em um teto
+				if (airbone && !tchfloor)
+					encostouTeto = true;
+
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x) {
