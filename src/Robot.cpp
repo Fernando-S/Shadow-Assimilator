@@ -395,7 +395,8 @@ Vec2 Robot::GetCenter() {
 void Robot::Shoot(Vec2 target) {
 	// Carrega um Tiro do Robo
 	auto bulletGO = new GameObject();
-	bulletGO->box = associated.box.Center();
+	bulletGO->box = associated.box.Center();		// faz o tiro sair do centro do robô
+	bulletGO->box.y = associated.box.y + 25;		// faz ele sair do olho
 
 	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(/*Vec2(associated.box.x, associated.box.y)*/associated.box.Center()), BULLET_SPEED,
 		std::rand() % 11 + BULLET_MAX_DAMAGE - 10, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
