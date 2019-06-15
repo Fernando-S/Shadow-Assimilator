@@ -475,5 +475,45 @@ void GameState0::LoadBuildings() {
 
 	plataformaGO->AddComponent(tileMap_Plataforma);
 	objectArray.emplace_back(plataformaGO);
+
+
+
+///////////////////////////////////////////
+//	SEGUNDA Plataforma de 3 quadrados	//
+/////////////////////////////////////////
+	auto segundaPlataformaGO = new GameObject();
+	auto tileMap_SegundaPlataforma = new TileMap(*segundaPlataformaGO, "./assets/map/tileMap_Plataforma80x80.txt", tileSet);
+	tileMap_SegundaPlataforma->colide = true;
+
+
+	// hitbox da plataforma
+	segundaPlataformaGO->box.w = tileMap_SegundaPlataforma->GetWidth() * tileSet->GetTileWidth();
+	segundaPlataformaGO->box.h = tileMap_SegundaPlataforma->GetHeight() * tileSet->GetTileHeight();
+	segundaPlataformaGO->box.y = predioSimplesGO->box.y /*-  1 * tileSet->GetTileHeight()*/;
+	segundaPlataformaGO->box.x = predioSimplesGO->box.x - 5 * tileSet->GetTileWidth();
+
+	segundaPlataformaGO->AddComponent(tileMap_SegundaPlataforma);
+	objectArray.emplace_back(segundaPlataformaGO);
+
+
+
+///////////////////////////////////
+//	 Plataforma de 3 quadrados	//
+/////////////////////////////////
+	auto terceiraPlataformaGO = new GameObject();
+	auto tileMap_TerceiraPlataforma = new TileMap(*terceiraPlataformaGO, "./assets/map/tileMap_Plataforma80x80.txt", tileSet);
+	tileMap_TerceiraPlataforma->colide = true;
+
+
+	// hitbox da plataforma
+	terceiraPlataformaGO->box.w = tileMap_TerceiraPlataforma->GetWidth() * tileSet->GetTileWidth();
+	terceiraPlataformaGO->box.h = tileMap_TerceiraPlataforma->GetHeight() * tileSet->GetTileHeight();
+	terceiraPlataformaGO->box.y = predioSimplesGO->box.y + 1 * tileSet->GetTileHeight();
+	terceiraPlataformaGO->box.x = predioSimplesGO->box.x + 10 * tileSet->GetTileWidth();
+
+	terceiraPlataformaGO->AddComponent(tileMap_TerceiraPlataforma);
+	objectArray.emplace_back(terceiraPlataformaGO);
+
+
 }
 

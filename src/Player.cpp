@@ -87,9 +87,8 @@ void Player::Update(float dt) {
 		//		DOUBLE JUMP
 		///////////////////////////////////////////////////////////////
 
-		if (airbone && !inputManager.IsKeyDown(W_KEY) && (Jump == 1) ) {
+		if (airbone && !inputManager.IsKeyDown(W_KEY) && (Jump == 1) )
 			doubleJump = true; // setar para 0 quando encostar no chão
-		}
 
 		if (doubleJump && airbone && inputManager.IsKeyDown(W_KEY)) {
 			Jump++;
@@ -353,9 +352,11 @@ void Player::NotifyCollision(GameObject& other) {
 		if (tile->colide) {
 			//Wallgrab = true;
 
+			/// todo - dá ruim ao pular de lugares altos se for soh 80
+			/// mas tbm dá ruim se for muito maior na hora de encostar pelo lado da plataforma
 			// Colisao com chaos
 			if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h)
-				&& (this->associated.box.y + this->associated.box.h <= tile->GetY() + 149) ) {
+				&& (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*/ +90) ) {
 				if (!airbone && tchfloor) {
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
 					verticalSpeed = 0;
@@ -373,7 +374,8 @@ void Player::NotifyCollision(GameObject& other) {
 				}
 			}
 			// Colisao com tetos
-			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h) && encostouTeto) {
+			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 149/* +120*/ < this->associated.box.y + this->associated.box.h) && encostouTeto
+					  /*&& this->associated.box.y + this->associated.box.h < tile->GetY()*/) {
 					this->associated.box.y = tile->GetY() + 80;
 					verticalSpeed = 0;
 			}
@@ -416,9 +418,10 @@ void Player::NotifyCollision(GameObject& other) {
 				
 				
 				// Checa se saiu de algum chao/plataforma e bateu em um teto
-				if (airbone && !tchfloor)
+				if (airbone && !tchfloor) {
 					encostouTeto = true;
-
+					cout << "Bateu no teto\n";
+				}
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x) {

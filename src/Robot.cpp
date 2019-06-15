@@ -359,7 +359,7 @@ void Robot::NotifyCollision(GameObject& other) {
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
-				&& (tile->GetX() + tile->GetWidth() * 80 - 80 <= associated.box.x)) {
+				&& ((tile->GetX() + tile->GetWidth() * 80 - 80) <= associated.box.x)) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
@@ -370,6 +370,10 @@ void Robot::NotifyCollision(GameObject& other) {
 			// Momento que sai da colisao com o chao para impedir pulo aereo
 			else
 			{
+				// Checa se saiu de algum chao/plataforma e bateu em um teto
+				if (airbone && !tchfloor)
+					encostouTeto = true;
+
 				airbone = true;
 				tchfloor = false;
 			}
@@ -382,6 +386,7 @@ void Robot::NotifyCollision(GameObject& other) {
 Vec2 Robot::GetCenter() {
 	return associated.box.Center();
 }
+
 
 void Robot::Shoot(Vec2 target) {
 	// Carrega um Tiro do Robo
