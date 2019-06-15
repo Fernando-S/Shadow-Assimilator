@@ -71,6 +71,8 @@ void Robot::Update(float dt) {
 	else {
 		double accelSpeedGain = ROBOT_ACCELERATION * dt;
 
+		cooldownTimer.Update(dt);
+
 		// aplica gravidade funcional a todo momento
 		if (verticalSpeed > -900)
 			verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
@@ -289,10 +291,12 @@ void Robot::Update(float dt) {
 			//cout << "\nTROCA, PULO ESQUERDA\n\n";
 		}
 
-		if (inputManager.IsKeyDown(NUMPAD_ONE_KEY)) {
-		//	if(Player::player && (Player::player->GetCenter() ))
-				Shoot(Player::player->GetCenter());
-		}
+		//if (inputManager.IsKeyDown(NUMPAD_ONE_KEY)) {
+		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 800) && cooldownTimer.Get() > 1.8) {
+			Shoot(/*Player::player->GetCenter()*/Vec2(Player::player->GetCenter().x, this->GetCenter().y));
+			cooldownTimer.Restart();
+			}
+		//}
 
 	}
 
@@ -393,7 +397,7 @@ void Robot::Shoot(Vec2 target) {
 	auto bulletGO = new GameObject();
 	bulletGO->box = associated.box.Center();
 
-	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(associated.box.Center()), BULLET_SPEED,
+	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(/*Vec2(associated.box.x, associated.box.y)*/associated.box.Center()), BULLET_SPEED,
 		std::rand() % 11 + BULLET_MAX_DAMAGE - 10, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
 	bullet->robotBullet = true;
 	bulletGO->AddComponent(bullet);
