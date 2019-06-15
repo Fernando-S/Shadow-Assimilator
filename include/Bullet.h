@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Alien.h"
 #include "Robot.h"
+#include "TileMap.h"
 
 class Bullet : public Component{
 public:
