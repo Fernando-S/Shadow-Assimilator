@@ -44,8 +44,70 @@ void GameState0::LoadAssets() {
 	objectArray.emplace_back(bgGO);
 
 	// Chama funcao que carrega todas as contrucoes (chaos e predios) 
-	LoadBuildings();
+	//LoadBuildings();
 	
+
+	// Teste do novo TileSet
+	auto chaoGO = new GameObject();
+	chaoGO->box.x = 0;
+	chaoGO->box.y = 800;
+
+	auto colidemGO = new GameObject();
+	colidemGO->box.x = 0;
+	//colidemGO->box.y = -1056;
+	colidemGO->box.y = -288;
+
+	auto backgroundGO = new GameObject();
+	backgroundGO->box.x = 0;
+	//backgroundGO->box.y = -1056;
+	backgroundGO->box.y = -288;
+
+	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
+	//auto tileMap = new TileMap(*chaoGO, "./assets/map/MEUtileMap.txt", tileSet);
+
+
+	// TileSet de 40 por 40
+//	auto tileSet = new TileSet(40, 40, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+//	auto tileMap = new TileMap(*chaoGO, "./assets/map/tileMap40x40.txt", tileSet);
+
+
+	// Teste do TileSet de 80 por 80 do chao
+	auto tileSet = new TileSet(64, 64, "./assets/img/TileSetAzul.png");
+	//auto tileSetEscuro = new TileSet(32, 32, "./assets/img/tileESCURO.png");
+	auto tileSetEscuro = new TileSet(64, 64, "./assets/img/128sepa.png");
+
+	auto tileMap_Background = new TileMap(*backgroundGO, "./assets/map/tileMap_TUDAOBACKGROUNDOTIMIZADO.txt", tileSetEscuro);
+	//auto tileMap_Background = new TileMap(*backgroundGO, "./assets/map/tileMap_TUDAOBACKGROUND.txt", tileSet);
+	//auto tileMap_Colidem = new TileMap(*colidemGO, "./assets/map/tileMap_TUDAO.txt", tileSet);
+	auto tileMap_Colidem = new TileMap(*colidemGO, "./assets/map/tileMap_TUDAOOTIMIZADO.txt", tileSet);
+	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_CHAOZAO.txt", tileSet);
+	
+	tileMap_Background->colide = false;
+	tileMap_Colidem->colide = false;
+	tileMap_Chao->colide = true;
+
+	chaoGO->box.w = tileMap_Chao->GetWidth() * tileSet->GetTileWidth();
+	chaoGO->box.h = tileMap_Chao->GetHeight() * tileSet->GetTileHeight();
+
+	chaoGO->AddComponent(tileMap_Chao);
+	objectArray.emplace_back(chaoGO);
+
+	colidemGO->AddComponent(tileMap_Colidem);
+	objectArray.emplace_back(colidemGO);
+
+	backgroundGO->AddComponent(tileMap_Background);
+	objectArray.emplace_back(backgroundGO);
+
+
+
+
+
+
+
+
+
+
+
 
 ////////////////////////////////
 //	   Carrega o Ricardo	 //
@@ -83,7 +145,7 @@ void GameState0::LoadAssets() {
 	auto player = new Player(*playerGO);
 
 	playerGO->AddComponent(player);
-	playerGO->box.PlaceCenter(Vec2(1600, 800 - playerGO->box.h));
+	playerGO->box.PlaceCenter(Vec2(1600, 600 - playerGO->box.h));
 	//playerGO->box.PlaceCenter(Vec2(1600, -59));
 
 	objectArray.emplace_back(playerGO);
@@ -326,6 +388,7 @@ void GameState0::Resume() {
 }
 
 void GameState0::LoadBuildings() {
+	/*
 /////////////////
 //	  Chao	  //
 ///////////////
@@ -413,29 +476,30 @@ void GameState0::LoadBuildings() {
 	objectArray.emplace_back(predioSimplesGO);
 
 
-
+	*/
 ///////////////////////
 //	   Lixao		//
 /////////////////////
 	auto lixaoGO = new GameObject();
-	auto lixaoTetoGO = new GameObject();
-	auto lixaoParedeEsquerdaGO = new GameObject();
+//	auto lixaoTetoGO = new GameObject();
+//	auto lixaoParedeEsquerdaGO = new GameObject();
 
 	// todo - usaremos o mesmo tileSet por enquanto, nao temos um tileSet soh do chao
-	//auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
+	auto tileSet = new TileSet(80, 80, "./assets/img/tilesetPRETOeLARANJA(40x40).png");
 	auto tileMap_Lixao = new TileMap(*lixaoGO, "./assets/map/tileMap_Lixao80x80.txt", tileSet);
-	auto tileMap_LixaoTeto = new TileMap(*lixaoTetoGO, "./assets/map/tileMap_LixaoTeto80x80.txt", tileSet);
-	auto tileMap_LixaoParedeEsquerda = new TileMap(*lixaoParedeEsquerdaGO, "./assets/map/tileMap_LixaoParedeEsquerda80x80.txt", tileSet);
+/*	auto tileMap_LixaoTeto = new TileMap(*lixaoTetoGO, "./assets/map/tileMap_LixaoTeto80x80.txt", tileSet);
+//	auto tileMap_LixaoParedeEsquerda = new TileMap(*lixaoParedeEsquerdaGO, "./assets/map/tileMap_LixaoParedeEsquerda80x80.txt", tileSet);
 	//tileMap_Lixao->colide = true;
 	//tileMap_LixaoTeto->floor = true;
-	tileMap_LixaoTeto->colide = true;
-	tileMap_LixaoParedeEsquerda->colide = true;
+//	tileMap_LixaoTeto->colide = true;
+//	tileMap_LixaoParedeEsquerda->colide = true;
 
 	// hitbox que envolve o lixao
 	lixaoGO->box.w = tileMap_Lixao->GetWidth() * tileSet->GetTileWidth();
 	lixaoGO->box.h = tileMap_Lixao->GetHeight() * tileSet->GetTileHeight();
-	lixaoGO->box.y = chaoGO->box.y - (tileMap_Lixao->GetHeight() * tileSet->GetTileHeight());
-	lixaoGO->box.x = chaoGO->box.x;
+	lixaoGO->box.y = /*chaoGO->box.y/ 800 - (tileMap_Lixao->GetHeight() * tileSet->GetTileHeight());
+	lixaoGO->box.x = /*chaoGO->box.x/0;
+	
 
 	// hitbox do teto do lixao
 	lixaoTetoGO->box.w = tileMap_LixaoTeto->GetWidth() * tileSet->GetTileWidth();
@@ -448,14 +512,14 @@ void GameState0::LoadBuildings() {
 	lixaoParedeEsquerdaGO->box.h = tileMap_LixaoParedeEsquerda->GetHeight() * tileSet->GetTileHeight();
 	lixaoParedeEsquerdaGO->box.y = lixaoGO->box.y;
 	lixaoParedeEsquerdaGO->box.x = lixaoGO->box.x;
-
+*/
 	lixaoGO->AddComponent(tileMap_Lixao);
-	lixaoTetoGO->AddComponent(tileMap_LixaoTeto);
-	lixaoParedeEsquerdaGO->AddComponent(tileMap_LixaoParedeEsquerda);
+//	lixaoTetoGO->AddComponent(tileMap_LixaoTeto);
+//	lixaoParedeEsquerdaGO->AddComponent(tileMap_LixaoParedeEsquerda);
 
 	objectArray.emplace_back(lixaoGO);
-	objectArray.emplace_back(lixaoTetoGO);
-	objectArray.emplace_back(lixaoParedeEsquerdaGO);
+/*	objectArray.emplace_back(lixaoTetoGO);
+/	objectArray.emplace_back(lixaoParedeEsquerdaGO);
 
 
 
@@ -489,7 +553,7 @@ void GameState0::LoadBuildings() {
 	// hitbox da plataforma
 	segundaPlataformaGO->box.w = tileMap_SegundaPlataforma->GetWidth() * tileSet->GetTileWidth();
 	segundaPlataformaGO->box.h = tileMap_SegundaPlataforma->GetHeight() * tileSet->GetTileHeight();
-	segundaPlataformaGO->box.y = predioSimplesGO->box.y /*-  1 * tileSet->GetTileHeight()*/;
+	segundaPlataformaGO->box.y = predioSimplesGO->box.y /*-  1 * tileSet->GetTileHeight()/;
 	segundaPlataformaGO->box.x = predioSimplesGO->box.x - 5 * tileSet->GetTileWidth();
 
 	segundaPlataformaGO->AddComponent(tileMap_SegundaPlataforma);
@@ -513,7 +577,7 @@ void GameState0::LoadBuildings() {
 
 	terceiraPlataformaGO->AddComponent(tileMap_TerceiraPlataforma);
 	objectArray.emplace_back(terceiraPlataformaGO);
-
+	*/
 
 }
 

@@ -253,7 +253,9 @@ void Robot::Update(float dt) {
 		// Corrida para a direita
 		if (!Setidle && Setrun && (Run == 1)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
+			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
+			//sprite = new Sprite(associated, "./assets/img/walk_1.png", 6, 0.1);
+			sprite = new Sprite(associated, "./assets/img/vilao_corrida.png", 10, 0.09);
 
 			associated.AddComponent(sprite);
 
@@ -264,7 +266,9 @@ void Robot::Update(float dt) {
 		// Corrida para a esquerda
 		if (!Setidle && Setrun && (Run == -1)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
+			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
+			//sprite = new Sprite(associated, "./assets/img/walk2_1.png", 6, 0.1);
+			sprite = new Sprite(associated, "./assets/img/vilao_corrida_inv.png", 10, 0.09);
 
 			associated.AddComponent(sprite);
 
