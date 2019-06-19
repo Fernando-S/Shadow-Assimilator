@@ -18,6 +18,7 @@
 #define PLAYER_ATRICT 150				// em pixels/s²
 #define PLAYER_ANGULAR_SPEED PI			// em rads/s
 #define PLAYER_INITIAL_HP 22			// em hit points
+#define ONETILESQUARE 64				// tamanho de 1 tile
 
 class Player : public Component {
 public:
