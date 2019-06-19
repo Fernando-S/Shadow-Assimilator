@@ -352,8 +352,9 @@ void Player::NotifyCollision(GameObject& other) {
 	// Prosfere dano ao jogador se o tiro for dos Aliens
 	//if ((bullet && bullet->targetsPlayer) && bullet->alienBullet) {
 	if (bullet && bullet->robotBullet) {
-		std::cout << "Vida do Jogador: " << hp << std::endl;
+		//std::cout << "Vida do Jogador: " << hp << std::endl;
 		hp -= bullet->GetDamage();
+		damaged = true;
 	}
 
 
