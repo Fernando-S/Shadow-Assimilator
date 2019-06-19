@@ -13,11 +13,11 @@
 #include "Music.h"
 
 
-#define PLAYER_MAX_LINEAR_SPEED 500	// em pixels/s
+#define PLAYER_MAX_LINEAR_SPEED 500		// em pixels/s
 #define PLAYER_ACCELERATION 1000		// em pixels/s²
 #define PLAYER_ATRICT 150				// em pixels/s²
-#define PLAYER_ANGULAR_SPEED PI		// em rads/s
-#define PLAYER_INITIAL_HP 100			// em hit points
+#define PLAYER_ANGULAR_SPEED PI			// em rads/s
+#define PLAYER_INITIAL_HP 22			// em hit points
 
 class Player : public Component {
 public:
@@ -30,6 +30,7 @@ public:
 	void NotifyCollision(GameObject& other) override;
 	Vec2 GetCenter();			// Funcao para poder pegar a posicao do player
 	void Shoot(Vec2 target);
+	int GetHP();
 
 	static Player* player;
 	//float secondsToSelfDestruction = 1.5;

@@ -29,6 +29,7 @@ public:
 		int GetX();
 
 		bool /*floor = false,*/ colide = false;
+		Collider *collider;
 
 private:
 		std::vector<int> tileMatrix;

@@ -33,8 +33,10 @@ public:
 	
 
 private:
+	void ChangePlayerHP();
 	void LoadBuildings();
 
+	Sprite* HPbarSprite;
 	TileSet* tileSet;
 	Music backgroundMusic;
 	
