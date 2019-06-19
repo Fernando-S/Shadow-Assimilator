@@ -71,7 +71,7 @@ void Player::Update(float dt) {
 		double accelSpeedGain = PLAYER_ACCELERATION * dt;
 
 		// aplica gravidade funcional a todo momento
-		if (verticalSpeed > -900 /*&& !tchfloor*/) {
+		if (verticalSpeed > -800 /*&& !tchfloor*/) {
 			verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
 			//verticalSpeed -= accelSpeedGain * 0.5; //QUEDA
 			//tchfloor = false;
@@ -320,6 +320,15 @@ void Player::Update(float dt) {
 				Shoot(Player::player->GetCenter());
 		}
 
+		/*
+		BeforeCollision();
+
+		auto tile = (TileMap*)other.GetComponent("TileMap");
+
+		if (!tchfloor && (this->associated.box.y + this->associated.box.h <= tile->GetY() - 1)) {
+			verticalSpeed = 0;
+		}
+		*/
 	}
 
 }
@@ -355,11 +364,11 @@ void Player::NotifyCollision(GameObject& other) {
 			/// todo - dá ruim ao pular de lugares altos se for soh 80
 			/// mas tbm dá ruim se for muito maior na hora de encostar pelo lado da plataforma
 			// Colisao com chaos
-			if ( (tile->GetY() <= this->associated.box.y + this->associated.box.h)
-				&& (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*/ +90) ) {
+			if ( /*(tile->GetY() <= this->associated.box.y + this->associated.box.h)
+				&&*/ (this->associated.box.y + this->associated.box.h <= tile->GetY() + 149/* + 90*/) ) {
 				if (!airbone && tchfloor) {
-					this->associated.box.y = tile->GetY() - this->associated.box.h;
 					verticalSpeed = 0;
+					this->associated.box.y = tile->GetY() - this->associated.box.h;
 				}
 				tchfloor = true;
 				airbone = false;
@@ -460,3 +469,14 @@ void Player::Shoot(Vec2 target) {
 
 	Game::GetInstance().GetCurrentState().AddObject(bulletGO);
 }
+
+
+int Player::GetHP() {
+	return hp;
+}
+
+/*
+void Player::BeforeCollision() {
+
+}
+*/

@@ -8,9 +8,11 @@ TileMap::TileMap(GameObject& associated, std::string file, TileSet *tileSet) : C
 	mapDepth = -1;
 	Load(file);
 	SetTileSet(tileSet);
-
-	associated.AddComponent(new Collider(associated));
-
+	
+	//associated.AddComponent(new Collider(associated));
+	
+	collider = new Collider(associated);
+	associated.AddComponent(collider);
 }
 
 void TileMap::Load(std::string file) {

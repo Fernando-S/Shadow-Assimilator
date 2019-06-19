@@ -403,7 +403,7 @@ void Robot::Shoot(Vec2 target) {
 	bulletGO->box.y = associated.box.y + 25;		// faz ele sair do olho
 
 	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(/*Vec2(associated.box.x, associated.box.y)*/associated.box.Center()), BULLET_SPEED,
-		std::rand() % 11 + BULLET_MAX_DAMAGE - 10, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+		/*std::rand() % 11 + BULLET_MAX_DAMAGE - 10*/ 2, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
 	bullet->robotBullet = true;
 	bulletGO->AddComponent(bullet);
 
