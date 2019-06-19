@@ -5,6 +5,16 @@
 
 auto surpriseGO = new GameObject();
 
+auto HPbarGO = new GameObject();
+auto HPbar = new Sprite(*HPbarGO, "./assets/img/barra_de_HP/HP_22.png");
+
+/*
+auto HP1GO = new GameObject();
+auto HP1 = new Sprite(*HP1GO, "./assets/img/HP_1.png");
+
+auto HP2GO = new GameObject();
+auto HP2 = new Sprite(*HP2GO, "./assets/img/HP_2.png");
+*/
 bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
 bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false, direita1 = false, direita2 = false;
 
@@ -42,6 +52,11 @@ void GameState0::LoadAssets() {
 
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
+
+
+
+
+
 
 	// Chama funcao que carrega todas as contrucoes (chaos e predios) 
 	//LoadBuildings();
@@ -179,6 +194,35 @@ void GameState0::LoadAssets() {
 	}
 */
 
+
+
+///////////////////////
+//	  Barra de HP	//
+/////////////////////
+	/*
+	auto HPbarGO = new GameObject();
+	auto HPbar = new Sprite(*HPbarGO, "./assets/img/barra_hp.png");
+	
+	auto HP1GO = new GameObject();
+	auto HP1 = new Sprite(*HP1GO, "./assets/img/HP_1.png");
+
+	auto HP2GO = new GameObject();
+	auto HP2 = new Sprite(*HP2GO, "./assets/img/HP_2.png");
+	*/
+	//HPbarGO->box.y = Camera::pos.y + 30;
+	//HPbarGO->box.x = Camera::pos.x + 30;
+
+	auto HPbarCamFollower = new CameraFollower(*HPbarGO);
+	HPbarGO->AddComponent(HPbarCamFollower);
+
+	HPbarGO->AddComponent(HPbar);
+	objectArray.emplace_back(HPbarGO);
+	
+	/*
+	HP1GO->AddComponent(HP1);
+	objectArray.emplace_back(HP1GO);
+	*/
+
 }
 
 void GameState0::Update(float dt){
@@ -187,7 +231,10 @@ void GameState0::Update(float dt){
 	
 	// Faz o update na camera e na box do mapa
 	Camera::Update(dt);
-
+	/*
+	HP1GO->box.x = HPbarGO->box.x + 30;
+	HP1GO->box.y = HPbarGO->box.y + 30;
+	*/
 	quitRequested = inputManager.QuitRequested();			// Seta o quitRequested ao fechar o jogo
 	popRequested = inputManager.KeyPress(ESCAPE_KEY);		// Seta o popRequested para retornar a TitleSet ao apertar ESC
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray
