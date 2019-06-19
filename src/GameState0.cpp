@@ -70,6 +70,8 @@ void GameState0::LoadAssets() {
 	//backgroundGO->box.y = -1056;
 	backgroundGO->box.y = -288;
 
+	
+
 	//auto tileSet = new TileSet(64, 64, "./assets/img/tileset.png");
 	//auto tileMap = new TileMap(*chaoGO, "./assets/map/MEUtileMap.txt", tileSet);
 
@@ -89,6 +91,7 @@ void GameState0::LoadAssets() {
 	//auto tileMap_Colidem = new TileMap(*colidemGO, "./assets/map/tileMap_TUDAO.txt", tileSet);
 	auto tileMap_Colidem = new TileMap(*colidemGO, "./assets/map/tileMap_TUDAOOTIMIZADO.txt", tileSet);
 	auto tileMap_Chao = new TileMap(*chaoGO, "./assets/map/tileMap_CHAOZAO.txt", tileSet);
+
 	
 	tileMap_Background->colide = false;
 	tileMap_Colidem->colide = false;
@@ -108,10 +111,18 @@ void GameState0::LoadAssets() {
 
 
 
+	auto torre1LGO = new GameObject(); // declara a parede esquerda da torre
+	torre1LGO->box.x = tileSet->GetTileWidth() * 80 + chaoGO->box.x; //declara onde a torre ficará no eixo x
+	torre1LGO->box.y = (- 13 * tileSet->GetTileHeight()) + chaoGO->box.y; //declara onde a torre ficará no eixo y
 
+	auto tileMap_torre1L = new TileMap(*torre1LGO, "./assets/map/tileMap_torre1L.txt", tileSet);
+	tileMap_torre1L->colide = true;
 
+	torre1LGO->box.w = tileMap_torre1L->GetWidth() * tileSet->GetTileWidth();
+	torre1LGO->box.h = tileMap_torre1L->GetHeight() * tileSet->GetTileHeight();
 
-
+	torre1LGO->AddComponent(tileMap_torre1L);
+	objectArray.emplace_back(torre1LGO);
 
 
 
