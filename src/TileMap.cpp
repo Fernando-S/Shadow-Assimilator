@@ -123,3 +123,7 @@ int TileMap::GetY() {
 int TileMap::GetX() {
 	return (int)this->associated.box.x;
 }
+
+Rect TileMap::GetBox() {
+	return this->associated.box;
+}

@@ -22,6 +22,20 @@ bool Rect::Contains(Vec2 vector) {
 		return false;
 }
 
+bool Rect::ContainsX(float posX) {
+	if ((posX >= this->x) && (posX <= (this->x + this->w) ) )
+		return true;
+	else
+		return false;
+}
+
+bool Rect::ContainsY(float posY) {
+	if ((posY >= this->y) && (posY <= (this->y + this->h) ) )
+		return true;
+	else
+		return false;
+}
+
 Vec2 Rect::Center() {
 	Vec2 vector;
 

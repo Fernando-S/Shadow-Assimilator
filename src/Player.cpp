@@ -60,7 +60,8 @@ void Player::Update(float dt) {
 		// Toca o som e mostra a explosao
 		auto explosionGO = new GameObject();
 		auto explosionSound = new Sound(*explosionGO, "./assets/audio/boom.wav");
-		explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/penguindeath.png", 5, 0.1, 1.5));
+		//explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/penguindeath.png", 5, 0.1, 1.5));
+		explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/prot_morte.png", 21, 0.1, 2.1));
 		explosionGO->AddComponent(explosionSound);
 		explosionSound->Play();
 		explosionGO->box.PlaceCenter(associated.box.Center());
@@ -71,18 +72,29 @@ void Player::Update(float dt) {
 		double accelSpeedGain = PLAYER_ACCELERATION * dt;
 
 		// aplica gravidade funcional a todo momento
-		if (verticalSpeed > -800 /*&& !tchfloor*/) {
-			verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
-			//verticalSpeed -= accelSpeedGain * 0.5; //QUEDA
+		if (verticalSpeed > -800 /*&& !tchfloor*/ && airbone) {
+			verticalSpeed -= accelSpeedGain * 0.9;//QUEDA
 			//tchfloor = false;
 			//airbone = true;
 		}
 
 		if (inputManager.KeyRelease(SPACE_KEY)) {
-			associated.box.PlaceCenter(Vec2(704, 100));
+			//associated.box.PlaceCenter(Vec2(704, 100));
+			associated.box.x = 704;
+			associated.box.y = 100;
 			airbone = true;
 			tchfloor = false;
+			verticalSpeed = 0;
 		}
+
+		/*
+		// Checa se esta no ar
+		if (airbone && !tchfloor) {
+			tchCeiling = false;
+			cout << "ta no ar\n";
+		}
+		*/
+
 		//////////////////////////////////////////////////////////////
 		//		DOUBLE JUMP
 		///////////////////////////////////////////////////////////////
@@ -245,6 +257,7 @@ void Player::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
+			associated.box.x += associated.box.w/2;
 
 			//SFX//
 			//PlayerSFX_Run->Stop();
@@ -263,6 +276,7 @@ void Player::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			//srite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
+			associated.box.x += 1;
 
 			//SFX//
 			//PlayerSFX_Run->Stop();
@@ -330,6 +344,8 @@ void Player::Update(float dt) {
 		}
 		*/
 	}
+	//cout << "aribone = " << airbone << endl;
+	//cout << "tchfloor = " << tchfloor << endl;
 
 }
 
@@ -366,7 +382,10 @@ void Player::NotifyCollision(GameObject& other) {
 			/// mas tbm dá ruim se for muito maior na hora de encostar pelo lado da plataforma
 			// Colisao com chaos
 			if ( /*(tile->GetY() <= this->associated.box.y + this->associated.box.h)
-				&&*/ (this->associated.box.y + this->associated.box.h <= tile->GetY() + 149/* + 90*/) ) {
+				&&*/ (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ + 120) ) {
+			//if (tile->GetBox().ContainsY(this->associated.box.y + this->associated.box.h) //||
+				//tile->GetBox().ContainsY(this->associated.box.h)
+				//){
 				if (!airbone && tchfloor) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
@@ -375,64 +394,70 @@ void Player::NotifyCollision(GameObject& other) {
 				airbone = false;
 				Jump = 0;
 				doubleJump = false;
-				encostouTeto = false;
+				tchCeiling = false;
 
 				// Checa se esta saindo de uma plataforma
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
 					airbone = true;
 					tchfloor = false;
+					//tchCeiling = false;
+					cout << "Desencostou\n";
 				}
 			}
 			// Colisao com tetos
-			else if ((associated.box.y < tile->GetY() + ONETILESQUARE) && (tile->GetY() + 149/* +120*/ < this->associated.box.y + this->associated.box.h) && encostouTeto
-					  /*&& this->associated.box.y + this->associated.box.h < tile->GetY()*/) {
-					this->associated.box.y = tile->GetY() + ONETILESQUARE;
+			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE) //&& (tile->GetY() /*+ 149/* +120*/ < this->associated.box.y /*+ this->associated.box.h*/) //&& tchCeiling
+					  && this->associated.box.y + this->associated.box.h/4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
+					this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE;
+					/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
 					verticalSpeed = 0;
+					tchCeiling = true;
 			}
 			// Colisao com uma parede A DIREITA
 			else if ( (tile->GetX() <= this->associated.box.x + this->associated.box.w)
-					  && (this->associated.box.x + this->associated.box.w <= tile->GetX() + ONETILESQUARE/*/4*/) ) {
+					  && (this->associated.box.x + this->associated.box.w <= tile->GetX() + ONETILESQUARE/*/4*/
+					  && !tchCeiling) ) {
 				this->associated.box.x = tile->GetX() - this->associated.box.w;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
 				WallgrabL = false;
 				WallgrabR = true;
-				encostouTeto = false;
-
-				// Checa se esta desencostando da parede A DIREITA
-				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
-					cout << "desencostou dessa parede >>\n";
-				}
+				tchCeiling = false;
+				
+				// Wall Slide A DIREITA
+				if(airbone && !tchfloor)
+					verticalSpeed /= 2;//QUEDA
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ( (associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
-				      && (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x) ) {
+				      && (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)
+					  && !tchCeiling) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
 				WallgrabL = true;
 				WallgrabR = false;
-				encostouTeto = false;
+				tchCeiling = false;
 
-				// Checa se esta desencostando da parede A ESQUERDA
-				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
-					cout << "desencostou dessa parede <<\n";
-				}
+				// Wall Slide A ESQUERDA
+				if (airbone && !tchfloor)
+					verticalSpeed /= 2;//QUEDA
 			}
 
 			/// todo - checar se isso ainda funciona
 			else {
 				WallgrabL = false;
 				WallgrabR = false;
+				tchfloor = false;
+				tchCeiling = false;
+				airbone = true;
 				cout << "desencostou do tile\n";
-				
-				
+				/*
 				// Checa se saiu de algum chao/plataforma e bateu em um teto
 				if (airbone && !tchfloor) {
-					encostouTeto = true;
+					tchCeiling = true;
 					cout << "Bateu no teto\n";
 				}
-
+				*/
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
 					cout << "desencostou dessa parede <<\n";
@@ -441,6 +466,13 @@ void Player::NotifyCollision(GameObject& other) {
 				// Checa se esta desencostando da parede A DIREITA
 				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
 					cout << "desencostou dessa parede >>\n";
+				}
+				
+				// Checa se esta desencostando do teto
+				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
+					cout << "desencostou do teto ^\n";
+					for (int i = 0; i < 500; i++);
+					tchCeiling = false;
 				}
 			}
 		}

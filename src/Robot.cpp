@@ -1,11 +1,6 @@
 #include "Robot.h"
 #include "Game.h"
 
-#define MAX_SPEED 400
-#define SPEED_STEP 50
-#define ROBOT_SPEED 400
-#define ROBOT_JUMP 600
-
 using namespace std;
 
 bool moveDireita = false;
@@ -24,7 +19,7 @@ Robot::Robot(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	hp = ROBOT_INITIAL_HP;
 
 	// Carrega o sprite da personagem idle
-	sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+	sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
 
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
@@ -78,7 +73,9 @@ void Robot::Update(float dt) {
 			verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
 
 		if (inputManager.KeyRelease(SPACE_KEY)) {
-			associated.box.PlaceCenter(Vec2(694, 100));
+			//associated.box.PlaceCenter(Vec2(694, 100));
+			associated.box.x = 694;
+			associated.box.y = 100;
 			airbone = true;
 			tchfloor = false;
 		}
@@ -90,6 +87,7 @@ void Robot::Update(float dt) {
 			if (!moveDireita && !moveEsquerda)
 				moveEsquerda = true;
 
+			/// EH AQUI, FERNANDO!!!! USA ESSE TIMER, CARALHO!
 			//if (mudaDeLado.Get() < ROBOT_TIME) {
 			if (associated.box.x < initialX - 250) {
 				moveDireita = true;
@@ -113,8 +111,8 @@ void Robot::Update(float dt) {
 			airbone = true;
 			doubleJump = false;
 		}
-		else*/
-			if (inputManager.IsKeyDown(J_KEY) || moveEsquerda) {
+		else */
+			if (/*inputManager.IsKeyDown(J_KEY) ||*/ moveEsquerda) {
 
 				if (linearSpeed == 0)
 					oppositeSpeed = 0;
@@ -151,7 +149,7 @@ void Robot::Update(float dt) {
 				//std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
 
 			}
-			else if (inputManager.IsKeyDown(L_KEY) || moveDireita) {
+			else if (/*inputManager.IsKeyDown(L_KEY) ||*/ moveDireita) {
 				speedH = { 1, 0 };
 
 				if (Getspeed2 == false) {
@@ -179,7 +177,7 @@ void Robot::Update(float dt) {
 						linearSpeed += accelSpeedGain;
 
 				}
-
+				
 				//cout << "linearSpeed: " << linearSpeed << endl;
 				//cout << "Run: " << Run << endl;
 			}
@@ -202,17 +200,19 @@ void Robot::Update(float dt) {
 
 			if ((linearSpeed < 40) && (linearSpeed > -40))
 				linearSpeed = 0;
-
+		*/
+			/// TODO - USA ISSO AQUI PRA NAO BUGAR A ANIMACAO DE FICAR PARADO
+			/*
 			if (Stop < 10) {
 				Stop++;
 				if (Stop == 1)
 					Setrun = false;
 			}
 			Setidle = true;
-
+			*/
 			//cout << "Stop: " << Stop << endl;
 
-		}*/
+		/*}*/
 		//////////////////////////////////////////////////////////////
 		/////////////////////VELOCIDADE///////////////////////////////
 
@@ -230,7 +230,7 @@ void Robot::Update(float dt) {
 		// Idle para a direita
 		if (Setidle && !Setrun && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_idle.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
 			
 			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
 			// arruma a posicao para o sprite do personagem idle aparecer do pe mais a frente apos a corrida
@@ -244,7 +244,7 @@ void Robot::Update(float dt) {
 		// Idle para a esquerda
 		if (Setidle && !Setrun && (Stop == 2) && (Run < 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_idle_espelhado.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/vilao_idle_inv.png", 10, 0.09);
 
 			associated.AddComponent(sprite);
 			//cout << "\nTROCA, CORRE > PARA\n\n";
@@ -253,8 +253,6 @@ void Robot::Update(float dt) {
 		// Corrida para a direita
 		if (!Setidle && Setrun && (Run == 1)) {
 			associated.RemoveComponent(sprite);
-			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2.png", 12, 0.1);
-			//sprite = new Sprite(associated, "./assets/img/walk_1.png", 6, 0.1);
 			sprite = new Sprite(associated, "./assets/img/vilao_corrida.png", 10, 0.09);
 
 			associated.AddComponent(sprite);
@@ -299,7 +297,7 @@ void Robot::Update(float dt) {
 		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 800) && cooldownTimer.Get() > 1.8) {
 			Shoot(/*Player::player->GetCenter()*/Vec2(Player::player->GetCenter().x, this->GetCenter().y));
 			cooldownTimer.Restart();
-			}
+		}
 		//}
 
 	}
@@ -344,7 +342,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				airbone = false;
 				Jump = 0;
 				doubleJump = false;
-				encostouTeto = false;
+				tchCeiling = false;
 
 				// Checa se esta saindo de uma plataforma
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x)) {
@@ -353,9 +351,10 @@ void Robot::NotifyCollision(GameObject& other) {
 				}
 			}
 			// Colisao com tetos
-			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h) && encostouTeto) {
+			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h)/* && tchCeiling*/) {
 				this->associated.box.y = tile->GetY() + 80;
 				verticalSpeed = 0;
+				tchCeiling = true;
 			}
 			// Colisao com uma parede A DIREITA
 			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w)
@@ -363,7 +362,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				this->associated.box.x = tile->GetX() - this->associated.box.w;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
-				encostouTeto = false;
+				tchCeiling = false;
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
@@ -371,7 +370,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
-				encostouTeto = false;
+				tchCeiling = false;
 			}
 			
 			/// todo - checar se isso ainda funciona
@@ -379,8 +378,8 @@ void Robot::NotifyCollision(GameObject& other) {
 			else
 			{
 				// Checa se saiu de algum chao/plataforma e bateu em um teto
-				if (airbone && !tchfloor)
-					encostouTeto = true;
+				//if (airbone && !tchfloor)
+					//tchCeiling = true;
 
 				airbone = true;
 				tchfloor = false;

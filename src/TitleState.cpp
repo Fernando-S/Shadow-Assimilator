@@ -20,7 +20,7 @@ void TitleState::LoadAssets() {
 	// criacao do texto de "press to play"
 	auto textGO = new GameObject();
 	SDL_Color textColor = { 255, 150, 0, 255 };
-	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press SPACE to play!", /*{ 255, 150, 0, 255 }*/ textColor/*, 0.7*/);
+	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ] to play!", /*{ 255, 150, 0, 255 }*/ textColor/*, 0.7*/);
 	textGO->AddComponent(text);
 	textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, Game::GetInstance().GetHeight() / 2.0f });
 	objectArray.emplace_back(textGO);
