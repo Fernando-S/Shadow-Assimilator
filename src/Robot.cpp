@@ -332,11 +332,10 @@ void Robot::NotifyCollision(GameObject& other) {
 		if (tile->colide) {
 
 			// Colisao com o chao
-			if ((tile->GetY() <= this->associated.box.y + this->associated.box.h)
-				&& (this->associated.box.y + this->associated.box.h <= tile->GetY() + 149)) {
+			if (this->associated.box.y + this->associated.box.h <= tile->GetY() + 120) {
 				if (!airbone && tchfloor) {
-					this->associated.box.y = tile->GetY() - this->associated.box.h;
 					verticalSpeed = 0;
+					this->associated.box.y = tile->GetY() - this->associated.box.h;
 				}
 				tchfloor = true;
 				airbone = false;
@@ -345,7 +344,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				tchCeiling = false;
 
 				// Checa se esta saindo de uma plataforma
-				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * 80 < this->associated.box.x)) {
+				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
 					airbone = true;
 					tchfloor = false;
 				}
