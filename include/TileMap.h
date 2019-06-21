@@ -27,6 +27,7 @@ public:
 		bool Is(std::string type) override;
 		int GetY();
 		int GetX();
+		Rect GetBox();
 
 		bool /*floor = false,*/ colide = false;
 		Collider *collider;

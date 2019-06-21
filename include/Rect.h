@@ -11,6 +11,8 @@ public:
 	Rect(float x, float y, float w, float h);
 	Rect();
 	bool Contains(Vec2 vector);
+	bool ContainsX(float posX);
+	bool ContainsY(float posY);
 	Vec2 Center();
 	void Centralize();
 	void PlaceCenter(Vec2 pos);
