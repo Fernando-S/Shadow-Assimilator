@@ -11,6 +11,7 @@
 #include "Collider.h"
 
 #define PARALLAX 0.5
+#define ONETILESQUARE 64				// tamanho de 1 tile
 
 class TileMap : public Component{
 public:
@@ -25,11 +26,12 @@ public:
 		int GetDepth();
 		void Update(float dt) override;
 		bool Is(std::string type) override;
+		void NotifyCollision(GameObject& other) override;
 		int GetY();
 		int GetX();
 		Rect GetBox();
 
-		bool /*floor = false,*/ colide = false;
+		bool floor = false, colide = false;
 		Collider *collider;
 
 private:
