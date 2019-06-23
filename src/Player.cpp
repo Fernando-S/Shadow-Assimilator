@@ -76,6 +76,7 @@ void Player::Update(float dt) {
 	else {
 		double accelSpeedGain = PLAYER_ACCELERATION * dt;
 		WallJumpTimer.Update(dt);
+		ShootCooldownTimer.Update(dt);
 
 		//////////////////////////////////////////
 		//		TERMINO DO WALL JUMP
@@ -131,11 +132,17 @@ void Player::Update(float dt) {
 		//}
 		///////////////////////////////////////////////////////////////
 
-		if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
+		/////////////////
+		//		JUMP
+		///////////////
+		if (airbone)
+			SetJump = false;
 
+		if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
+			//this->associated.box.y -= 10;
 			verticalSpeed = PLAYER_JUMP;
 			tchfloor = false;
-			//Setjump = true;
+			SetJump = true;
 			airbone = true;
 			Jump++;
 		}
@@ -359,7 +366,7 @@ void Player::Update(float dt) {
 				associated.box.x -= 1;
 				//linearSpeed = 50;
 				//verticalSpeed = 10;
-				speedD = { -1, -0.5 };
+				speedD = { -1, -2 };
 				diagonalSpeed = PLAYER_JUMP * 3;
 				associated.box += speedD * diagonalSpeed*dt;
 				WallJump = true;
@@ -369,7 +376,7 @@ void Player::Update(float dt) {
 		}
 
 		// WallSlide A ESQUERDA
-		if (WallgrabL) {
+		if (WallgrabL/* && !tchfloor*/) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/prot_desliza.png", 8, 0.1);
 			associated.AddComponent(sprite);
@@ -396,11 +403,13 @@ void Player::Update(float dt) {
 		}
 
 
-		if (inputManager.IsKeyDown(Q_KEY)) {
-			if (Player::player)
-				Shoot(Player::player->GetCenter());
+		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
+			if (facingR)
+				Shoot(GetCenter());
+			else if (facingL)
+				Shoot(Vec2(-1*GetCenter().x, GetCenter().y));
+			ShootCooldownTimer.Restart();
 		}
-
 	}
 
 }
@@ -433,24 +442,36 @@ void Player::NotifyCollision(GameObject& other) {
 		if (tile->colide) {
 			//Wallgrab = true;
 
+			cout << "WallgrabL = " << WallgrabL << endl;
+			cout << "WallgrabR = " << WallgrabR << endl;
+
 			/// todo - dá ruim ao pular de lugares altos se for soh 80
 			/// mas tbm dá ruim se for muito maior na hora de encostar pelo lado da plataforma
 			// Colisao com chaos
 			if ( /*(tile->GetY() <= this->associated.box.y + this->associated.box.h)
-				&&*/ (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ + 120) ) {
-			//if (tile->GetBox().ContainsY(this->associated.box.y + this->associated.box.h) //||
-				//tile->GetBox().ContainsY(this->associated.box.h)
-				//){
-				if (!airbone && tchfloor) {
+				&&*/ (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)				
+					  || this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY()) ) <= this->associated.box.h/2
+				) {
+				//if (tile->GetBox().ContainsY(this->associated.box.y + this->associated.box.h) //||
+					//tile->GetBox().ContainsY(this->associated.box.h)
+					//){
+				if (!airbone && tchfloor && !SetJump) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
 					if (facingR) {
-
+						/*associated.RemoveComponent(sprite);
+						sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
+						associated.AddComponent(sprite);*/
 					}
-					else if (facingL) {
-
+					else if (facingL) {/*
+						associated.RemoveComponent(sprite);
+						sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
+						associated.AddComponent(sprite);
+						*/
 					}
 				}
+				WallgrabL = false;
+				WallgrabR = false;
 				tchfloor = true;
 				airbone = false;
 				Jump = 0;
@@ -468,23 +489,26 @@ void Player::NotifyCollision(GameObject& other) {
 			}
 			// Colisao com tetos
 			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE) //&& (tile->GetY() /*+ 149/* +120*/ < this->associated.box.y /*+ this->associated.box.h*/) //&& tchCeiling
-					  && this->associated.box.y + this->associated.box.h/4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
-					this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE;
-					/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
-					verticalSpeed = 0;
-					tchCeiling = true;
+				&& this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE
+				//&& !WallgrabR && !WallgrabL//&& tile->floor
+				//|| this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY() + tile->GetHeight() * ONETILESQUARE)) <= this->associated.box.h / 2
+				) {
+				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE +1;
+				/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
+				verticalSpeed = 0;
+				tchCeiling = true;
+			
 			}
 			// Colisao com uma parede A DIREITA
-			else if ( (tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling
-					  && ( (this->associated.box.x + this->associated.box.w <= tile->GetX() + tile->GetWidth()*ONETILESQUARE/* /4*/)
-					  || this->GetCenter().Distancia(Vec2(tile->GetX(),this->GetCenter().y)) < 32)
-				) {
+			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling //&& !tile->floor
+					&& ((this->associated.box.x + this->associated.box.w <= tile->GetX() + tile->GetWidth()*ONETILESQUARE/* /4*/)
+					|| this->GetCenter().Distancia(Vec2(tile->GetX(), this->GetCenter().y)) < 32)) {
 				this->associated.box.x = tile->GetX() - this->associated.box.w;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
 				WallgrabL = false;
 				tchCeiling = false;
-				
+
 				// Wall Slide A DIREITA
 				if (airbone && !tchfloor) {
 					verticalSpeed /= 2;		// QUEDA
@@ -494,8 +518,9 @@ void Player::NotifyCollision(GameObject& other) {
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
-				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)
-				&& !tchCeiling) {
+				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)	/// todo - talvez mudar essa condicao
+				&& !tchCeiling //&& !tile->floor
+				) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
@@ -520,19 +545,19 @@ void Player::NotifyCollision(GameObject& other) {
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
 					cout << "desencostou dessa parede <<\n";
-					if (airbone) {
+				//	if (airbone) {
 						//doubleJump = true;
-						WallgrabL = false;
-					}
+				//		WallgrabL = false;
+				//	}
 				}
 
 				// Checa se esta desencostando da parede A DIREITA
 				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
 					cout << "desencostou dessa parede >>\n";
-					if (airbone) {
+				//	if (airbone) {
 						//doubleJump = true;
-						WallgrabR = false;
-					}
+				//		WallgrabR = false;
+				//	}
 				}
 				
 				// Checa se esta desencostando do teto

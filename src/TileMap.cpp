@@ -127,3 +127,13 @@ int TileMap::GetX() {
 Rect TileMap::GetBox() {
 	return this->associated.box;
 }
+
+void TileMap::NotifyCollision(GameObject& other) {
+	auto tile = (TileMap*)other.GetComponent("TileMap");
+
+	// Checa se tem um tile colidindo horizontalmente com outro
+	if (tile && ((tile->GetX() <= this->associated.box.x + this->associated.box.w)
+				|| (this->associated.box.x <= tile->GetX() + tile->GetWidth()*ONETILESQUARE))) {
+		this->floor = true;
+	}
+}

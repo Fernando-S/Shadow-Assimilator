@@ -8,6 +8,8 @@ auto HPbarGO = new GameObject();
 auto playerGO = new GameObject();
 auto player = new Player(*playerGO);
 auto chaoGO = new GameObject();
+/*auto chaoGO1 = new GameObject();
+auto chaoGO2 = new GameObject();*/
 
 
 bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
@@ -52,6 +54,10 @@ void GameState0::LoadAssets() {
 	// Teste do novo TileSet
 	chaoGO->box.x = 0;
 	chaoGO->box.y = 800;
+	/*chaoGO1->box.x = 0;
+	chaoGO1->box.y = chaoGO->box.y +ONETILESQUARE;
+	chaoGO2->box.x = 0;
+	chaoGO2->box.y = chaoGO1->box.y +ONETILESQUARE;*/
 	LoadMap();
 	
 	auto colidemGO = new GameObject();
@@ -380,6 +386,29 @@ void GameState0::LoadMap() {
 	chaoGO->AddComponent(Chao);
 	objectArray.emplace_back(chaoGO);
 
+	/*
+	auto Chao1 = new TileMap(*chaoGO1, "./assets/map/tileMap_CHAOZAO.txt", tileSet);
+
+	Chao1->colide = true;
+
+	chaoGO1->box.w = Chao1->GetWidth() * tileSet->GetTileWidth();
+	chaoGO1->box.h = Chao1->GetHeight() * tileSet->GetTileHeight();
+
+	chaoGO1->AddComponent(Chao1);
+	objectArray.emplace_back(chaoGO1);
+
+
+
+	auto Chao2 = new TileMap(*chaoGO2, "./assets/map/tileMap_CHAOZAO.txt", tileSet);
+
+	Chao2->colide = true;
+
+	chaoGO2->box.w = Chao2->GetWidth() * tileSet->GetTileWidth();
+	chaoGO2->box.h = Chao2->GetHeight() * tileSet->GetTileHeight();
+
+	chaoGO2->AddComponent(Chao2);
+	objectArray.emplace_back(chaoGO2);
+	*/
 
 ///////////////////////////////
 //	Comeco dos paranaues	//
