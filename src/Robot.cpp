@@ -67,18 +67,21 @@ void Robot::Update(float dt) {
 		double accelSpeedGain = ROBOT_ACCELERATION * dt;
 
 		cooldownTimer.Update(dt);
-
+		
 		// aplica gravidade funcional a todo momento
-		if (verticalSpeed > -900)
-			verticalSpeed -= accelSpeedGain * 0.9; //QUEDA
+		if (verticalSpeed > -800 && airbone) {
+			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
+		}
 
 		if (inputManager.KeyRelease(SPACE_KEY)) {
-			//associated.box.PlaceCenter(Vec2(694, 100));
-			associated.box.x = 694;
+			associated.box.x = 704;
 			associated.box.y = 100;
 			airbone = true;
 			tchfloor = false;
+			verticalSpeed = -800;
 		}
+
+
 
 		// Tentativa de IA apenas quando esta no chao
 		if (!airbone && tchfloor) {
@@ -231,11 +234,6 @@ void Robot::Update(float dt) {
 		if (Setidle && !Setrun && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
-			
-			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
-			// arruma a posicao para o sprite do personagem idle aparecer do pe mais a frente apos a corrida
-			//associated.box.x += associated.box.w;//121;
-
 			associated.AddComponent(sprite);
 
 			//cout << "\nTROCA, CORRE > PARA\n\n";
@@ -245,7 +243,6 @@ void Robot::Update(float dt) {
 		if (Setidle && !Setrun && (Stop == 2) && (Run < 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/vilao_idle_inv.png", 10, 0.09);
-
 			associated.AddComponent(sprite);
 			//cout << "\nTROCA, CORRE > PARA\n\n";
 		}
@@ -254,7 +251,6 @@ void Robot::Update(float dt) {
 		if (!Setidle && Setrun && (Run == 1)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/vilao_corrida.png", 10, 0.09);
-
 			associated.AddComponent(sprite);
 
 
@@ -264,7 +260,6 @@ void Robot::Update(float dt) {
 		// Corrida para a esquerda
 		if (!Setidle && Setrun && (Run == -1)) {
 			associated.RemoveComponent(sprite);
-			//sprite = new Sprite(associated, "./assets/img/sprite_corrida2_espelhado.png", 12, 0.1);
 			//sprite = new Sprite(associated, "./assets/img/walk2_1.png", 6, 0.1);
 			sprite = new Sprite(associated, "./assets/img/vilao_corrida_inv.png", 10, 0.09);
 
@@ -295,7 +290,7 @@ void Robot::Update(float dt) {
 
 		//if (inputManager.IsKeyDown(NUMPAD_ONE_KEY)) {
 		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 800) && cooldownTimer.Get() > 1.8) {
-			Shoot(/*Player::player->GetCenter()*/Vec2(Player::player->GetCenter().x, this->GetCenter().y));
+			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
 			cooldownTimer.Restart();
 		}
 		//}
@@ -330,7 +325,7 @@ void Robot::NotifyCollision(GameObject& other) {
 
 	if (tile) {
 		if (tile->colide) {
-
+			/*
 			// Colisao com o chao
 			if (this->associated.box.y + this->associated.box.h <= tile->GetY() + 120) {
 				if (!airbone && tchfloor) {
@@ -350,12 +345,22 @@ void Robot::NotifyCollision(GameObject& other) {
 				}
 			}
 			// Colisao com tetos
-			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h)/* && tchCeiling*/) {
+			/*
+			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h)/* && tchCeiling/) {
 				this->associated.box.y = tile->GetY() + 80;
 				verticalSpeed = 0;
 				tchCeiling = true;
 			}
+			*6
+			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE)
+	   				  && this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
+				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE;
+				/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
+				verticalSpeed = 0;
+				tchCeiling = true;
+			}
 			// Colisao com uma parede A DIREITA
+			/*
 			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w)
 				&& (this->associated.box.x + this->associated.box.w <= tile->GetX() + 90)) {
 				this->associated.box.x = tile->GetX() - this->associated.box.w;
@@ -363,7 +368,25 @@ void Robot::NotifyCollision(GameObject& other) {
 				oppositeSpeed = 0;
 				tchCeiling = false;
 			}
+			/
+			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling
+				&& (this->associated.box.x + this->associated.box.w <= tile->GetX() + ONETILESQUARE)) {
+				this->associated.box.x = tile->GetX() - this->associated.box.w;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+				//WallgrabL = false;
+				tchCeiling = false;
+				/*
+				// Wall Slide A DIREITA
+				if (airbone && !tchfloor) {
+					verticalSpeed /= 2;		// QUEDA
+					wallX = tile->GetX();
+					WallgrabR = true;
+				}
+				/
+			}
 			// Coliscao com uma parede A ESQUERDA
+			/*
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
 				&& ((tile->GetX() + tile->GetWidth() * 80 - 80) <= associated.box.x)) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
@@ -371,19 +394,127 @@ void Robot::NotifyCollision(GameObject& other) {
 				oppositeSpeed = 0;
 				tchCeiling = false;
 			}
-			
+			/
+			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
+				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)
+				&& !tchCeiling) {
+				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+
+				//WallgrabR = false;
+				tchCeiling = false;
+
+				// Wall Slide A ESQUERDA
+				/*
+				if (airbone && !tchfloor) {
+					verticalSpeed /= 2;//QUEDA
+					WallgrabL = true;
+				}
+				/
+			}
 			/// todo - checar se isso ainda funciona
 			// Momento que sai da colisao com o chao para impedir pulo aereo
 			else
 			{
-				// Checa se saiu de algum chao/plataforma e bateu em um teto
-				//if (airbone && !tchfloor)
-					//tchCeiling = true;
-
+				
 				airbone = true;
 				tchfloor = false;
 			}
-			
+			*/
+
+
+
+
+			if ( (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ + 120)) {
+				if (!airbone && tchfloor) {
+					verticalSpeed = 0;
+					this->associated.box.y = tile->GetY() - this->associated.box.h;
+				}
+				tchfloor = true;
+				airbone = false;
+				Jump = 0;
+				doubleJump = false;
+				tchCeiling = false;
+
+				// Checa se esta saindo de uma plataforma
+				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
+					airbone = true;
+					tchfloor = false;
+					//tchCeiling = false;
+					//cout << "Desencostou\n";
+				}
+			}
+			// Colisao com tetos
+			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE) 
+				&& this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
+				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE;
+				verticalSpeed = 0;
+				tchCeiling = true;
+			}
+			// Colisao com uma parede A DIREITA
+			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling
+					  && ((this->associated.box.x + this->associated.box.w <= tile->GetX() + tile->GetWidth()*ONETILESQUARE)
+					  || this->GetCenter().Distancia(Vec2(tile->GetX(), this->GetCenter().y)) < 32)	) {
+				this->associated.box.x = tile->GetX() - this->associated.box.w;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+				//WallgrabL = false;
+				tchCeiling = false;
+
+				// Wall Slide A DIREITA
+				if (airbone && !tchfloor) {
+					verticalSpeed /= 2;		// QUEDA
+				//	wallX = tile->GetX();
+				//	WallgrabR = true;
+				}
+			}
+			// Coliscao com uma parede A ESQUERDA
+			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
+				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)
+				&& !tchCeiling) {
+				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
+				linearSpeed = 0;
+				oppositeSpeed = 0;
+
+				//WallgrabR = false;
+				tchCeiling = false;
+
+				// Wall Slide A ESQUERDA
+				if (airbone && !tchfloor) {
+					verticalSpeed /= 2;	// QUEDA
+				//	WallgrabL = true;
+				}
+			}
+			else {
+				//WallgrabL = false;
+				//WallgrabR = false;
+				tchfloor = false;
+				tchCeiling = false;
+				airbone = true;
+				//cout << "desencostou do tile\n";
+
+				// Checa se esta desencostando da parede A ESQUERDA
+				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
+					//cout << "desencostou dessa parede <<\n";
+					if (airbone)
+						doubleJump = true;
+				}
+
+				// Checa se esta desencostando da parede A DIREITA
+				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
+					//cout << "desencostou dessa parede >>\n";
+					if (airbone)
+						doubleJump = true;
+				}
+
+				// Checa se esta desencostando do teto
+				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
+					//cout << "desencostou do teto ^\n";
+					//for (int i = 0; i < 50; i++);
+					tchCeiling = false;
+				}
+			}
 		}
 	}
 }
@@ -400,8 +531,8 @@ void Robot::Shoot(Vec2 target) {
 	bulletGO->box = associated.box.Center();		// faz o tiro sair do centro do robô
 	bulletGO->box.y = associated.box.y + 25;		// faz ele sair do olho
 
-	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(/*Vec2(associated.box.x, associated.box.y)*/associated.box.Center()), BULLET_SPEED,
-		/*std::rand() % 11 + BULLET_MAX_DAMAGE - 10*/ 2, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(associated.box.Center()), BULLET_SPEED,
+		                     BULLET_DAMAGE, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
 	bullet->robotBullet = true;
 	bulletGO->AddComponent(bullet);
 
