@@ -47,7 +47,7 @@ private:
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
 		 tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
 		 SetJump = false;
-	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1, wallX;
+	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0,wallX = 0;
 
 };
 
