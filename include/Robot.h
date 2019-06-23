@@ -22,9 +22,10 @@
 #define SPEED_STEP 50
 #define ROBOT_SPEED 400
 #define ROBOT_JUMP 600
-#define BULLET_SPEED 1000					// em pixels/s
-#define BULLET_MAX_DAMAGE 20				// em hit points
-#define BULLET_MAX_DISTANCE 1000			// em pixels
+#define BULLET_SPEED 1000			// em pixels/s
+#define BULLET_MAX_DAMAGE 20		// em hit points
+#define BULLET_MAX_DISTANCE 1000	// em pixels
+#define BULLET_DAMAGE 11				// dano em hitpoints
 
 class Robot : public Component {
 public:
@@ -51,7 +52,7 @@ private:
 	Vec2 speedH, speedV;
 	float linearSpeed, verticalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed, initialX, initialY;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, Setjump = false,
-		Wallgrab = false,/*Floorgrab = false, Quedalivre = true,*/ tchfloor = false, airbone = true, doubleJump = false, tchCeiling = false;
+		Wallgrab = false, tchfloor, airbone, doubleJump = false, tchCeiling = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 1, chao = 0;
 
 };
