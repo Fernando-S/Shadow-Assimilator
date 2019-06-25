@@ -4,8 +4,9 @@
 
 std::unordered_map<std::string, std::shared_ptr<SDL_Texture>> Resources::imageTable;
 std::unordered_map<std::string, std::shared_ptr<Mix_Music>> Resources::musicTable;
-std::unordered_map<std::string, std::shared_ptr<Mix_Chunk>> Resources::soundTable;
+//std::unordered_map<std::string, std::shared_ptr<Mix_Chunk>> Resources::soundTable;
 std::unordered_map<std::string, std::shared_ptr<TTF_Font>> Resources::fontTable;
+std::unordered_map<std::string, Mix_Chunk*> Resources::soundTable;
 
 
 std::shared_ptr<SDL_Texture> Resources::GetImage(std::string file) {
@@ -71,7 +72,7 @@ void Resources::ClearMusics() {
 			it++;										// avanca no vetor
 	}
 }
-
+/*
 std::shared_ptr<Mix_Chunk> Resources::GetSound(std::string file) {
 	auto search = soundTable.find(file);
 
@@ -103,6 +104,38 @@ void Resources::ClearSounds() {
 			it++;										// avanca no vetor
 	}
 }
+*/
+
+
+
+Mix_Chunk *Resources::GetSound(std::string file) {
+	auto search = soundTable.find(file);
+
+	if (search != soundTable.end()) { // if the sound is found...
+		return search->second;
+	}
+	else { // if the sound is NOT found...
+		auto sound = Mix_LoadWAV(file.c_str());
+
+		if (!sound) {
+			std::cerr << "IMG_LoadTexture RETURNED ERROR: " << Mix_GetError();
+			exit(1);
+		}
+
+		soundTable[file] = sound;
+
+		return sound;
+	}
+}
+
+void Resources::ClearSounds() {
+	for (auto it : soundTable) {
+		Mix_FreeChunk(it.second);
+	}
+
+	soundTable.clear();
+}
+
 
 std::shared_ptr<TTF_Font> Resources::GetFont(std::string file, int fontSize) {
 	auto key = file + std::to_string(fontSize);

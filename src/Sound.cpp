@@ -4,14 +4,14 @@ Sound::Sound(GameObject& associated) : Component(associated) {
 	chunk = nullptr;
 }
 
-Sound::Sound(GameObject& associated, const char* file) : Component(associated) {			// mudei para const char*		
+Sound::Sound(GameObject& associated, const char* file) : Component(associated) {			// mudei para const char*		a
 	Sound(this->associated);
 	Open(file);
 }
 
 void Sound::Play(int times) {
-//	channel = Mix_PlayChannel(-1, chunk, times - 1);
-	channel = Mix_PlayChannel(-1, chunk.get(), times - 1);
+	channel = Mix_PlayChannel(-1, chunk, times - 1);
+	//channel = Mix_PlayChannel(-1, chunk.get(), times - 1);
 	if (channel < 0) {
 		std::cerr << " Impossible to play sound; ERROR: " << Mix_GetError() << std::endl;
 		exit(1);
@@ -24,8 +24,8 @@ void Sound::Stop() {
 }
 
 void Sound::Open(const char* file) {					// mudei para const char*
-//	chunk = Mix_LoadWAV(file);
-	chunk = Resources::GetSound(file);
+	chunk = Mix_LoadWAV(file);
+	//chunk = Resources::GetSound(file);
 
 	if (!chunk) {
 		std::cerr << " Couldn't open sound file; ERROR: " << Mix_GetError() << std::endl;
@@ -36,8 +36,8 @@ void Sound::Open(const char* file) {					// mudei para const char*
 Sound::~Sound() {
 	if (chunk != nullptr) {
 		Mix_HaltChannel(channel);
-//		Mix_FreeChunk(chunk);
-//		Mix_FreeChunk(chunk.get());
+		Mix_FreeChunk(chunk);
+		//Mix_FreeChunk(chunk.get());
 	}
 }
 
@@ -71,3 +71,13 @@ bool Sound::IsPlaying() {
 	else
 		return false;
 }
+
+
+
+
+
+
+
+
+
+

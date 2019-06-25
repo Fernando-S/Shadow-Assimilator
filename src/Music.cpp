@@ -88,7 +88,7 @@ Music::~Music() {
 
 void Music::Play(int times) {
 	if (music) {
-		Mix_PlayMusic(music.get(), times);
+		Mix_PlayMusic(music.get(), times);				// se times for -1, a musica repete infinitamente. Se for 0, a musica nao toca
 	}
 	else {
 		std::cerr << " ERROR: music is null" << std::endl;
