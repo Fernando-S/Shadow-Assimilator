@@ -1593,12 +1593,10 @@ void Player::Update(float dt) {
 		}
 		*/
 
-		if (verticalSpeed >= 600) {
-			BuzzL++;
-			cout << "airbone: " << airbone << "\n";
-			cout << "verticalSpeed: " << verticalSpeed << "\n";
-			cout << "BuzzL: " << BuzzL << "\n";
-		}
+		contadorW1 = verticalSpeed;
+		//cout << "contadorW1: " << contadorW1 << "\n";
+		//cout << "verticalSpeed: " << verticalSpeed << "\n";
+
 
 		if ((verticalSpeed > -800 && airbone) || (BuzzL >= 2)) {
 
@@ -1612,6 +1610,18 @@ void Player::Update(float dt) {
 			//tchfloor = false;
 			//airbone = true;
 		}
+
+		contadorW2 = verticalSpeed;
+		//cout << "contadorW2: " << contadorW2 << "\n";
+
+		if ((contadorW2 == contadorW1) && (verticalSpeed != 0)) {
+			//if (verticalSpeed > 600) {
+			BuzzL++;
+			cout << "airbone: " << airbone << "\n";
+			cout << "verticalSpeed: " << verticalSpeed << "\n";
+			cout << "BuzzL: " << BuzzL << "\n";
+		}
+
 		if ((BuzzL >= 2) && (airbone == false)) {
 			BuzzL = 0;
 			tchfloor = true;
