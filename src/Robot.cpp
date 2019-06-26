@@ -359,7 +359,18 @@ bool Robot::Is(std::string type) {
 void Robot::NotifyCollision(GameObject& other) {
 	auto laser = (Bullet*)other.GetComponent("Bullet");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
-	
+	auto player1 = (Player*)other.GetComponent("Player");
+
+
+	// Prosfere dano ao jogador se o tiro for dos Aliens
+	if (laser && laser->playerBullet) {
+		//std::cout << "Vida do Robo: " << hp << std::endl;
+		hp -= laser->GetDamage();
+	}
+	else if (player1 && Player::player->isAtacking) {
+		cout << "Deu dano no robo\n";
+		hp -= 2;
+	}
 	
 	// Prosfere dano ao jogador se o tiro for dos Aliens
 	if (laser && laser->playerBullet) {

@@ -25,7 +25,7 @@ void GameState0::LoadAssets() {
 //	  Carrega a Musica e aperta o play	  //
 ///////////////////////////////////////////
 	//backgroundMusic = *new Music("./assets/audio/Basshunter_DotA.mp3");
-	backgroundMusic = *new Music("./assets/audio/Shadow_Assimilator_-_Theme_1.mp3");
+	backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow_Assimilator_-_Theme_1.mp3");
 	backgroundMusic.Play();
 
 
@@ -108,7 +108,7 @@ void GameState0::LoadAssets() {
 	robotGO->box.x = 3000;
 	robotGO->box.y = 800 - robotGO->box.h;
 
-	//objectArray.emplace_back(robotGO);
+	objectArray.emplace_back(robotGO);
 
 
 

@@ -39,13 +39,13 @@ public:
 	static Player* player;
 	//float secondsToSelfDestruction = 1.5;
 	Sprite* sprite;
-	bool damaged = false;
+	bool damaged = false, isAtacking = false;
 	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX;
 
 private:
 	//std::weak_ptr<GameObject> pcannon;
 	Timer WallJumpTimer;
-	Timer ShootCooldownTimer;
+	Timer ShootCooldownTimer, DashCooldownTimer;
 	Vec2 speedH, speedV, speedD;
 	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
