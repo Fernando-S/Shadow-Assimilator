@@ -25,6 +25,14 @@ Player::Player(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	// Carrega o sprite da personagem idle
 	sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
 
+	runSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
+	jumpSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
+	DjumpSFX = new Sound(associated, "./assets/audio/SFX/PuloDuplo(Assim.)1.wav");
+	landSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
+	LightAttackSFX = new Sound(associated, "./assets/audio/SFX/AtaqueFraco(Assim.)1.wav");
+	HeavyAttackSFX = new Sound(associated, "./assets/audio/SFX/AtaqueForte(Assim.)1.wav");
+
+
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
 //	associated.angleDeg = angle * 180 / PI;
@@ -99,8 +107,11 @@ void Player::Update(float dt) {
 			Ground = 0;
 		}
 
-		if (verticalSpeed == 600) {
+		if (verticalSpeed >= 600) {
 			BuzzL++;
+			cout << "airbone: " << airbone << "\n";
+			cout << "verticalSpeed: " << verticalSpeed << "\n";
+			cout << "BuzzL: " << BuzzL << "\n";
 		}
 
 		if ((verticalSpeed > -800 && airbone) || (BuzzL >= 2)) {
@@ -115,12 +126,19 @@ void Player::Update(float dt) {
 			//tchfloor = false;
 			//airbone = true;
 		}
-
 		if ((BuzzL >= 2) && (airbone == false)) {
 			BuzzL = 0;
 			tchfloor = true;
 			cout << "\nZERA\n";
 		}
+		/*
+		if ((BuzzL >= 2) && (verticalSpeed == 0)) {
+			BuzzL = 0;
+			tchfloor = true;
+			airbone = false;
+			cout << "\nZERA\n";
+		}
+		*/
 
 		//////////////////
 		//		SPAWN DE TESTE
@@ -147,7 +165,6 @@ void Player::Update(float dt) {
 			//Jump = 0;
 			Fall = 0;
 			Ground = 0;
-			Jump++;
 			verticalSpeed = PLAYER_JUMP * 0.7;
 			doubleJump = false;
 			DJ++;
@@ -170,11 +187,11 @@ void Player::Update(float dt) {
 			//cout << "wallAUX: " << wallAUX << endl;
 			if (inputManager.IsKeyDown(D_KEY) && (wallAUX > 0)) {
 				verticalSpeed = -30;		// QUEDA
-				Jump = 0;
-				DJ = 0;
+				
 			}
 			Fall = 0;
 			Ground = 0;
+			Jump = 0;
 		}
 		// Wall Slide A ESQUERDA
 		else if (airbone && !tchfloor && WallgrabL) {
@@ -185,13 +202,13 @@ void Player::Update(float dt) {
 				wallAUX--;
 			}
 			if (inputManager.IsKeyDown(A_KEY) && (wallAUX < 0)) {
-				Jump = 0;
+				
 				verticalSpeed = -30;		// QUEDA
 				linearSpeed -= accelSpeedGain;
-				DJ = 0;
 			}
 			Fall = 0;
 			Ground = 0;
+			Jump = 0;
 		}
 
 
@@ -352,7 +369,7 @@ void Player::Update(float dt) {
 		///////////////////////////////////////
 		//			SPRITES
 		//////////////////////////////////////
-		/*
+		
 		cout << "\nStop: " << Stop << endl;
 		cout << "Run: " << Run << endl;
 		cout << "Jump: " << Jump << endl;
@@ -360,10 +377,8 @@ void Player::Update(float dt) {
 		cout << "wallAUX: " << wallAUX << endl;
 		cout << "Ground: " << Ground << endl;
 		cout << "DJ: " << DJ << endl;
-		*/
-	
+		cout << "verticalSpeed: " << verticalSpeed << endl;
 
-		
 		//cout << "verticalSpeed: " << verticalSpeed << endl << endl;
 
 
@@ -375,8 +390,33 @@ void Player::Update(float dt) {
 			facingR = true;
 			facingL = false;
 
-			//SFX//
-			//PlayerSFX_Run->Stop();
+
+
+			///////////////////
+			//PARADO//
+
+			if (runSFX->IsPlaying()) {
+				//runSFX->Stop();
+				cout << "STOP RUN\n";
+			}
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}
+			/*
+			if (DjumpSFX->IsPlaying()) {
+				DjumpSFX->Stop();
+			}
+			if (landSFX->IsPlaying()) {
+				landSFX->Stop();
+			}
+			if (LightAttackSFX->IsPlaying()) {
+				LightAttackSFX->Stop();
+			}
+			if (HeavyAttackSFX->IsPlaying()) {
+				HeavyAttackSFX->Stop();
+			}
+			*/
+			///////////////////
 
 			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
 			// arruma a posicao para o sprite do personagem idle aparecer do pe mais a frente apos a corrida
@@ -398,8 +438,31 @@ void Player::Update(float dt) {
 			facingR = false;
 			facingL = true;
 
-			//SFX//
-			//PlayerSFX_Run->Stop();
+			///////////////////
+			//PARADO//
+			cout << runSFX;
+			if (runSFX->IsPlaying()) {
+			//	runSFX->Stop();
+				cout << "STOP RUN\n";
+			}
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}
+			/*
+			if (DjumpSFX->IsPlaying()) {
+				DjumpSFX->Stop();
+			}
+			if (landSFX->IsPlaying()) {
+				landSFX->Stop();
+			}
+			if (LightAttackSFX->IsPlaying()) {
+				LightAttackSFX->Stop();
+			}
+			if (HeavyAttackSFX->IsPlaying()) {
+				HeavyAttackSFX->Stop();
+			}
+			*/
+			///////////////////
 
 			associated.AddComponent(sprite);
 
@@ -420,10 +483,32 @@ void Player::Update(float dt) {
 			associated.AddComponent(sprite);
 			facingR = true;
 			facingL = false;
-			//SFX//
-			//PlayerSFX_Run->Play();
-		
-			
+
+			///////////////////
+			//SFX - runSFX//
+			if (!runSFX->IsPlaying()) {
+				runSFX->Play();
+				cout << "PLAY RUN\n";
+			}
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}
+			/*
+			if (DjumpSFX->IsPlaying()) {
+				DjumpSFX->Stop();
+			}
+			if (landSFX->IsPlaying()) {
+				landSFX->Stop();
+			}
+			if (LightAttackSFX->IsPlaying()) {
+				LightAttackSFX->Stop();
+			}
+			if (HeavyAttackSFX->IsPlaying()) {
+				HeavyAttackSFX->Stop();
+			}
+			*/
+			///////////////////
+
 			cout << "\nCORRIDA DIREITA\n\n";
 			//system("PAUSE");
 
@@ -438,13 +523,37 @@ void Player::Update(float dt) {
 			associated.AddComponent(sprite);
 			facingR = false;
 			facingL = true;
-			//SFX//
-			//PlayerSFX_Run->Play();
+
+			///////////////////
+			//SFX - runSFX//
+			/*
+			if (!runSFX->IsPlaying()) {
+				runSFX->Play();
+				cout << "PLAY RUN\n";
+			}
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}
+			
+			if (DjumpSFX->IsPlaying()) {
+				DjumpSFX->Stop();
+			}
+			if (landSFX->IsPlaying()) {
+				landSFX->Stop();
+			}
+			if (LightAttackSFX->IsPlaying()) {
+				LightAttackSFX->Stop();
+			}
+			if (HeavyAttackSFX->IsPlaying()) {
+				HeavyAttackSFX->Stop();
+			}
+			*/
+			///////////////////
 
 			cout << "\nCORRIDA ESQUERDA\n\n";
 			Run--;
 		}
-		if (DJ == 0) {
+		//if (DJ <= 5) {
 			// Pulo para a direita
 			//cout << "verticalspeed: " << verticalSpeed << endl;
 
@@ -455,12 +564,41 @@ void Player::Update(float dt) {
 
 				cout << "\nPULO DIREITA\n\n";
 
-				//cout << "\nTROCA, PULO DIREITA\n\n";
+				///////////////////
+				//SFX - jumpSFX//
+				/*
+				if (runSFX->IsPlaying()) {
+					runSFX->Stop();
+					cout << "STOP RUN\n";
+				}
 
+				if (!jumpSFX->IsPlaying()) {
+					jumpSFX->Play();
+				}
+				*/
+				/*
+				if (DjumpSFX->IsPlaying()) {
+					DjumpSFX->Stop();
+				}
+				if (landSFX->IsPlaying()) {
+					landSFX->Stop();
+				}
+				if (LightAttackSFX->IsPlaying()) {
+					LightAttackSFX->Stop();
+				}
+				if (HeavyAttackSFX->IsPlaying()) {
+					HeavyAttackSFX->Stop();
+				}
+				*/
+				///////////////////
+				if (Jump == 1) {
+					DJ++;
+					Jump++;
+				}
+			
 			}
-
 			// Pulo para a esquerda
-			if ((((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
+			if ( (((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/prot_pulo_inv.png", 8, 0.1);
 				associated.AddComponent(sprite);
@@ -468,19 +606,69 @@ void Player::Update(float dt) {
 				cout << "\nPULO ESQUERDA\n\n";
 
 				
-				//cout << "\nTROCA, PULO ESQUERDA\n\n";
+				///////////////////
+				//SFX - jumpSFX//
+				/*
+				if (runSFX->IsPlaying()) {
+					runSFX->Stop();
+					cout << "STOP RUN\n";
+				}
+				/*
+				if (!jumpSFX->IsPlaying()) {
+					jumpSFX->Play();
+				}
+				if (DjumpSFX->IsPlaying()) {
+					DjumpSFX->Stop();
+				}
+				if (landSFX->IsPlaying()) {
+					landSFX->Stop();
+				}
+				if (LightAttackSFX->IsPlaying()) {
+					LightAttackSFX->Stop();
+				}
+				if (HeavyAttackSFX->IsPlaying()) {
+					HeavyAttackSFX->Stop();
+				}
+				*/
+				///////////////////
 			}
 			if (Jump == 1) {
 				DJ++;
 				Jump++;
 			}
-		}
+		
 
 		// Pulo Duplo para a direita
 		if ((((Run >= 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/prot_puloduplo.png", 4, 0.1);
 			associated.AddComponent(sprite);
+
+			///////////////////
+			//SFX - DjumpSFX//
+			/*
+			if (runSFX->IsPlaying()) {
+			//	runSFX->Stop();
+				cout << "STOP RUN\n";
+			}
+			
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}
+			if (!DjumpSFX->IsPlaying()) {
+				DjumpSFX->Play();
+			}
+			if (landSFX->IsPlaying()) {
+				landSFX->Stop();
+			}
+			if (LightAttackSFX->IsPlaying()) {
+				LightAttackSFX->Stop();
+			}
+			if (HeavyAttackSFX->IsPlaying()) {
+				HeavyAttackSFX->Stop();
+			}
+			*/
+			///////////////////
 
 			cout << "\nPULO DUPLO DIREITA\n\n";
 			DJ++;
@@ -492,6 +680,32 @@ void Player::Update(float dt) {
 			sprite = new Sprite(associated, "./assets/img/prot_puloduplo_inv.png", 4, 0.1);
 			associated.AddComponent(sprite);
 			associated.box.x -= 10;
+
+			///////////////////
+			//SFX - DjumpSFX//
+
+			if (runSFX->IsPlaying()) {
+			//	runSFX->Stop();
+				cout << "STOP RUN\n";
+			}
+			/*
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}
+			if (!DjumpSFX->IsPlaying()) {
+				DjumpSFX->Play();
+			}
+			if (landSFX->IsPlaying()) {
+				landSFX->Stop();
+			}
+			if (LightAttackSFX->IsPlaying()) {
+				LightAttackSFX->Stop();
+			}
+			if (HeavyAttackSFX->IsPlaying()) {
+				HeavyAttackSFX->Stop();
+			}
+			*/
+			///////////////////
 
 			cout << "\nPULO DUPLO ESQUERDA\n\n";
 			DJ++;
@@ -506,6 +720,13 @@ void Player::Update(float dt) {
 
 			associated.box.x += 70;
 
+			//////////////
+			//SFX
+			//if (runningSFX->IsPlaying()) {
+			//	runningSFX->Stop();
+			//}
+			/////////////////
+
 			cout << "\nWALLSLIDE DIREITA\n\n";
 
 			//cout << "\nTROCA, WallSlide A DIREITA\n\n";
@@ -517,6 +738,13 @@ void Player::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/prot_desliza.png", 8, 0.1);
 			associated.AddComponent(sprite);
+
+			//////////////
+			//SFX
+			//if (runningSFX->IsPlaying()) {
+			//	runningSFX->Stop();
+			//}
+			/////////////////
 
 			cout << "\nWALLSLIDE ESQUERDA\n\n";
 		}
@@ -598,17 +826,7 @@ void Player::NotifyCollision(GameObject& other) {
 				if (!airbone && tchfloor && !SetJump) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
-					if (facingR) {
-						/*associated.RemoveComponent(sprite);
-						sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
-						associated.AddComponent(sprite);*/
-					}
-					else if (facingL) {/*
-						associated.RemoveComponent(sprite);
-						sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
-						associated.AddComponent(sprite);
-						*/
-					}
+					
 				}
 				WallgrabL = false;
 				WallgrabR = false;
@@ -623,7 +841,7 @@ void Player::NotifyCollision(GameObject& other) {
 				wallAUX = 0;
 				Jump = 0;
 				Fall = 0;
-
+			
 				// Checa se esta saindo de uma plataforma
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
 					airbone = true;
