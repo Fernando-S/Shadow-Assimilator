@@ -709,16 +709,6 @@ int Player::GetHP() {
 */
 
 
-
-
-
-
-
-
-
-
-
-
 /*
 #include "Player.h"
 #include "Game.h"
@@ -1478,23 +1468,6 @@ int Player::GetHP() {
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Player::Player(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	player = this;
 	speedH = { 1, 0 };
@@ -1583,22 +1556,27 @@ void Player::Update(float dt) {
 		/////////////////////////////////////////
 		//		GRAVIDADE
 		////////////////////////////////////////
-		//cout << "airbone: " << airbone << "\n";
+		cout << "airbone: " << airbone << "\n";
 		//cout << "verticalSpeed: " << verticalSpeed << "\n";
-		//cout << "BuzzL: " << BuzzL << "\n";
+		cout << "BuzzL: " << BuzzL << "\n";
 
-		/*
+		
 		if (airbone) {
 			Ground = 0;
 		}
-		*/
+		
 
 		contadorW1 = verticalSpeed;
-		//cout << "contadorW1: " << contadorW1 << "\n";
-		//cout << "verticalSpeed: " << verticalSpeed << "\n";
+		cout << "\ncontadorW1: " << contadorW1 << "\n";
+		cout << "verticalSpeed: " << verticalSpeed << "\n";
 
+		if (verticalSpeed < -800) {
+			verticalSpeed = -800;
+		}
 
-		if ((verticalSpeed > -800 && airbone) || (BuzzL >= 2)) {
+		if ((BuzzL >= 2) && (verticalSpeed > -800)) {
+
+			cout << "\n\n\n\n\nVOCE E UM BRINQUEDO\n\n\n\n\n";
 
 			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
 			Stop = 0;
@@ -1607,26 +1585,45 @@ void Player::Update(float dt) {
 					Fall++;
 				}
 			}
-			//tchfloor = false;
-			//airbone = true;
+			tchfloor = false;
+			airbone = true;
+		}
+
+		if (verticalSpeed > -800 && airbone) {
+
+			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
+			Stop = 0;
+			if (verticalSpeed < 0) {
+				if (Fall < 10) {
+					Fall++;
+				}
+			}
+			tchfloor = false;
+			airbone = true;
 		}
 
 		contadorW2 = verticalSpeed;
-		//cout << "contadorW2: " << contadorW2 << "\n";
+		cout << "contadorW2: " << contadorW2 << "\n\n";
 
-		if ((contadorW2 == contadorW1) && (verticalSpeed != 0)) {
+		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
 			//if (verticalSpeed > 600) {
 			BuzzL++;
 			cout << "airbone: " << airbone << "\n";
 			cout << "verticalSpeed: " << verticalSpeed << "\n";
 			cout << "BuzzL: " << BuzzL << "\n";
 		}
-
-		if ((BuzzL >= 2) && (airbone == false)) {
+		/*
+		if ((airbone = 0) && (verticalSpeed > 0)) {
+			BuzzL++;
+		}
+		*/
+		if (((BuzzL >= 1) && /*(airbone == false) &&*/ (contadorW2 != contadorW1)) || verticalSpeed == -800) {
 			BuzzL = 0;
-			tchfloor = true;
+		//	verticalSpeed = 0;
+		//	tchfloor = true;
 			cout << "\nZERA\n";
 		}
+
 		/*
 		if ((BuzzL >= 2) && (verticalSpeed == 0)) {
 			BuzzL = 0;
@@ -1892,7 +1889,7 @@ void Player::Update(float dt) {
 		///////////////////////////////////////
 		//			SPRITES
 		//////////////////////////////////////
-
+		/*
 		cout << "\nStop: " << Stop << endl;
 		cout << "Run: " << Run << endl;
 		cout << "Jump: " << Jump << endl;
@@ -1901,7 +1898,7 @@ void Player::Update(float dt) {
 		cout << "Ground: " << Ground << endl;
 		cout << "DJ: " << DJ << endl;
 		cout << "verticalSpeed: " << verticalSpeed << endl;
-
+		*/
 		//cout << "verticalSpeed: " << verticalSpeed << endl << endl;
 
 		///////////////////////////
