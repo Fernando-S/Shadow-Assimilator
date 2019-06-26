@@ -69,7 +69,7 @@ void Player::Update(float dt) {
 
 		// Toca o som e mostra a explosao
 		auto explosionGO = new GameObject();
-		auto explosionSound = new Sound(*explosionGO, "./assets/audio/boom.wav");
+		auto explosionSound = new Sound(*explosionGO, "./assets/audio/SFX/boom.wav");
 		if (facingR) {
 			explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/prot_morte.png", 21, 0.1, 2.1));
 			associated.box.x += 40;

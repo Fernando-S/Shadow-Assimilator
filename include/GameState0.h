@@ -35,6 +35,7 @@ public:
 private:
 	void ChangePlayerHP();
 	void LoadMap();
+	void LoadLevel();
 
 	Sprite* HPbarSprite;
 	TileSet* tileSet;
