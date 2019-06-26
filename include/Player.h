@@ -12,6 +12,7 @@
 #include "PenguinCannon.h"
 #include "InputManager.h"
 #include "Music.h"
+#include "Sound.h"
 
 
 #define PLAYER_MAX_LINEAR_SPEED 500		// em pixels/s
@@ -39,6 +40,7 @@ public:
 	//float secondsToSelfDestruction = 1.5;
 	Sprite* sprite;
 	bool damaged = false;
+	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX;
 
 private:
 	//std::weak_ptr<GameObject> pcannon;
@@ -50,6 +52,7 @@ private:
 		 tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
 		 SetJump = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0;
+	int contadorW1 = 0, contadorW2 = 0;
 
 };
 #endif	//PLAYER_H
