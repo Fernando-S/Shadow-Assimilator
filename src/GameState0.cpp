@@ -173,11 +173,20 @@ void GameState0::Update(float dt){
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
 	
+	if (player->ultrapassou) {
+		Camera::Unfollow();
+		playerGO->render = false;
+	}
+	else {
+		playerGO->render = true;
+		Camera::Follow(playerGO);
+	}
+
 	// Faz o update na camera e na box do mapa
 	Camera::Update(dt);
 
 	ChangePlayerHP();
-	
+
 	quitRequested = inputManager.QuitRequested();			// Seta o quitRequested ao fechar o jogo
 	popRequested = inputManager.KeyPress(ESCAPE_KEY);		// Seta o popRequested para retornar a TitleSet ao apertar ESC
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray

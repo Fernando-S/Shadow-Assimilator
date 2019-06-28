@@ -39,7 +39,7 @@ public:
 	static Player* player;
 	//float secondsToSelfDestruction = 1.5;
 	Sprite* sprite;
-	bool damaged = false, isAtacking = false;
+	bool damaged = false, isAtacking = false, ultrapassou = false;
 	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX;
 
 private:

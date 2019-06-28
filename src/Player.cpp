@@ -225,6 +225,12 @@ void Player::Update(float dt) {
 				wallAUX++;
 			}
 			//cout << "wallAUX: " << wallAUX << endl;
+
+			if (inputManager.IsKeyDown(D_KEY) && (linearSpeed != 0)) {
+				WallgrabR = false;		// QUEDA
+				wallAUX = 0;
+			}
+
 			if (inputManager.IsKeyDown(D_KEY) && (wallAUX > 0)) {
 				verticalSpeed = -30;		// QUEDA
 
@@ -241,11 +247,22 @@ void Player::Update(float dt) {
 			if (wallAUX > -10) {
 				wallAUX--;
 			}
+			
+			if (inputManager.IsKeyDown(A_KEY) && ((linearSpeed != 0) || (linearSpeed !=(-0) )) ) {
+				WallgrabL = false;		// QUEDA
+				wallAUX = 0;
+			}
+			
 			if (inputManager.IsKeyDown(A_KEY) && (wallAUX < 0)) {
-
 				verticalSpeed = -30;		// QUEDA
 				linearSpeed -= accelSpeedGain;
 			}
+			/*
+			else if (inputManager.KeyRelease(A_KEY)) {
+				WallgrabL = false;
+				wallAUX = 0;
+			}
+			*/
 			Fall = 0;
 			Ground = 0;
 			Jump = 0;
@@ -281,10 +298,26 @@ void Player::Update(float dt) {
 		if (airbone) {
 			Ground = 0;
 			SetJump = false;
+			/*
 			if (runSFX->IsPlaying()) {
 				runSFX->Stop();
 			}
+			*/
+		}/*
+		else {
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}
 		}
+		*/
+		//if (Jump > 0) {
+			if (!jumpSFX->IsPlaying()) {
+			//	jumpSFX->Play();
+			//	cout << "SOLTA O SOM" << endl;
+			}
+			
+
+		//}
 
 		if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
 			//this->associated.box.y -= 10;
@@ -295,8 +328,14 @@ void Player::Update(float dt) {
 			Jump++;
 			Ground = 0;
 			/// todo - ver como fazer isso funcionar
+
+			if (!runSFX->IsPlaying()) {
+				runSFX->Play();
+			}
+
 			if (!jumpSFX->IsPlaying()) {
 				jumpSFX->Play();
+				cout << "SOLTA O SOM" << endl;
 			}
 			
 		}
@@ -402,8 +441,11 @@ void Player::Update(float dt) {
 			Setidle = true;
 			if (runSFX->IsPlaying()) {
 				runSFX->Stop();
-			}
-
+			}/*
+			if (jumpSFX->IsPlaying()) {
+				jumpSFX->Stop();
+			}*/
+			
 			//cout << "Stop: " << Stop << endl;
 		}
 
@@ -445,7 +487,9 @@ void Player::Update(float dt) {
 		cout << "DJ: " << DJ << endl;
 		cout << "verticalSpeed: " << verticalSpeed << endl;
 		*/
-		//cout << "verticalSpeed: " << verticalSpeed << endl << endl;
+
+		//cout << "linearSpeed: " << linearSpeed << endl;
+
 
 		///////////////////////////
 		//		SPRITES
@@ -454,11 +498,16 @@ void Player::Update(float dt) {
 		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
-			associated.box.x += associated.box.w / 2;
+
 			facingR = true;
 			facingL = false;
 
-
+			if (Ground <= 2) {
+				//associated.box.x += 35;
+			}
+			else {
+				associated.box.x += associated.box.w / 2;
+			}
 
 			///////////////////
 			//PARADO//
@@ -493,9 +542,7 @@ void Player::Update(float dt) {
 
 			associated.AddComponent(sprite);
 
-			if (Ground <= 2) {
-				associated.box.x -= 35;
-			}
+			
 
 			cout << "\nIDLE DIREITA\n\n";
 		}
@@ -506,6 +553,7 @@ void Player::Update(float dt) {
 			sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
 			facingR = false;
 			facingL = true;
+
 
 			///////////////////
 			//PARADO//
@@ -537,7 +585,10 @@ void Player::Update(float dt) {
 			associated.AddComponent(sprite);
 
 			if (Ground <= 2) {
-				associated.box.x += 35;
+			//	associated.box.x += 35;
+			}
+			else {
+				associated.box.x += associated.box.w / 2;
 			}
 
 			cout << "\nIDLE ESQUERDA\n\n";
@@ -548,7 +599,7 @@ void Player::Update(float dt) {
 		//if ((Run == 1) && (wallAUX == 0) && (Jump == 0) && (Ground > 0) && (Fall == 0)) {
 		if ((((Run == 1) && (Ground > 0)) || ((Ground == 1) && (Run > 0) && (inputManager.IsKeyDown(D_KEY)))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida(142x128).png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida(142x128).png", 12, 0.08);
 			associated.AddComponent(sprite);
 			facingR = true;
 			facingL = false;
@@ -587,10 +638,10 @@ void Player::Update(float dt) {
 		}
 
 		// Corrida para a esquerda
-		//if ((Run == -1) && (wallAUX == 0) && (Jump == 0) && (Ground > 0) && (Fall == 0)) {
+		//if ((Run == -1) && (wallAUX == 0) && (Jump == 0) && (Ground > 0) && (Fall == 0)) 
 		if ((((Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && (inputManager.IsKeyDown(A_KEY)))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida_invertida.png", 12, 0.1);
+			sprite = new Sprite(associated, "./assets/img/sprite_prot_corrida_invertida.png", 12, 0.08);
 			associated.AddComponent(sprite);
 			facingR = false;
 			facingL = true;
@@ -637,9 +688,9 @@ void Player::Update(float dt) {
 
 			///////////////////
 			//SFX - jumpSFX//
-			/*
+			
 			if (runSFX->IsPlaying()) {
-				runSFX->Stop();
+			//	runSFX->Stop();
 				//cout << "STOP RUN\n";
 			}
 			if (!jumpSFX->IsPlaying()) {
@@ -926,9 +977,13 @@ void Player::NotifyCollision(GameObject& other) {
 				&&*/ (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
 				|| this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2
 				) {
+				if (this->associated.box.y + this->associated.box.h > tile->GetY()) {
+					ultrapassou = true;
+				}
 				if (!airbone && tchfloor && !SetJump) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
+					ultrapassou = false;
 				}
 				WallgrabL = false;
 				WallgrabR = false;
@@ -951,6 +1006,7 @@ void Player::NotifyCollision(GameObject& other) {
 					doubleJump = true;
 					Stop = 0;
 					wallAUX = 0;
+					ultrapassou = false;
 					//tchCeiling = false;
 					cout << "Desencostou\n";
 				}
@@ -965,6 +1021,7 @@ void Player::NotifyCollision(GameObject& other) {
 				/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
 				verticalSpeed = 0;
 				tchCeiling = true;
+				ultrapassou = false;
 
 			}
 			// Colisao com uma parede A DIREITA
@@ -977,6 +1034,7 @@ void Player::NotifyCollision(GameObject& other) {
 				WallgrabL = false;
 				tchCeiling = false;
 				WallgrabR = true;
+				ultrapassou = false;
 
 				if (airbone && !tchfloor && WallgrabR) {
 					wallX = tile->GetX();
@@ -995,6 +1053,7 @@ void Player::NotifyCollision(GameObject& other) {
 				WallgrabR = false;
 				tchCeiling = false;
 				WallgrabL = true;
+				ultrapassou = false;
 
 			}
 			else {
@@ -1005,11 +1064,13 @@ void Player::NotifyCollision(GameObject& other) {
 				airbone = true;
 				cout << "desencostou do tile\n";
 				wallAUX = 0;
+				ultrapassou = false;
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
 					cout << "desencostou dessa parede <<\n";
 					wallAUX = 0;
+					WallgrabL = false;
 					//	if (airbone) {
 							//doubleJump = true;
 					//		WallgrabL = false;
@@ -1020,11 +1081,13 @@ void Player::NotifyCollision(GameObject& other) {
 				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
 					cout << "desencostou dessa parede >>\n";
 					cout << "airbone: " << airbone << endl;
+					WallgrabR = false;
 					if (airbone) {
 						//system("PAUSE");
 						associated.box.x -= 15;
 					}
 					wallAUX = 0;
+					ultrapassou = false;
 				}
 
 				// Checa se esta desencostando do teto
@@ -1032,6 +1095,7 @@ void Player::NotifyCollision(GameObject& other) {
 					cout << "desencostou do teto ^\n";
 					//for (int i = 0; i < 50; i++);
 					tchCeiling = false;
+					ultrapassou = false;
 				}
 			}
 		}
