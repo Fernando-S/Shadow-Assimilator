@@ -173,13 +173,8 @@ void GameState0::Update(float dt){
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
 	
-	if (player->ultrapassou) {
-		Camera::Unfollow();
-		playerGO->render = false;
-	}
-	else {
-		playerGO->render = true;
-		Camera::Follow(playerGO);
+	if (playerGO->box.y + playerGO->box.h > 800) {
+		playerGO->box.y = 800 - playerGO->box.h;
 	}
 
 	// Faz o update na camera e na box do mapa
