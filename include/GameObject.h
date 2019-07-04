@@ -25,7 +25,7 @@ public:
 	Rect box;
 	void Start();
 	double angleDeg;
-	bool render = true, colide = false;
+	bool render = true;
 
 private:
 	std::vector<std::shared_ptr<Component>> components;
