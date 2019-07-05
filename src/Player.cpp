@@ -109,10 +109,13 @@ void Player::Update(float dt) {
 		//////////////////////////////////////////
 		if (WallJump && (WallJumpTimer.Get() > 0.3)) {
 			WallJump = false;
-			linearSpeed = 0;
-			verticalSpeed = 0;
-		}
-
+			//linearSpeed = 0;
+			//verticalSpeed = 0;
+		}/*
+		else if (WallJump && (WallJumpTimer.Get() < 0.3)) {
+			doubleJump = false;
+		}*/
+		
 		/////////////////////////////////////////
 		//		GRAVIDADE
 		////////////////////////////////////////
@@ -293,6 +296,7 @@ void Player::Update(float dt) {
 			oppositeSpeed += 250;
 			wallAUX = 0;
 			Jump++;
+			//WallJump = true;
 		}
 
 		//NA PAREDE DA ESQUERDA
@@ -303,6 +307,7 @@ void Player::Update(float dt) {
 			associated.box += speedH * linearSpeed*dt;
 			wallAUX = 0;
 			Jump++;
+			//WallJump = true;
 		}
 		///////////////////////////////////////////////////////////////
 
@@ -357,7 +362,7 @@ void Player::Update(float dt) {
 			/////////////////////
 			//		CORRIDA PARA A ESQUERDA
 			////////////////////
-			if (inputManager.IsKeyDown(A_KEY) && !WallJump) {
+			if (inputManager.IsKeyDown(A_KEY) /*&& !WallJump*/) {
 
 				WallgrabR = false;
 
@@ -973,8 +978,15 @@ void Player::Update(float dt) {
 			isAtacking = false;
 		/////////////////////////////////
 
+///////////////////////////////////////////////////////
+//				EFEITOS SONOROS						//
+/////////////////////////////////////////////////////
 
-		if (SetJump) {
+
+		///////////////////////////
+		//		SFX DE PULO		//
+		/////////////////////////
+		if (SetJump/* || WallJump*/) {
 			if (playerSFX->IsPlaying()) {
 				playerSFX->Stop();
 			}
@@ -983,7 +995,11 @@ void Player::Update(float dt) {
 			associated.AddComponent(playerSFX);
 			playerSFX->Play();
 			runningSound = false;
+			//wallSlideSound = false;
 		}
+		///////////////////////////////
+		//		SFX DE CORRIDA		//
+		/////////////////////////////
 		else if (Setrun && tchfloor) {
 			if (!runningSound) {
 				if (playerSFX->IsPlaying()) {
@@ -1000,7 +1016,38 @@ void Player::Update(float dt) {
 				}
 			}
 		}
-		
+		///////////////////////////////
+		//		SFX DE WALLSLIDE	//
+		/////////////////////////////
+		else if (airbone && !tchfloor && (WallgrabL || WallgrabR)) {
+			if (!wallSlideSound) {
+				if (playerSFX->IsPlaying()) {
+					playerSFX->Stop();
+				}
+				associated.RemoveComponent(playerSFX);
+				playerSFX = new Sound(associated, "./assets/audio/SFX/ArrastarPrincipal(Assim.)2.wav");
+				associated.AddComponent(playerSFX);
+				wallSlideSound = true;
+			}
+			else {
+				if (!playerSFX->IsPlaying()) {
+					playerSFX->Play();
+				}
+			}
+		}
+		///////////////////////////////
+		//		SFX DE POUSO		//
+		/////////////////////////////
+		else if (ultrapassou) {
+			if (playerSFX->IsPlaying()) {
+				playerSFX->Stop();
+			}
+			associated.RemoveComponent(playerSFX);
+			playerSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
+			associated.AddComponent(playerSFX);
+			playerSFX->Play();
+			//runningSound = false;
+		}
 	}
 
 }
@@ -1137,6 +1184,10 @@ void Player::NotifyCollision(GameObject& other) {
 							//doubleJump = true;
 					//		WallgrabL = false;
 					//	}
+					if (playerSFX->IsPlaying()/* && !WallJump*/) {
+						playerSFX->Stop();
+					}
+					wallSlideSound = false;
 				}
 
 				// Checa se esta desencostando da parede A DIREITA
@@ -1150,6 +1201,10 @@ void Player::NotifyCollision(GameObject& other) {
 					}
 					wallAUX = 0;
 					ultrapassou = false;
+					if (playerSFX->IsPlaying()/* && !WallJump*/) {
+						playerSFX->Stop();
+					}
+					wallSlideSound = false;
 				}
 
 				// Checa se esta desencostando do teto
@@ -1170,15 +1225,22 @@ Vec2 Player::GetCenter() {
 
 void Player::Shoot(Vec2 target) {
 	// Carrega um Tiro do Robo
-	auto bulletGO = new GameObject();
-	bulletGO->box = associated.box.Center();
+	auto laserGO = new GameObject();
+	laserGO->box = associated.box.Center();
 
-	auto bullet = new Bullet(*bulletGO, target.InclinacaoDaDiferenca(associated.box.Center()), BULLET_SPEED,
+	auto laser = new Bullet(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), BULLET_SPEED,
 		PLAYER_BULLET_DAMAGE, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
-	bullet->playerBullet = true;
-	bulletGO->AddComponent(bullet);
+	laser->playerBullet = true;
+	auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
+	laserGO->AddComponent(laserSound);
+	/// todo - Parar playerSFX nao fez a menor diferenca
+	if (playerSFX->IsPlaying()) {
+		playerSFX->Stop();
+	}
+	laserSound->Play();
+	laserGO->AddComponent(laser);
 
-	Game::GetInstance().GetCurrentState().AddObject(bulletGO);
+	Game::GetInstance().GetCurrentState().AddObject(laserGO);
 }
 
 int Player::GetHP() {

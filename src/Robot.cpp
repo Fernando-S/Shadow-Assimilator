@@ -333,7 +333,10 @@ void Robot::Update(float dt) {
 		}
 
 		//if (inputManager.IsKeyDown(NUMPAD_ONE_KEY)) {
-		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 800) && cooldownTimer.Get() > 1.8) {
+		/// todo - fazer uma condicao parecida ou ate mesmo igual para tocar o som de corrida apenas quando esta proximo do jogador
+		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 800) && cooldownTimer.Get() > 1.8
+			&& (Player::player->GetCenter().y > this->associated.box.y - ONETILESQUARE * 3)
+			&& (Player::player->GetCenter().y < this->associated.box.y + this->associated.box.h + ONETILESQUARE * 3) ) {
 			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
 			cooldownTimer.Restart();
 		}
@@ -362,22 +365,15 @@ void Robot::NotifyCollision(GameObject& other) {
 	auto player1 = (Player*)other.GetComponent("Player");
 
 
-	// Prosfere dano ao jogador se o tiro for dos Aliens
+	// Prosfere dano ao robo se o tiro for do jogador
 	if (laser && laser->playerBullet) {
 		//std::cout << "Vida do Robo: " << hp << std::endl;
 		hp -= laser->GetDamage();
 	}
 	else if (player1 && Player::player->isAtacking) {
-		cout << "Deu dano no robo\n";
-		hp -= 2;
+		//cout << "Deu dano no robo\n";
+		hp -= 2;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
 	}
-	
-	// Prosfere dano ao jogador se o tiro for dos Aliens
-	if (laser && laser->playerBullet) {
-		//std::cout << "Vida do Robo: " << hp << std::endl;
-		hp -= laser->GetDamage();
-	}
-	
 
 	if (tile) {
 		if (tile->colide) {
