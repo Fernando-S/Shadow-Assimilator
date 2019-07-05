@@ -40,7 +40,7 @@ public:
 	//float secondsToSelfDestruction = 1.5;
 	Sprite* sprite;
 	bool damaged = false, isAtacking = false, ultrapassou = false;
-	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX;
+	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX, *playerSFX;
 
 private:
 	//std::weak_ptr<GameObject> pcannon;
@@ -50,7 +50,7 @@ private:
 	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
 		 tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
-		 SetJump = false;
+		 SetJump = false, runningSound = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0;
 	int contadorW1 = 0, contadorW2 = 0;
 
