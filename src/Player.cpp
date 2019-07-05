@@ -27,6 +27,9 @@ Player::Player(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	// Carrega o sprite da personagem idle
 	sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
 
+	// Carrega som nulo para a personagem
+	playerSFX = new Sound(associated);
+
 	runSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
 	jumpSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
 	DjumpSFX = new Sound(associated, "./assets/audio/SFX/PuloDuplo(Assim.)1.wav");
@@ -35,6 +38,7 @@ Player::Player(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	HeavyAttackSFX = new Sound(associated, "./assets/audio/SFX/AtaqueForte(Assim.)1.wav");
 
 
+	associated.AddComponent(playerSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
 	//	associated.angleDeg = angle * 180 / PI;
@@ -89,6 +93,16 @@ void Player::Update(float dt) {
 		WallJumpTimer.Update(dt);
 		ShootCooldownTimer.Update(dt);
 		DashCooldownTimer.Update(dt);
+		/*
+		if ( Setrun && !runSFX->IsPlaying() && !airbone) {
+			runSFX->Play();
+		}
+		
+		if (SetJump && !jumpSFX->IsPlaying()) {
+			jumpSFX->Play();
+		}
+		*/
+
 
 		//////////////////////////////////////////
 		//		TERMINO DO WALL JUMP
@@ -102,9 +116,9 @@ void Player::Update(float dt) {
 		/////////////////////////////////////////
 		//		GRAVIDADE
 		////////////////////////////////////////
-		//cout << "airbone: " << airbone << "\n";
-		//cout << "verticalSpeed: " << verticalSpeed << "\n";
-		//cout << "BuzzL: " << BuzzL << "\n";
+		////cout << "airbone: " << airbone << "\n";
+		////cout << "verticalSpeed: " << verticalSpeed << "\n";
+		////cout << "BuzzL: " << BuzzL << "\n";
 
 		
 		if (airbone) {
@@ -113,8 +127,8 @@ void Player::Update(float dt) {
 		
 
 		contadorW1 = verticalSpeed;
-		//cout << "\ncontadorW1: " << contadorW1 << "\n";
-		//cout << "verticalSpeed: " << verticalSpeed << "\n";
+		////cout << "\ncontadorW1: " << contadorW1 << "\n";
+		////cout << "verticalSpeed: " << verticalSpeed << "\n";
 
 		if (verticalSpeed < -800) {
 			verticalSpeed = -800;
@@ -122,7 +136,7 @@ void Player::Update(float dt) {
 
 		if ((BuzzL >= 2) && (verticalSpeed > -800)) {
 
-			//cout << "\n\n\n\n\nVOCE E UM BRINQUEDO\n\n\n\n\n";
+			////cout << "\n\n\n\n\nVOCE E UM BRINQUEDO\n\n\n\n\n";
 
 			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
 			Stop = 0;
@@ -149,14 +163,14 @@ void Player::Update(float dt) {
 		}
 
 		contadorW2 = verticalSpeed;
-		//cout << "contadorW2: " << contadorW2 << "\n\n";
+		////cout << "contadorW2: " << contadorW2 << "\n\n";
 
 		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
 			//if (verticalSpeed > 600) {
 			BuzzL++;
-			cout << "airbone: " << airbone << "\n";
-			cout << "verticalSpeed: " << verticalSpeed << "\n";
-			cout << "BuzzL: " << BuzzL << "\n";
+			//cout << "airbone: " << airbone << "\n";
+			//cout << "verticalSpeed: " << verticalSpeed << "\n";
+			//cout << "BuzzL: " << BuzzL << "\n";
 		}
 		/*
 		if ((airbone = 0) && (verticalSpeed > 0)) {
@@ -167,7 +181,7 @@ void Player::Update(float dt) {
 			BuzzL = 0;
 		//	verticalSpeed = 0;
 		//	tchfloor = true;
-			cout << "\nZERA\n";
+			//cout << "\nZERA\n";
 		}
 
 		/*
@@ -175,7 +189,7 @@ void Player::Update(float dt) {
 			BuzzL = 0;
 			tchfloor = true;
 			airbone = false;
-			cout << "\nZERA\n";
+			//cout << "\nZERA\n";
 		}
 		*/
 
@@ -194,7 +208,7 @@ void Player::Update(float dt) {
 		//////////////////////////////////////////////////////////////
 		//		DOUBLE JUMP
 		///////////////////////////////////////////////////////////////
-		//cout << "DJ: " << DJ << "\n";
+		////cout << "DJ: " << DJ << "\n";
 		if (airbone && !inputManager.IsKeyDown(W_KEY) && (Jump == 2) && (DJ == 1) && (wallAUX == 0)) {
 			doubleJump = true; // setar para 0 quando encostar no chão
 		}
@@ -215,7 +229,7 @@ void Player::Update(float dt) {
 		////WALL SLIDE/////
 		/////////////////////////////////////////////////////////////
 
-		//cout << "wallAUX: " << wallAUX << endl;
+		////cout << "wallAUX: " << wallAUX << endl;
 		// Wall Slide A DIREITA
 		if (airbone && !tchfloor && WallgrabR) {
 			if (wallAUX < 0) {
@@ -224,7 +238,7 @@ void Player::Update(float dt) {
 			if (wallAUX < 10) {
 				wallAUX++;
 			}
-			//cout << "wallAUX: " << wallAUX << endl;
+			////cout << "wallAUX: " << wallAUX << endl;
 
 			if (inputManager.IsKeyDown(D_KEY) && (linearSpeed != 0)) {
 				WallgrabR = false;		// QUEDA
@@ -311,10 +325,10 @@ void Player::Update(float dt) {
 		}
 		*/
 		//if (Jump > 0) {
-			if (!jumpSFX->IsPlaying()) {
+			//if (!jumpSFX->IsPlaying()) {
 			//	jumpSFX->Play();
-			//	cout << "SOLTA O SOM" << endl;
-			}
+			//	//cout << "SOLTA O SOM" << endl;
+			//}
 			
 
 		//}
@@ -328,16 +342,16 @@ void Player::Update(float dt) {
 			Jump++;
 			Ground = 0;
 			/// todo - ver como fazer isso funcionar
-
-			if (!runSFX->IsPlaying()) {
-				runSFX->Play();
+			/*
+			if (runSFX->IsPlaying()) {
+				runSFX->Stop();
 			}
 
 			if (!jumpSFX->IsPlaying()) {
 				jumpSFX->Play();
-				cout << "SOLTA O SOM" << endl;
+				//cout << "SOLTA O SOM" << endl;
 			}
-			
+			*/
 		}
 		else	
 			/////////////////////
@@ -352,7 +366,7 @@ void Player::Update(float dt) {
 
 				if (Getspeed1 == false) {
 					oppositeSpeed = linearSpeed;
-					//std::cout << "\n\nPassarvalor1" << endl << endl;
+					//std:://cout << "\n\nPassarvalor1" << endl << endl;
 					Getspeed1 = true;
 					Setidle = false;
 					Setrun = true;
@@ -373,12 +387,16 @@ void Player::Update(float dt) {
 				else
 					linearSpeed = -oppositeSpeed;
 
+				//if (jumpSFX->IsPlaying()) {
+				//	jumpSFX->Stop();
+				//}
+				/*
 				if (!runSFX->IsPlaying() && !airbone) {
 					runSFX->Play();
-				}
+				}*/
 
-				//std::cout << "linearSpeed1: " << linearSpeed << endl;
-				//std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
+				//std:://cout << "linearSpeed1: " << linearSpeed << endl;
+				//std:://cout << "oppositeSpeed1: " << oppositeSpeed << endl;
 
 			}
 			/////////////////////////
@@ -389,7 +407,7 @@ void Player::Update(float dt) {
 
 				if (Getspeed2 == false) {
 					oppositeSpeed = linearSpeed;
-					//std::cout << "\n\nPassarvalor2" << endl << endl;
+					//std:://cout << "\n\nPassarvalor2" << endl << endl;
 					Getspeed2 = true;
 
 					Run = 0;
@@ -412,12 +430,16 @@ void Player::Update(float dt) {
 						linearSpeed += accelSpeedGain;
 
 				}
-
+				/*
+				if (jumpSFX->IsPlaying()) {
+					jumpSFX->Stop();
+				}*/
+				/*
 				if (!runSFX->IsPlaying() && !airbone) {
 					runSFX->Play();
-				}
-				//cout << "linearSpeed: " << linearSpeed << endl;
-				//cout << "Run: " << Run << endl;
+				}*/
+				////cout << "linearSpeed: " << linearSpeed << endl;
+				////cout << "Run: " << Run << endl;
 			}
 
 		double atrictSpeedLoss = PLAYER_ATRICT * dt;
@@ -438,15 +460,27 @@ void Player::Update(float dt) {
 
 			if ((linearSpeed <= 40) && (linearSpeed >= -40))
 				linearSpeed = 0;
+			Setrun = false;
 			Setidle = true;
+			
+			if (runningSound) {
+				if (playerSFX->IsPlaying()) {
+					playerSFX->Stop();
+				}
+			}
+
+
+			/*
 			if (runSFX->IsPlaying()) {
 				runSFX->Stop();
-			}/*
-			if (jumpSFX->IsPlaying()) {
-				jumpSFX->Stop();
+			}
+			*/
+			/*
+			if (SetJump && !jumpSFX->IsPlaying()) {
+				jumpSFX->Play();
 			}*/
 			
-			//cout << "Stop: " << Stop << endl;
+			////cout << "Stop: " << Stop << endl;
 		}
 
 		if ((linearSpeed == 0) && (verticalSpeed == 0)) {
@@ -462,8 +496,8 @@ void Player::Update(float dt) {
 		associated.box += speedH * linearSpeed*dt;
 		associated.box += speedV * verticalSpeed*dt;
 
-		//cout << "Centro: " << GetCenter().y << endl;
-		//cout << "Centro: " << chao << endl;
+		////cout << "Centro: " << GetCenter().y << endl;
+		////cout << "Centro: " << chao << endl;
 
 
 		//////////////////////////////////////////////////////////////
@@ -478,17 +512,17 @@ void Player::Update(float dt) {
 		//			SPRITES
 		//////////////////////////////////////
 		/*
-		cout << "\nStop: " << Stop << endl;
-		cout << "Run: " << Run << endl;
-		cout << "Jump: " << Jump << endl;
-		cout << "Fall: " << Fall << endl;
-		cout << "wallAUX: " << wallAUX << endl;
-		cout << "Ground: " << Ground << endl;
-		cout << "DJ: " << DJ << endl;
-		cout << "verticalSpeed: " << verticalSpeed << endl;
+		//cout << "\nStop: " << Stop << endl;
+		//cout << "Run: " << Run << endl;
+		//cout << "Jump: " << Jump << endl;
+		//cout << "Fall: " << Fall << endl;
+		//cout << "wallAUX: " << wallAUX << endl;
+		//cout << "Ground: " << Ground << endl;
+		//cout << "DJ: " << DJ << endl;
+		//cout << "verticalSpeed: " << verticalSpeed << endl;
 		*/
 
-		//cout << "linearSpeed: " << linearSpeed << endl;
+		////cout << "linearSpeed: " << linearSpeed << endl;
 
 
 		///////////////////////////
@@ -514,7 +548,7 @@ void Player::Update(float dt) {
 			/*
 			if (runSFX->IsPlaying()) {
 				runSFX->Stop();
-				cout << "STOP RUN\n";
+				//cout << "STOP RUN\n";
 			}
 			/*
 			if (jumpSFX->IsPlaying()) {
@@ -544,7 +578,7 @@ void Player::Update(float dt) {
 
 			
 
-			cout << "\nIDLE DIREITA\n\n";
+			//cout << "\nIDLE DIREITA\n\n";
 		}
 
 		// Idle para a esquerda
@@ -558,10 +592,10 @@ void Player::Update(float dt) {
 			///////////////////
 			//PARADO//
 			/*
-			cout << runSFX;
+			//cout << runSFX;
 			if (runSFX->IsPlaying()) {
 				//	runSFX->Stop();
-				cout << "STOP RUN\n";
+				//cout << "STOP RUN\n";
 			}
 			if (jumpSFX->IsPlaying()) {
 				jumpSFX->Stop();
@@ -591,7 +625,7 @@ void Player::Update(float dt) {
 				associated.box.x += associated.box.w / 2;
 			}
 
-			cout << "\nIDLE ESQUERDA\n\n";
+			//cout << "\nIDLE ESQUERDA\n\n";
 
 		}
 
@@ -609,7 +643,7 @@ void Player::Update(float dt) {
 			/*
 			if (!runSFX->IsPlaying()) {
 				runSFX->Play();
-				cout << "PLAY RUN\n";
+				//cout << "PLAY RUN\n";
 			}
 			/*
 			if (jumpSFX->IsPlaying()) {
@@ -631,7 +665,7 @@ void Player::Update(float dt) {
 			*/
 			///////////////////
 
-			cout << "\nCORRIDA DIREITA\n\n";
+			//cout << "\nCORRIDA DIREITA\n\n";
 			//system("PAUSE");
 
 			Run++;
@@ -651,7 +685,7 @@ void Player::Update(float dt) {
 			/*
 			if (!runSFX->IsPlaying()) {
 				runSFX->Play();
-				cout << "PLAY RUN\n";
+				//cout << "PLAY RUN\n";
 			}
 			if (jumpSFX->IsPlaying()) {
 				jumpSFX->Stop();
@@ -672,25 +706,25 @@ void Player::Update(float dt) {
 			*/
 			///////////////////
 
-			cout << "\nCORRIDA ESQUERDA\n\n";
+			//cout << "\nCORRIDA ESQUERDA\n\n";
 			Run--;
 		}
 		//if (DJ <= 5) {
 			// Pulo para a direita
-			//cout << "verticalspeed: " << verticalSpeed << endl;
+			////cout << "verticalspeed: " << verticalSpeed << endl;
 
 		if ((((Run >= 0) && (Jump == 1)) || ((Jump > 1) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/prot_pulo.png", 8, 0.1);
 			associated.AddComponent(sprite);
 
-			cout << "\nPULO DIREITA\n\n";
+			//cout << "\nPULO DIREITA\n\n";
 
 			///////////////////
 			//SFX - jumpSFX//
-			
+			/*
 			if (runSFX->IsPlaying()) {
-			//	runSFX->Stop();
+				runSFX->Stop();
 				//cout << "STOP RUN\n";
 			}
 			if (!jumpSFX->IsPlaying()) {
@@ -723,7 +757,7 @@ void Player::Update(float dt) {
 			sprite = new Sprite(associated, "./assets/img/prot_pulo_inv.png", 8, 0.1);
 			associated.AddComponent(sprite);
 			associated.box.x -= 10;
-			cout << "\nPULO ESQUERDA\n\n";
+			//cout << "\nPULO ESQUERDA\n\n";
 
 
 			///////////////////
@@ -731,7 +765,7 @@ void Player::Update(float dt) {
 			/*
 			if (runSFX->IsPlaying()) {
 				runSFX->Stop();
-				cout << "STOP RUN\n";
+				//cout << "STOP RUN\n";
 			}
 			/*
 			if (!jumpSFX->IsPlaying()) {
@@ -769,7 +803,7 @@ void Player::Update(float dt) {
 			/*
 			if (runSFX->IsPlaying()) {
 			//	runSFX->Stop();
-				cout << "STOP RUN\n";
+				//cout << "STOP RUN\n";
 			}
 
 			if (jumpSFX->IsPlaying()) {
@@ -790,7 +824,7 @@ void Player::Update(float dt) {
 			*/
 			///////////////////
 
-			cout << "\nPULO DUPLO DIREITA\n\n";
+			//cout << "\nPULO DUPLO DIREITA\n\n";
 			DJ++;
 		}
 
@@ -806,7 +840,7 @@ void Player::Update(float dt) {
 			/*
 			if (runSFX->IsPlaying()) {
 				//	runSFX->Stop();
-				cout << "STOP RUN\n";
+				//cout << "STOP RUN\n";
 			}
 			/*
 			if (jumpSFX->IsPlaying()) {
@@ -827,7 +861,7 @@ void Player::Update(float dt) {
 			*/
 			///////////////////
 
-			cout << "\nPULO DUPLO ESQUERDA\n\n";
+			//cout << "\nPULO DUPLO ESQUERDA\n\n";
 			DJ++;
 		}
 
@@ -847,9 +881,9 @@ void Player::Update(float dt) {
 			//}
 			/////////////////
 
-			cout << "\nWALLSLIDE DIREITA\n\n";
+			//cout << "\nWALLSLIDE DIREITA\n\n";
 
-			//cout << "\nTROCA, WallSlide A DIREITA\n\n";
+			////cout << "\nTROCA, WallSlide A DIREITA\n\n";
 		}
 
 		// WallSlide A ESQUERDA
@@ -866,7 +900,7 @@ void Player::Update(float dt) {
 			//}
 			/////////////////
 
-			cout << "\nWALLSLIDE ESQUERDA\n\n";
+			//cout << "\nWALLSLIDE ESQUERDA\n\n";
 		}
 
 		// QUEDA PRA DIREITA
@@ -879,7 +913,7 @@ void Player::Update(float dt) {
 				associated.AddComponent(sprite);
 				associated.box.x += 20;
 
-				cout << "\nQUEDA DIREITA\n\n";
+				//cout << "\nQUEDA DIREITA\n\n";
 			}
 
 			// QUEDA PRA ESQUERDA
@@ -891,7 +925,7 @@ void Player::Update(float dt) {
 				associated.AddComponent(sprite);
 				associated.box.x += 20;
 
-				cout << "\nQUEDA ESQUERDA\n\n";
+				//cout << "\nQUEDA ESQUERDA\n\n";
 			}
 		}
 
@@ -911,7 +945,7 @@ void Player::Update(float dt) {
 		///////////////////////////////
 		////// DIREITA ///////
 		if (inputManager.IsKeyDown(E_KEY) && DashCooldownTimer.Get() > 1.8) {
-			cout << "\nDASH\n";
+			//cout << "\nDASH\n";
 			speedH = { 1, 0 };
 			linearSpeed += 1000;
 			associated.box += speedH * linearSpeed*dt;
@@ -920,7 +954,7 @@ void Player::Update(float dt) {
 		///////////////////////////////
 		////// ESQUERDA ///////
 		if (inputManager.IsKeyDown(Q_KEY) && DashCooldownTimer.Get() > 1.8) {
-			cout << "\nDASH\n";
+			//cout << "\nDASH\n";
 			speedH = { -1, 0 };
 			linearSpeed += 1000;
 			associated.box += speedH * linearSpeed*dt;
@@ -933,12 +967,39 @@ void Player::Update(float dt) {
 		/////////////////////////////////
 		if (inputManager.KeyPress(K_KEY)) {
 			isAtacking = true;
-			cout << "Ataque da personagem\n";
+			//cout << "Ataque da personagem\n";
 		}
 		else
 			isAtacking = false;
 		/////////////////////////////////
 
+
+		if (SetJump) {
+			if (playerSFX->IsPlaying()) {
+				playerSFX->Stop();
+			}
+			associated.RemoveComponent(playerSFX);
+			playerSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
+			associated.AddComponent(playerSFX);
+			playerSFX->Play();
+			runningSound = false;
+		}
+		else if (Setrun && tchfloor) {
+			if (!runningSound) {
+				if (playerSFX->IsPlaying()) {
+					playerSFX->Stop();
+				}
+				associated.RemoveComponent(playerSFX);
+				playerSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
+				associated.AddComponent(playerSFX);
+				runningSound = true;
+			}
+			else {
+				if (!playerSFX->IsPlaying()) {
+					playerSFX->Play();
+				}
+			}
+		}
 		
 	}
 
@@ -959,10 +1020,11 @@ bool Player::Is(std::string type) {
 void Player::NotifyCollision(GameObject& other) {
 	auto bullet = (Bullet*)other.GetComponent("Bullet");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
+	auto go = (GameObject*)other.GetComponent("GameObject");
 
 	// Prosfere dano ao jogador se o tiro for inimigo
 	if (bullet && bullet->robotBullet) {
-		//std::cout << "Vida do Jogador: " << hp << std::endl;
+		//std:://cout << "Vida do Jogador: " << hp << std::endl;
 		hp -= bullet->GetDamage();
 		damaged = true;
 	}
@@ -1008,7 +1070,7 @@ void Player::NotifyCollision(GameObject& other) {
 					wallAUX = 0;
 					ultrapassou = false;
 					//tchCeiling = false;
-					cout << "Desencostou\n";
+					//cout << "Desencostou\n";
 				}
 			}
 			// Colisao com tetos
@@ -1062,13 +1124,13 @@ void Player::NotifyCollision(GameObject& other) {
 				tchfloor = false;
 				tchCeiling = false;
 				airbone = true;
-				cout << "desencostou do tile\n";
+				//cout << "desencostou do tile\n";
 				wallAUX = 0;
 				ultrapassou = false;
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
-					cout << "desencostou dessa parede <<\n";
+					//cout << "desencostou dessa parede <<\n";
 					wallAUX = 0;
 					WallgrabL = false;
 					//	if (airbone) {
@@ -1079,8 +1141,8 @@ void Player::NotifyCollision(GameObject& other) {
 
 				// Checa se esta desencostando da parede A DIREITA
 				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
-					cout << "desencostou dessa parede >>\n";
-					cout << "airbone: " << airbone << endl;
+					//cout << "desencostou dessa parede >>\n";
+					//cout << "airbone: " << airbone << endl;
 					WallgrabR = false;
 					if (airbone) {
 						//system("PAUSE");
@@ -1092,7 +1154,7 @@ void Player::NotifyCollision(GameObject& other) {
 
 				// Checa se esta desencostando do teto
 				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
-					cout << "desencostou do teto ^\n";
+					//cout << "desencostou do teto ^\n";
 					//for (int i = 0; i < 50; i++);
 					tchCeiling = false;
 					ultrapassou = false;

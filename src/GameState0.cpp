@@ -120,7 +120,7 @@ void GameState0::LoadAssets() {
 	//auto playerGO = new GameObject();
 	//auto player = new Player(*playerGO);
 	playerGO->AddComponent(player);
-	playerGO->box.x = 4500;
+	playerGO->box.x = 400;
 	playerGO->box.y = 800 - playerGO->box.h;
 
 	objectArray.emplace_back(playerGO);
