@@ -27,7 +27,7 @@
 #define BULLET_SPEED 1000			// em pixels/s
 #define BULLET_MAX_DAMAGE 20		// em hit points
 #define BULLET_MAX_DISTANCE 1000	// em pixels
-#define ROBOT_BULLET_DAMAGE 2		// dano em hitpoints
+#define ROBOT_BULLET_DAMAGE 11		// dano em hitpoints
 
 class Robot : public Component {
 public:
