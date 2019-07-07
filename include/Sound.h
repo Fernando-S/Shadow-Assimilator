@@ -13,11 +13,11 @@
 class Sound : public Component{
 public:
 	Sound(GameObject& associated);
-	Sound(GameObject& associated, const char* file);			// mudei para const char*
+	Sound(GameObject& associated, const char* file);
 	~Sound() override;
 	void Play(int times = 1);
 	void Stop();
-	void Open(const char* file);								// mudei para const char*
+	void Open(const char* file);
 	bool IsOpen();
 	void Update(float dt) override;
 	void Render() override;

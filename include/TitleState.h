@@ -10,7 +10,6 @@
 #include "GameState0.h"
 #include "Text.h"
 #include "Camera.h"
-#include "TitleState.h"
 
 class TitleState : public State{
 public:

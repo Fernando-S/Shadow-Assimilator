@@ -8,9 +8,8 @@
 #define GAME_H
 #include <stack>
 #include <iostream>
-#include "GameState0.h"
-//#include "TitleState.h"
 #include "InputManager.h"
+#include "Resources.h"
 #include "State.h"
 #include "SDL.h"							// Comentar e usar SDL_include.h para enviar
 #include "SDL_ttf.h"						// Comentar e usar SDL_include.h para enviar

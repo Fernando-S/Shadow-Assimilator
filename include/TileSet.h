@@ -8,7 +8,7 @@
 
 class TileSet{
 public:
-		TileSet(int tileWidth, int tileHeight, const char* file);		// mudei para const char*
+		TileSet(int tileWidth, int tileHeight, const char* file);
 		void RenderTile(unsigned index, float x, float y);
 		int GetTileWidth();
 		int GetTileHeight();

@@ -10,7 +10,6 @@
 #include "TileMap.h"
 #include "CameraFollower.h"
 #include "Camera.h"
-#include "Alien.h"
 #include "Player.h"
 #include "Robot.h"
 #include "Collision.h"
@@ -34,16 +33,19 @@ public:
 
 private:
 	void ChangePlayerHP();
-	void LoadMap();
 	void LoadLevel();
 
 	Sprite* HPbarSprite;
 	TileSet* tileSet;
 	Music backgroundMusic;
-	
-	// todo - mexer melhor nisso para mudar de tela apenas apos o fim das animacoes de explosao
-	Timer TimeToEndPlayerAnimation, TimeToEndAlienAnimation;
-	float secondsToEndPlayerAnimation = 1.5, secondsToEndAlienAnimation = 1.2;
+	GameObject* HPbarGO;
+	GameObject* surpriseGO;
+	GameObject* playerGO;
+	GameObject* chaoGO;
+	Player* player;
+
+	bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
+	bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false, direita1 = false, direita2 = false;
 	
 };
 

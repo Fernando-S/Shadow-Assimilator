@@ -10,12 +10,12 @@
 #include "Collider.h"
 #include "InputManager.h"
 #include "Camera.h"
-#include "Bullet.h"
+#include "Laser.h"
 
-#define PENGUIN_BULLET_SPEED 600				// em pixels/s
-#define PENGUIN_BULLET_MAX_DAMAGE 30			// em hit points
-#define PENGUIN_BULLET_MAX_DISTANCE 1000		// em pixels
-#define PENGUIN_SHOOTING_COLLDOWN 1				// em segundos
+#define PENGUIN_LASER_SPEED 600				// em pixels/s
+#define PENGUIN_LASER_MAX_DAMAGE 30			// em hit points
+#define PENGUIN_LASER_MAX_DISTANCE 1000		// em pixels
+#define PENGUIN_SHOOTING_COLLDOWN 1			// em segundos
 
 class PenguinCannon : public Component{
 public:

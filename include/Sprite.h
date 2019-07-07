@@ -12,13 +12,13 @@
 #include "GameObject.h"
 #include "Resources.h"
 #include "Timer.h"
+#include "Camera.h"
 
 
 class Sprite: public Component {
 public:
 	Sprite(GameObject& associated);
-	Sprite(GameObject& associated, const char* file, int frameCount = 1, float frameTime = 1,
-		   float secondsToSelfDestruct = 0);		// mudei para const char*
+	Sprite(GameObject& associated, const char* file, int frameCount = 1, float frameTime = 1, float secondsToSelfDestruct = 0);
 	~Sprite() override;
 	void Open(const char* file);
 	void SetClip(int x, int y, int w, int h);
@@ -34,13 +34,6 @@ public:
 	void SetFrame(int frame);
 	void SetFrameCount(int frameCount);
 	void SetFrameTime(float frameTime);
-
-	Sprite(const Sprite&) = default;               // Copy constructor
-	Sprite(Sprite&&) = default;                    // Move constructor
-	Sprite& operator=(const Sprite&) = default;  // Copy assignment operator
-	Sprite& operator=(Sprite&&) = default;       // Move assignment operator
-	
-	bool background = false;
 
 private:
 //	SDL_Texture* texture;

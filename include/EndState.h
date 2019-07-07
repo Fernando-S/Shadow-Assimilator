@@ -8,7 +8,6 @@
 #include "Sprite.h"
 #include "GameData.h"
 #include "Text.h"
-//#include ""
 
 class EndState : public State{
 public:
