@@ -49,21 +49,21 @@ bool PenguinCannon::Is(std::string type) {
 void PenguinCannon::Shoot() {
 
 	// Carrega o tiro do Penguin
-	auto bulletGO = new GameObject();
-	auto bullet = new Bullet(*bulletGO, angle, PENGUIN_BULLET_SPEED, std::rand() % 11 + PENGUIN_BULLET_MAX_DAMAGE - 10,
-							 PENGUIN_BULLET_MAX_DISTANCE, "./assets/img/penguinbullet.png",	4, 0.2);
-	bullet->playerBullet = true;
+	auto laserGO = new GameObject();
+	auto laser = new Laser(*laserGO, angle, PENGUIN_LASER_SPEED, std::rand() % 11 + PENGUIN_LASER_MAX_DAMAGE - 10,
+							 PENGUIN_LASER_MAX_DISTANCE, "./assets/img/penguinbullet.png",	4, 0.2);
+	laser->playerLaser = true;
 
-	bulletGO->AddComponent(bullet);
-	bulletGO->box.PlaceCenter(associated.box.Center());
+	laserGO->AddComponent(laser);
+	laserGO->box.PlaceCenter(associated.box.Center());
 
-	auto bulletPos = Vec2(associated.box.w / 2, 0);
-	bulletPos = bulletPos.GetRotated(angle);
+	auto laserPos = Vec2(associated.box.w / 2, 0);
+	laserPos = laserPos.GetRotated(angle);
 
-	bulletGO->box += bulletPos;
+	laserGO->box += laserPos;
 
-//	Game::GetInstance().GetState().AddObject(bulletGO);
-	Game::GetInstance().GetCurrentState().AddObject(bulletGO);
+//	Game::GetInstance().GetState().AddObject(laserGO);
+	Game::GetInstance().GetCurrentState().AddObject(laserGO);
 }
 
 

@@ -7,6 +7,7 @@ std::unordered_map<std::string, std::shared_ptr<Mix_Music>> Resources::musicTabl
 //std::unordered_map<std::string, std::shared_ptr<Mix_Chunk>> Resources::soundTable;
 std::unordered_map<std::string, std::shared_ptr<TTF_Font>> Resources::fontTable;
 std::unordered_map<std::string, Mix_Chunk*> Resources::soundTable;
+//std::unordered_map<std::string, SDL_Texture*> Resources::imageTable;
 
 
 std::shared_ptr<SDL_Texture> Resources::GetImage(std::string file) {
@@ -40,6 +41,33 @@ void Resources::ClearImages() {
 			it++;									// avanca no vetor
 	}
 }
+
+
+/*
+SDL_Texture * Resources::GetImage(std::string file) {
+
+	auto search = imageTable.find(file);
+	if (search != imageTable.end())				// continua a procurar a imagem se ainda nao esta no final do vetor
+		return search->second;
+	else {										// tenta carregar a imagem se chegou ao final do vetor
+		auto texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), file.c_str());
+		if (!texture) {
+			std::cerr << " IMG_LoadTexture returned ERROR: " << SDL_GetError() << std::endl;
+			exit(1);
+		}
+		imageTable[file] = texture;
+		return texture;
+	}
+}
+
+void Resources::ClearImages() {
+	for (auto it : imageTable) {
+		SDL_DestroyTexture(it.second);				// destroi cada imagem
+	}
+	imageTable.clear();								// libera espaco da memoria
+}
+*/
+
 
 std::shared_ptr<Mix_Music> Resources::GetMusic(std::string file) {
 	auto search = musicTable.find(file);

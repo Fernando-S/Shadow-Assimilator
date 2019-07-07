@@ -24,11 +24,9 @@
 
 #include "Game.h"
 #include "TitleState.h"
-#include "GameState0.h"				//	todo - depois dos 30%, esse include vai embora
 
 int main(int argc, char* argv[]) {
-//	Game::GetInstance().Push(new TitleState);			// Seta o primeiro estado de jogo como sendo TitleState
-	Game::GetInstance().Push(new GameState0);			// Seta o primeiro estado de jogo como sendo GameState0
+	Game::GetInstance().Push(new TitleState);			// Seta o primeiro estado de jogo como sendo TitleState
 	Game::GetInstance().Run();							// Comeca a rodar o jogo
 	return 0;
 }

@@ -10,19 +10,22 @@ TitleState::~TitleState() {
 }
 
 void TitleState::LoadAssets() {
-	// criacao da imagem de titulo
+	// Background de titulo
 	auto bgGO = new GameObject();
 	bgGO->box = { 0,0 };
 	auto bg = new Sprite(*bgGO, "./assets/img/title.jpg");
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
 
-	// criacao do texto de "press to play"
+	// Texto "Press to Play"
 	auto textGO = new GameObject();
-	SDL_Color textColor = { 255, 150, 0, 255 };
-	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ] to play!", /*{ 255, 150, 0, 255 }*/ textColor/*, 0.7*/);
+	SDL_Color textColor = { 120, 120, 255, 255 };		// R, G, B, A
+	// todo - colocar ultimo parametro para ser o tempo de pisca pisca
+	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ENTER to play!", textColor/*, 0.7*/);
 	textGO->AddComponent(text);
-	textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, Game::GetInstance().GetHeight() / 2.0f });
+
+	// Posiciona o texto
+	textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, Game::GetInstance().GetHeight() * 5 / 7.0f });
 	objectArray.emplace_back(textGO);
 }
 
@@ -32,7 +35,7 @@ void TitleState::Update(float dt) {
 	// Seta o quitRequested ao fechar o jogo ou apertar ESC
 	quitRequested = inputManager.KeyPress(ESCAPE_KEY) || inputManager.QuitRequested();
 
-	if (inputManager.KeyPress(SPACE_KEY)) 
+	if (inputManager.KeyPress(ENTER_KEY) || inputManager.KeyPress(NUMPAD_ENTER_KEY))
 		Game::GetInstance().Push(new GameState0);
 
 	UpdateArray(dt);	// executa o update em cada um dos objetos no objectArray

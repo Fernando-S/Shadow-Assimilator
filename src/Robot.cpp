@@ -360,13 +360,13 @@ bool Robot::Is(std::string type) {
 
 
 void Robot::NotifyCollision(GameObject& other) {
-	auto laser = (Bullet*)other.GetComponent("Bullet");
+	auto laser = (Laser*)other.GetComponent("Laser");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
 	auto player1 = (Player*)other.GetComponent("Player");
 
 
 	// Prosfere dano ao robo se o tiro for do jogador
-	if (laser && laser->playerBullet) {
+	if (laser && laser->playerLaser) {
 		//std::cout << "Vida do Robo: " << hp << std::endl;
 		hp -= laser->GetDamage();
 	}
@@ -712,9 +712,9 @@ void Robot::Shoot(Vec2 target) {
 	laserGO->box = associated.box.Center();		// faz o tiro sair do centro do robô
 	laserGO->box.y = associated.box.y + 25;		// faz ele sair do olho
 
-	auto laser = new Bullet(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), BULLET_SPEED,
-		                     ROBOT_BULLET_DAMAGE, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
-	laser->robotBullet = true;
+	auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
+		                     ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+	laser->robotLaser = true;
 	auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
 	laserGO->AddComponent(laserSound);
 	laserSound->Play();

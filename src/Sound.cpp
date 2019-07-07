@@ -4,7 +4,7 @@ Sound::Sound(GameObject& associated) : Component(associated) {
 	chunk = nullptr;
 }
 
-Sound::Sound(GameObject& associated, const char* file) : Component(associated) {			// mudei para const char*		a
+Sound::Sound(GameObject& associated, const char* file) : Component(associated) {
 	Sound(this->associated);
 	Open(file);
 }
@@ -23,7 +23,7 @@ void Sound::Stop() {
 		Mix_HaltChannel(channel);
 }
 
-void Sound::Open(const char* file) {					// mudei para const char*
+void Sound::Open(const char* file) {
 	chunk = Mix_LoadWAV(file);
 	//chunk = Resources::GetSound(file);
 

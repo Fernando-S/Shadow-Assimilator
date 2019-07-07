@@ -14,7 +14,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
 }
 
 Sprite::Sprite(GameObject &associated, const char* file, int frameCount, float frameTime,
-			   float secondsToSelfDestruct) : Component(associated) {		// mudei para const char*
+			   float secondsToSelfDestruct) : Component(associated) {
 	Sprite(this->associated);
 	texture = nullptr;
 	width = 0;
@@ -32,9 +32,9 @@ Sprite::Sprite(GameObject &associated, const char* file, int frameCount, float f
 Sprite::~Sprite() {
 }
 
-void Sprite::Open(const char* file) {				// mudei para const char*
+void Sprite::Open(const char* file) {
 	if (texture)
-//		SDL_DestroyTexture(texture);
+		//SDL_DestroyTexture(texture);
 		SDL_DestroyTexture(texture.get());
 
 	texture = Resources::GetImage(file);
@@ -44,7 +44,7 @@ void Sprite::Open(const char* file) {				// mudei para const char*
 		exit(1);
 	}
 
-//	SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+	//SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
 	SDL_QueryTexture(texture.get(), nullptr, nullptr, &width, &height);
 	SetClip(0, 0, width, height);									// seta o clip para textura inteira
 
@@ -58,11 +58,11 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 }
 
 void Sprite::Render() {
-	if (background)					// renderiza na posicao da camera se for background
+	//if (background)					// renderiza na posicao da camera se for background
 		//Render((int)this->associated.box.x, (int)this->associated.box.y);
 		//Render((int)(Game::GetInstance().GetWidth() - width) / 2, (int)(Game::GetInstance().GetHeight() - height) / 4);
-		Render((int)Game::GetInstance().GetWidth()/3 - 30, (int)(Game::GetInstance().GetHeight()/* + height*/) / 12);
-	else							// renderiza na posicao no mundo se nao for
+	//	Render((int)Game::GetInstance().GetWidth()/3 - 30, (int)(Game::GetInstance().GetHeight()/* + height*/) / 12);
+	//else							// renderiza na posicao no mundo se nao for
 		Render((int)(this->associated.box.x - Camera::pos.x), (int)(this->associated.box.y - Camera::pos.y));
 }
 

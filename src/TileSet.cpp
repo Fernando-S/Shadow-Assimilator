@@ -1,6 +1,6 @@
 #include "TileSet.h"
 
-TileSet::TileSet(int tileWidth, int tileHeight, const char* file) : tileSet(*new GameObject(), file) {		// mudei para const char*
+TileSet::TileSet(int tileWidth, int tileHeight, const char* file) : tileSet(*new GameObject(), file) {
 
 	if (!tileSet.IsOpen()) {								// sai do programa e exibe uma msg de erro se nao conseguir abrir o sprite
 		std::cerr << "TileSet couldn't open the sprite! ERROR: " << SDL_GetError() << std::endl;

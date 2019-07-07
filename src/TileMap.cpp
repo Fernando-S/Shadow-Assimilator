@@ -9,8 +9,6 @@ TileMap::TileMap(GameObject& associated, std::string file, TileSet *tileSet) : C
 	Load(file);
 	SetTileSet(tileSet);
 	
-	//associated.AddComponent(new Collider(associated));
-	
 	collider = new Collider(associated);
 	associated.AddComponent(collider);
 }
@@ -24,7 +22,7 @@ void TileMap::Load(std::string file) {
 	// abre o arquivo com o tileMap sai do programa mostrando uma msg de erro caso o arquivo seja vazio
 	tileMapFile.open(file);
 	if (!tileMapFile.is_open()) {
-		std::cerr << " ERROR: tileMap.txt couldn't be opened!" << std::endl;
+		std::cerr << " ERROR: tileMap file couldn't be opened!" << std::endl;
 		exit(1);
 	}
 

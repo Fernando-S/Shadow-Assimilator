@@ -68,6 +68,7 @@ void Player::Update(float dt) {
 
 	if (inputManager.KeyPress(ZERO_KEY)) {
 		hp = 0;
+		damaged = true;
 	}
 
 
@@ -955,14 +956,14 @@ bool Player::Is(std::string type) {
 }
 
 void Player::NotifyCollision(GameObject& other) {
-	auto bullet = (Bullet*)other.GetComponent("Bullet");
+	auto laser = (Laser*)other.GetComponent("Laser");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
 	auto go = (GameObject*)other.GetComponent("GameObject");
 
 	// Prosfere dano ao jogador se o tiro for inimigo
-	if (bullet && bullet->robotBullet) {
+	if (laser && laser->robotLaser) {
 		//std:://cout << "Vida do Jogador: " << hp << std::endl;
-		hp -= bullet->GetDamage();
+		hp -= laser->GetDamage();
 		damaged = true;
 	}
 
@@ -1118,9 +1119,9 @@ void Player::Shoot(Vec2 target) {
 	auto laserGO = new GameObject();
 	laserGO->box = associated.box.Center();
 
-	auto laser = new Bullet(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), BULLET_SPEED,
-		PLAYER_BULLET_DAMAGE, BULLET_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
-	laser->playerBullet = true;
+	auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
+		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+	laser->playerLaser = true;
 	auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
 	laserGO->AddComponent(laserSound);
 	/// todo - Parar playerSFX nao fez a menor diferenca
