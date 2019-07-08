@@ -40,6 +40,51 @@ void GameState0::LoadAssets() {
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
 
+
+	///////////////////////////////////////////////////
+	//		Carrega os Predios de Background		//
+	/////////////////////////////////////////////////
+	
+	auto prediosGO = new GameObject();
+	//auto tileSet_Level0 = new TileSet(64, 64, "./assets/img/Level0/tileLevel0.png");
+	auto tileSet_Background = new TileSet(64, 64, "./assets/img/Level0/tile001.png");
+	auto prediosBackground = new TileMap(*prediosGO, "./assets/map/Level0/TileMap_Predios.txt", tileSet_Background);
+	//auto prediosBackground = new TileMap(*prediosGO, "./assets/img/Level0/TileMap_Predios.txt", tileSet_Level0);
+
+	prediosBackground->colide = false;
+
+	prediosGO->box.x = 0;
+	prediosGO->box.y =  800 - 29 * ONETILESQUARE;
+	prediosGO->box.w = prediosBackground->GetWidth() * tileSet_Background->GetTileWidth();
+	prediosGO->box.h = prediosBackground->GetHeight() * tileSet_Background->GetTileHeight();
+	//prediosGO->box.w = prediosBackground->GetWidth() * tileSet_Level0->GetTileWidth();
+	//prediosGO->box.h = prediosBackground->GetHeight() * tileSet_Level0->GetTileHeight();
+
+	prediosGO->AddComponent(prediosBackground);
+	objectArray.emplace_back(prediosGO);
+
+	// Detalhes dos predios
+	auto detalhesGO = new GameObject();
+	auto tileSet_Detalhes = new TileSet(64, 64, "./assets/img/Level0/tileENFEITES001.png");
+	auto detalhesBackground = new TileMap(*detalhesGO, "./assets/map/Level0/TileMap_Detalhes.txt", tileSet_Detalhes);
+	//auto detalhesBackground = new TileMap(*detalhesGO, "./assets/img/Level0/TileMap_Detalhes.txt", tileSet_Level0);
+
+	detalhesBackground->colide = false;
+
+	detalhesGO->box.x = 0;
+	detalhesGO->box.y = 800 - 29 * ONETILESQUARE;
+	detalhesGO->box.w = detalhesBackground->GetWidth() * tileSet_Detalhes->GetTileWidth();
+	detalhesGO->box.h = detalhesBackground->GetHeight() * tileSet_Detalhes->GetTileHeight();
+	//detalhesGO->box.w = detalhesBackground->GetWidth() * tileSet_Level0->GetTileWidth();
+	//detalhesGO->box.h = detalhesBackground->GetHeight() * tileSet_Level0->GetTileHeight();
+
+	detalhesGO->AddComponent(detalhesBackground);
+	objectArray.emplace_back(detalhesGO);
+	
+
+
+
+
 	
 	// Teste do novo TileSet
 	chaoGO->box.x = 0;
@@ -82,6 +127,19 @@ void GameState0::LoadAssets() {
 	robotGO->box.y = 800 - robotGO->box.h;
 
 	objectArray.emplace_back(robotGO);
+
+
+	///////////////////////////////////
+	//		Carrega o CoatGuy		//
+	/////////////////////////////////
+	auto coatGuyGO = new GameObject();
+	auto coatGuy = new CoatGuy(*coatGuyGO);
+
+	coatGuyGO->AddComponent(coatGuy);
+	coatGuyGO->box.x = 3000;
+	coatGuyGO->box.y = 800 - coatGuyGO->box.h;
+
+	objectArray.emplace_back(coatGuyGO);
 
 
 	///////////////////////////////////
@@ -315,18 +373,27 @@ void GameState0::Resume() {
 
 void GameState0::LoadLevel() {
 	
-	auto tileSet = new TileSet(64, 64, "./assets/img/tilesaaaaa.png");
-	auto Chao = new TileMap(*chaoGO, "./assets/map/Tile31_Chao_pra_caralho.txt", tileSet);
+	///////////////////////////////
+	//		Carrega o Chao		//
+	/////////////////////////////
+	//auto tileSet = new TileSet(64, 64, "./assets/img/tilesaaaaa.png");
+	//auto Chao = new TileMap(*chaoGO, "./assets/map/Tile31_Chao_pra_caralho.txt", tileSet);
+
+	auto tileSet_Chao = new TileSet(64, 64, "./assets/img/Level0/tile001.png");
+	auto Chao = new TileMap(*chaoGO, "./assets/map/Level0/TileMap_Chao.txt", tileSet_Chao);
 
 	Chao->colide = true;
 
-	chaoGO->box.w = Chao->GetWidth() * tileSet->GetTileWidth();
-	chaoGO->box.h = Chao->GetHeight() * tileSet->GetTileHeight();
+	//chaoGO->box.w = Chao->GetWidth() * tileSet->GetTileWidth();
+	//chaoGO->box.h = Chao->GetHeight() * tileSet->GetTileHeight();
+
+	chaoGO->box.w = Chao->GetWidth() * tileSet_Chao->GetTileWidth();
+	chaoGO->box.h = Chao->GetHeight() * tileSet_Chao->GetTileHeight();
 
 	chaoGO->AddComponent(Chao);
 	objectArray.emplace_back(chaoGO);
 
-
+	/*
 	////////////////////////////////////
 	//		HERE WE GO
 	///////////////////////////////////
@@ -825,6 +892,7 @@ void GameState0::LoadLevel() {
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	*/
 }
 
 void GameState0::ChangePlayerHP() {
