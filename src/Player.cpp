@@ -30,13 +30,14 @@ Player::Player(GameObject& associated) : Component(associated) {
 	// Carrega som nulo para a personagem
 	playerSFX = new Sound(associated);
 
+	/*
 	runSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
 	jumpSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
 	DjumpSFX = new Sound(associated, "./assets/audio/SFX/PuloDuplo(Assim.)1.wav");
 	landSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
 	LightAttackSFX = new Sound(associated, "./assets/audio/SFX/AtaqueFraco(Assim.)1.wav");
 	HeavyAttackSFX = new Sound(associated, "./assets/audio/SFX/AtaqueForte(Assim.)1.wav");
-
+	*/
 
 	associated.AddComponent(playerSFX);
 	associated.AddComponent(sprite);
@@ -129,9 +130,6 @@ void Player::Update(float dt) {
 
 			if (facingR) {
 				associated.RemoveComponent(sprite);
-				//associated.box.x += 10;
-				//associated.box.x -= 5;
-				//associated.box.x += 128;
 				sprite = new Sprite(associated, "./assets/img/prot_morte.png", 21, 0.1, 2.1);
 				associated.AddComponent(sprite);
 			}
@@ -144,9 +142,26 @@ void Player::Update(float dt) {
 			dead = true;
 		}
 		else {
+			///////////////////////////////
+			//		SFX DE MORTE		//
+			/////////////////////////////
+			if ((DeathTimer.Get() > 1.0) && !deathSound) {
+				
+				if (playerSFX->IsPlaying()) {
+					playerSFX->Stop();
+				}
+				associated.RemoveComponent(playerSFX);
+				playerSFX = new Sound(associated, "./assets/audio/SFX/MortePrincipal(Assim.).wav");
+				associated.AddComponent(playerSFX);
+				playerSFX->Play();
+				deathSound = true;
+			}
 
+
+			
 			if (DeathTimer.Get() > 2.1) {
-
+				/// todo - descobrir o porque disso para melhorar som de morte
+				cout << "Nem entra aqui. A personagem esta sendo deleta antes em outro lugar\n";
 				// Deleta a Personagem se o hp dela acabou
 				associated.RequestDelete();
 			}
@@ -229,7 +244,7 @@ void Player::Update(float dt) {
 		//		SPAWN DE TESTE		//
 		/////////////////////////////
 		if (inputManager.KeyRelease(SPACE_KEY)) {
-			associated.box.x = 704;
+			associated.box.x = 604;
 			associated.box.y = 100;
 			airbone = true;
 			tchfloor = false;
@@ -249,6 +264,7 @@ void Player::Update(float dt) {
 			Ground = 0;
 			verticalSpeed = PLAYER_JUMP * 0.7;
 			doubleJump = false;
+			foguete = true;
 			DJ++;
 		}
 		
@@ -720,14 +736,29 @@ void Player::Update(float dt) {
 		///////////////////////////////
 		//		SFX DE POUSO		//
 		/////////////////////////////
-		else if (ultrapassou) {
+		else if (/*ultrapassou*/ pouso && tchfloor && !airbone) {
 			if (playerSFX->IsPlaying()) {
 				playerSFX->Stop();
 			}
 			associated.RemoveComponent(playerSFX);
-			playerSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
+			//playerSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
+			playerSFX = new Sound(associated, "./assets/audio/SFX/Pouso2.1(Assim.).wav");
 			associated.AddComponent(playerSFX);
 			playerSFX->Play();
+			pouso = false;
+		}
+		///////////////////////////////////
+		//		SFX DE PULO DUPLO		//
+		/////////////////////////////////
+		else if (foguete) {
+			if (playerSFX->IsPlaying()) {
+				playerSFX->Stop();
+			}
+			associated.RemoveComponent(playerSFX);
+			playerSFX = new Sound(associated, "./assets/audio/SFX/Foguete2.1(Assim.).wav");
+			associated.AddComponent(playerSFX);
+			playerSFX->Play();
+			foguete = false;
 		}
 	}
 
@@ -763,6 +794,7 @@ void Player::NotifyCollision(GameObject& other) {
 			// Colisao com chaos
 			if ( (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
 				|| (this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2)	) {
+				
 				if (this->associated.box.y + this->associated.box.h > tile->GetY()) {
 					ultrapassou = true;
 				}
@@ -770,6 +802,8 @@ void Player::NotifyCollision(GameObject& other) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
 					ultrapassou = false;
+					if (Ground <= 2)
+						pouso = true;
 				}
 				WallgrabL = false;
 				WallgrabR = false;
