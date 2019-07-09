@@ -42,6 +42,7 @@ private:
 	GameObject* HPbarGO;
 	GameObject* surpriseGO;
 	GameObject* playerGO;
+	GameObject* coatGuyGO;
 	GameObject* chaoGO;
 	Player* player;
 
