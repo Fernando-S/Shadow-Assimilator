@@ -136,13 +136,14 @@ void Robot::Update(float dt) {
 			///////////////////////////////
 			//		SFX DE MORTE		//
 			/////////////////////////////
-			if ((DeathTimer.Get() > 1.0) && !deathSound) {
+			if (!deathSound && robotSFX->IsPlaying()) {
+				robotSFX->Stop();
+			}
 
-				if (robotSFX->IsPlaying()) {
-					robotSFX->Stop();
-				}
+			if ((DeathTimer.Get() > 1.0) && !deathSound) {
 				associated.RemoveComponent(robotSFX);
-				robotSFX = new Sound(associated, "./assets/audio/SFX/MortePrincipal(Assim.).wav");
+				//robotSFX = new Sound(associated, "./assets/audio/SFX/MortePrincipal(Assim.).wav");
+				robotSFX = new Sound(associated, "./assets/audio/SFX/ExplosaoInimigo(Comum).wav");
 				associated.AddComponent(robotSFX);
 				robotSFX->Play();
 				deathSound = true;
@@ -165,6 +166,7 @@ void Robot::Update(float dt) {
 		DashCooldownTimer.Update(dt);
 		DJTimer.Update(dt);
 		changeSideTimer.Update(dt);
+		recoilTimer.Update(dt);
 
 
 		//////////////////////////////////////////
@@ -234,7 +236,7 @@ void Robot::Update(float dt) {
 		///////////////////////////////////////////////////////////////////
 		//		IA do Robo espera um tempo parado e muda de lado		//
 		/////////////////////////////////////////////////////////////////
-		if (idle && changeSideTimer.Get() > 1.2) {
+		if (idle && changeSideTimer.Get() > 1.2 && !shooting) {
 			//cout << "ENTRA NA CONDICAO DO TEMPO\n";
 
 			// SETA PARA CORRER PARA A ESQUERDA SE ESTA PARADO OLHANDO PARA A DIREITA
@@ -256,9 +258,17 @@ void Robot::Update(float dt) {
 		// Tentativa de IA apenas quando esta no chao
 		if (!airbone && tchfloor) {
 
-			// Comeca a andar
+			if (shooting && recoilTimer.Get() > 1.2) {
+				//idle = false;
+				shooting = false;
+				alreadyShot = false;
+			}
+
+
+			// Comeca a andar assim que spawna
 			if (!moveDireita && !moveEsquerda && !idle)
 				moveEsquerda = true;
+			
 
 			if (associated.box.x < initialX - /*250*/ 5 * ONETILESQUARE) {
 				if (!idle && !moveDireita) {
@@ -278,6 +288,33 @@ void Robot::Update(float dt) {
 				}
 				//cout << "LIMITE A DIREITA\n";
 			}
+		}
+
+		if (shooting && recoilTimer.Get() > 0.6 && !alreadyShot) {
+			// Carrega um Tiro do Robo
+			auto laserGO = new GameObject();
+			laserGO->box = associated.box.Center();		// faz o tiro sair do centro do robô
+			if (facingL) {
+				laserGO->box.y = associated.box.y + 28;		// faz o tiro sair da altura do braco
+				laserGO->box.x = associated.box.x - 4;		// faz o tiro sair do final do braco
+			}
+			else if (facingR) {
+				laserGO->box.y = associated.box.y + 37;		// faz o tiro sair da altura do braco
+				laserGO->box.x = associated.box.x + associated.box.w;		// faz o tiro sair do final do braco
+			}
+
+			auto laser = new Laser(*laserGO, Vec2(Player::player->GetCenter().x, this->GetCenter().y).InclinacaoDaDiferenca(associated.box.Center()),
+				LASER_SPEED, ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+			laser->robotLaser = true;
+			auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
+			laserGO->AddComponent(laserSound);
+			laserSound->Play();
+			laserGO->AddComponent(laser);
+
+			Game::GetInstance().GetCurrentState().AddObject(laserGO);
+
+			//shooting = false;]
+			alreadyShot = true;
 		}
 
 
@@ -433,83 +470,83 @@ void Robot::Update(float dt) {
 			doubleJump = false;
 		}
 		else*/
-			///////////////////////////////////////////
-			//		CORRIDA PARA A ESQUERDA			//
-			/////////////////////////////////////////
-			if (inputManager.IsKeyDown(NUMPAD_FOUR_KEY) || moveEsquerda) {
+		///////////////////////////////////////////
+		//		CORRIDA PARA A ESQUERDA			//
+		/////////////////////////////////////////
+		if (/*inputManager.IsKeyDown(NUMPAD_FOUR_KEY) ||*/ moveEsquerda) {
 
-				WallgrabR = false;
+			WallgrabR = false;
 
-				if (linearSpeed == 0)
-					oppositeSpeed = 0;
+			if (linearSpeed == 0)
+				oppositeSpeed = 0;
 
-				if (Getspeed1 == false) {
-					oppositeSpeed = linearSpeed;
-					Getspeed1 = true;
-					Setidle = false;
-					Setrun = true;
-					Run = 0;
-					Stop = 0;
-					facingL = true;
-					facingR = false;
-				}
-
-				if (Run > -10)
-					Run--;
-
-				speedH = { -1, 0 };
-				if ((oppositeSpeed > -ROBOT_SPEED) && !WallgrabL) {
-
-					oppositeSpeed -= accelSpeedGain;
-					linearSpeed = -oppositeSpeed;
-
-				}
-				else
-					linearSpeed = -oppositeSpeed;
+			if (Getspeed1 == false) {
+				oppositeSpeed = linearSpeed;
+				Getspeed1 = true;
+				Setidle = false;
+				Setrun = true;
+				Run = 0;
+				Stop = 0;
+				facingL = true;
+				facingR = false;
 			}
+
+			if (Run > -10)
+				Run--;
+
+			speedH = { -1, 0 };
+			if ((oppositeSpeed > -ROBOT_SPEED) && !WallgrabL) {
+
+				oppositeSpeed -= accelSpeedGain;
+				linearSpeed = -oppositeSpeed;
+
+			}
+			else
+				linearSpeed = -oppositeSpeed;
+		}
 		///////////////////////////////////////
 		//		CORRIDA PARA A DIREITA		//
 		/////////////////////////////////////
-			else if (inputManager.IsKeyDown(NUMPAD_SIX_KEY) || moveDireita) {
-				speedH = { 1, 0 };
+		else if (/*inputManager.IsKeyDown(NUMPAD_SIX_KEY) ||*/ moveDireita) {
+			speedH = { 1, 0 };
 
-				if (Getspeed2 == false) {
-					oppositeSpeed = linearSpeed;
-					Getspeed2 = true;
+			if (Getspeed2 == false) {
+				oppositeSpeed = linearSpeed;
+				Getspeed2 = true;
 
-					Run = 0;
-					Stop = 0;
-					Setidle = false;
-					Setrun = true;
-					facingL = false;
-					facingR = true;
+				Run = 0;
+				Stop = 0;
+				Setidle = false;
+				Setrun = true;
+				facingL = false;
+				facingR = true;
 
-				}
-
-				if (Run < 10)
-					Run++;
-
-				if (linearSpeed < ROBOT_SPEED /*+ 50*/) {
-
-					if (oppositeSpeed >= 0) {
-						oppositeSpeed -= accelSpeedGain;
-						linearSpeed = -oppositeSpeed;
-					}
-					else
-						linearSpeed += accelSpeedGain;
-
-				}
 			}
+
+			if (Run < 10)
+				Run++;
+
+			if (linearSpeed < ROBOT_SPEED /*+ 50*/) {
+
+				if (oppositeSpeed >= 0) {
+					oppositeSpeed -= accelSpeedGain;
+					linearSpeed = -oppositeSpeed;
+				}
+				else
+					linearSpeed += accelSpeedGain;
+
+			}
+		}
 
 		double atrictSpeedLoss = ROBOT_ATRICT * dt;
 
-		if (!inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && !moveEsquerda)
+		if (/*!inputManager.IsKeyDown(NUMPAD_FOUR_KEY) &&*/ !moveEsquerda)
 			Getspeed1 = false;
 
-		if (!inputManager.IsKeyDown(NUMPAD_SIX_KEY) && !moveDireita)
+		if (/*!inputManager.IsKeyDown(NUMPAD_SIX_KEY) &&*/ !moveDireita)
 			Getspeed2 = false;
 
-		if (!inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && !inputManager.IsKeyDown(NUMPAD_SIX_KEY) && idle && !moveEsquerda && !moveDireita) {
+		if (/*!inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && !inputManager.IsKeyDown(NUMPAD_SIX_KEY) &&*/ idle && !moveEsquerda && !moveDireita) {
 
 			if (linearSpeed > 40)
 				linearSpeed -= accelSpeedGain * 1.5;
@@ -520,7 +557,7 @@ void Robot::Update(float dt) {
 			if ((linearSpeed <= 40) && (linearSpeed >= -40))
 				linearSpeed = 0;
 			Setrun = false;
-			if(tchfloor && !airbone)
+			if (tchfloor && !airbone)
 				Setidle = true;
 
 			if (runningSound) {
@@ -537,7 +574,6 @@ void Robot::Update(float dt) {
 			}
 		}
 
-
 		//////////////////////////////////////////////////////////////
 		/////////////////////VELOCIDADE///////////////////////////////
 
@@ -553,7 +589,7 @@ void Robot::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a direita			//
 		/////////////////////////////////////
-		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) {
+		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0) && !shooting) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
 
@@ -577,7 +613,7 @@ void Robot::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a esquerda		//
 		/////////////////////////////////////
-		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) {
+		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0) && !shooting) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle_inv.png", 10, 0.09);
 			facingR = false;
@@ -754,10 +790,11 @@ void Robot::Update(float dt) {
 		//		TIRO DO ROBO		//
 		/////////////////////////////
 		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
-			if (facingR)
+		/*	if (facingR)
 				Shoot(GetCenter());
 			else if (facingL)
-				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
+				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));*/
+			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
 			ShootCooldownTimer.Restart();
 		}
 		/*
@@ -1045,36 +1082,28 @@ Vec2 Robot::GetCenter() {
 }
 
 void Robot::Shoot(Vec2 target) {
+	recoilTimer.Restart();
 
 	// Muda para sprite de tiro
 	associated.RemoveComponent(sprite);
-	if (facingR) {
+	if (Player::player->GetCenter().x > this->associated.box.x) {
 		sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
+		facingR = true;
+		facingL = false;
 	}
-	else if (facingL) {
+	else if (Player::player->GetCenter().x < this->associated.box.x) {
 		sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
+		facingR = false;
+		facingL = true;
 	}
+
 	associated.AddComponent(sprite);
 
 
-
-	// Carrega um Tiro do Robo
-	auto laserGO = new GameObject();
-	laserGO->box = associated.box.Center();
-
-	auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
-		ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
-	laser->robotLaser = true;
-	auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
-	laserGO->AddComponent(laserSound);
-	/// todo - Parar robotSFX nao fez a menor diferenca
-	if (robotSFX->IsPlaying()) {
-		robotSFX->Stop();
-	}
-	laserSound->Play();
-	laserGO->AddComponent(laser);
-
-	Game::GetInstance().GetCurrentState().AddObject(laserGO);
+	idle = true;
+	moveDireita = false;
+	moveEsquerda = false;
+	shooting = true;
 }
 
 int Robot::GetHP() {

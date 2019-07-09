@@ -137,11 +137,11 @@ void Player::Update(float dt) {
 			///////////////////////////////
 			//		SFX DE MORTE		//
 			/////////////////////////////
+			if (!deathSound && playerSFX->IsPlaying()) {
+				playerSFX->Stop();
+			}
+
 			if ((DeathTimer.Get() > 1.0) && !deathSound) {
-				
-				if (playerSFX->IsPlaying()) {
-					playerSFX->Stop();
-				}
 				associated.RemoveComponent(playerSFX);
 				playerSFX = new Sound(associated, "./assets/audio/SFX/MortePrincipal(Assim.).wav");
 				associated.AddComponent(playerSFX);

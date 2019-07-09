@@ -135,11 +135,12 @@ void CoatGuy::Update(float dt) {
 			///////////////////////////////
 			//		SFX DE MORTE		//
 			/////////////////////////////
-			if ((DeathTimer.Get() > 1.0) && !deathSound) {
 
-				if (coatGuySFX->IsPlaying()) {
-					coatGuySFX->Stop();
-				}
+			if (!deathSound && coatGuySFX->IsPlaying()) {
+				coatGuySFX->Stop();
+			}
+
+			if ((DeathTimer.Get() > 1.0) && !deathSound) {
 				associated.RemoveComponent(coatGuySFX);
 				coatGuySFX = new Sound(associated, "./assets/audio/SFX/MortePrincipal(Assim.).wav");
 				associated.AddComponent(coatGuySFX);
