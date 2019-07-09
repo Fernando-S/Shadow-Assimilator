@@ -19,12 +19,20 @@
 
 
 #define COATGUY_MAX_LINEAR_SPEED 500		// em pixels/s
-#define COATGUY_ACCELERATION 1000		// em pixels/s²
-#define COATGUY_ATRICT 150				// em pixels/s²
+#define COATGUY_ACCELERATION 1000			// em pixels/s²
+#define COATGUY_ATRICT 150					// em pixels/s²
 #define COATGUY_ANGULAR_SPEED PI			// em rads/s
-#define COATGUY_INITIAL_HP 22			// em hit points
-#define ONETILESQUARE 64				// tamanho de 1 tile
-#define COATGUY_LASER_DAMAGE 2			// em hit points
+#define COATGUY_INITIAL_HP 4				// em hit points
+#define ONETILESQUARE 64					// tamanho de 1 tile
+#define COATGUY_LASER_DAMAGE 2				// em hit points
+#define LASER_SPEED 1000					// em pixels/s
+#define LASER_MAX_DAMAGE 20					// em hit points
+#define LASER_MAX_DISTANCE 1000				// em pixels
+#define MAX_SPEED 400
+#define SPEED_STEP 50
+#define COATGUY_SPEED 400
+#define COATGUY_JUMP 600
+
 
 /*
 class CoatGuy : public Component {
@@ -87,10 +95,9 @@ public:
 	int GetHP();
 
 	static CoatGuy* coatGuy;
-	//float secondsToSelfDestruction = 1.5;
 	Sprite* sprite;
 	bool damaged = false, isAtacking = false, ultrapassou = false;
-	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX, *coatGuySFX;
+	Sound* coatGuySFX;
 
 private:
 	//std::weak_ptr<GameObject> pcannon;
@@ -100,7 +107,7 @@ private:
 	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
 		tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
-		SetJump = false, runningSound = false, wallSlideSound = false, dead = false, notDJ = false, pouso = false, foguete = false,
+		SetJump = false, runningSound = false, wallSlideSound = false, deathSound = false, dead = false, notDJ = false, pouso = false, foguete = false,
 		spriteAlreadyIdleR = false, spriteAlreadyIdleL = false, spriteAlreadyRunR = false, spriteAlreadyRunL = false,
 		spriteAlreadyJumpR = false, spriteAlreadyJumpL = false, spriteAlreadyDJL = false, spriteAlreadyDJR = false,
 		jumped = false, gforce = false;

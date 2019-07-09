@@ -25,6 +25,10 @@
 #define PLAYER_INITIAL_HP 22			// em hit points
 #define ONETILESQUARE 64				// tamanho de 1 tile
 #define PLAYER_LASER_DAMAGE 2			// em hit points
+#define LASER_SPEED 1000			// em pixels/s
+#define LASER_MAX_DAMAGE 20			// em hit points
+#define LASER_MAX_DISTANCE 1000		// em pixels
+
 
 /*
 class Player : public Component {

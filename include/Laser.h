@@ -10,6 +10,7 @@
 #include "Collider.h"
 #include "Player.h"
 #include "Robot.h"
+#include "CoatGuy.h"
 #include "TileMap.h"
 
 class Laser : public Component{
@@ -22,7 +23,7 @@ public:
 	void NotifyCollision(GameObject& other) override;
 	int GetDamage();
 
-	bool /*targetsPlayer,*/ playerLaser = false, alienLaser = false, robotLaser = false;
+	bool /*targetsPlayer,*/ playerLaser = false, coatGuyLaser = false, robotLaser = false;
 		
 private:
 	Vec2 speed;
