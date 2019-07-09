@@ -18,7 +18,8 @@ void GameState0::LoadAssets() {
 	/////////////////////////////////////////////
 	//	  Carrega a Musica e aperta o play	  //
 	///////////////////////////////////////////
-	backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow_Assimilator_-_Theme_1.mp3");
+	//backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow_Assimilator_-_Theme_1.mp3");
+	backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow Assimilator track 1.ogg");
 	backgroundMusic.Play();
 
 	
@@ -125,7 +126,7 @@ void GameState0::LoadAssets() {
 	auto robot = new Robot(*robotGO);
 
 	robotGO->AddComponent(robot);
-	robotGO->box.x = 3000;
+	robotGO->box.x = 800;
 	robotGO->box.y = 800 - robotGO->box.h;
 
 	objectArray.emplace_back(robotGO);
@@ -138,7 +139,7 @@ void GameState0::LoadAssets() {
 	auto coatGuy = new CoatGuy(*coatGuyGO);
 
 	coatGuyGO->AddComponent(coatGuy);
-	coatGuyGO->box.x = 3000;
+	coatGuyGO->box.x = 1200;
 	coatGuyGO->box.y = 800 - coatGuyGO->box.h;
 
 	objectArray.emplace_back(coatGuyGO);

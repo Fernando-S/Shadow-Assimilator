@@ -42,12 +42,13 @@ int Laser::GetDamage() {
 void Laser::NotifyCollision(GameObject& other) {
 	auto player = (Player*)other.GetComponent("Player");
 	auto robot = (Robot*)other.GetComponent("Robot");
+	auto coatGuy = (CoatGuy*)other.GetComponent("CoatGuy");
 	auto tileMap = (TileMap*)other.GetComponent("TileMap");
 
 	// Deleta o tiro apenas se colidir com o inimigo do atirador
-	if (player && this->robotLaser)
+	if (player && (this->robotLaser || this->coatGuyLaser))
 		associated.RequestDelete();
-	else if (robot && this->playerLaser)
+	else if ((robot || coatGuy) && this->playerLaser)
 		associated.RequestDelete();
 	else if(tileMap && tileMap->colide)
 		associated.RequestDelete();

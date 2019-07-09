@@ -116,7 +116,8 @@ void Player::Update(float dt) {
 
 		if (!dead) {
 			DeathTimer.Restart();
-			Camera::Unfollow();				// Camera para de segui-los
+			//Camera::Unfollow();				// Camera para de segui-los
+			/// todo - comentar esse verticalSpeed com o Nego e ver o que ele acha melhor
 			verticalSpeed = 0;
 
 			if (facingR) {
@@ -152,7 +153,7 @@ void Player::Update(float dt) {
 			
 			if (DeathTimer.Get() > 2.1) {
 				/// todo - descobrir o porque disso para melhorar som de morte
-				cout << "Nem entra aqui. A personagem esta sendo deleta antes em outro lugar\n";
+				cout << "Nem entra aqui. A personagem esta sendo deletada antes em outro lugar\n";
 				// Deleta a Personagem se o hp dela acabou
 				associated.RequestDelete();
 			}
@@ -348,6 +349,10 @@ void Player::Update(float dt) {
 
 		}
 
+		if (Jump == 1) {
+
+		}
+
 		if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
 			//this->associated.box.y -= 10;
 			verticalSpeed = PLAYER_JUMP;
@@ -357,6 +362,13 @@ void Player::Update(float dt) {
 			Jump++;
 			Ground = 0;
 			DJTimer.Restart();
+			//auto laserSound2 = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
+
+			//auto laserSound2 = new Sound(associated, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
+			//if (!laserSound2->IsPlaying()) {
+			//4laserSound2->Play();
+			//cout << "nao ta tocando\n";
+			//}
 		}
 		else
 			///////////////////////////////////////////
@@ -391,9 +403,9 @@ void Player::Update(float dt) {
 				else
 					linearSpeed = -oppositeSpeed;
 			}
-		///////////////////////////////////////
-		//		CORRIDA PARA A DIREITA		//
-		/////////////////////////////////////
+			///////////////////////////////////////
+			//		CORRIDA PARA A DIREITA		//
+			/////////////////////////////////////
 			else if (inputManager.IsKeyDown(D_KEY)) {
 				speedH = { 1, 0 };
 
@@ -448,6 +460,7 @@ void Player::Update(float dt) {
 				if (playerSFX->IsPlaying()) {
 					playerSFX->Stop();
 				}
+				runningSound = false;
 			}
 
 		}
@@ -481,10 +494,7 @@ void Player::Update(float dt) {
 			facingR = true;
 			facingL = false;
 
-			if (Ground <= 2) {
-				//associated.box.x += 35;
-			}
-			else {
+			if (Ground > 2) {
 				associated.box.x += associated.box.w / 2;
 			}
 
@@ -493,6 +503,7 @@ void Player::Update(float dt) {
 			//associated.box.x += associated.box.w;//121;
 
 			associated.AddComponent(sprite);
+			playerSFX->Stop();
 		}
 
 
@@ -508,12 +519,10 @@ void Player::Update(float dt) {
 
 			associated.AddComponent(sprite);
 
-			if (Ground <= 2) {
-				//	associated.box.x += 35;
-			}
-			else {
+			if (Ground > 2) {
 				associated.box.x += associated.box.w / 2;
 			}
+			playerSFX->Stop();
 
 		}
 
@@ -604,7 +613,7 @@ void Player::Update(float dt) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo_inv.png", 4, 0.1);
 			associated.AddComponent(sprite);
-			associated.box.x -= 10;
+			//associated.box.x -= 10;
 			facingR = false;
 			facingL = true;
 			DJ++;
@@ -664,7 +673,7 @@ void Player::Update(float dt) {
 			}
 		}
 
-
+		/*
 		/// TODO - NEGRAO, FAZ ISSO FUNCIONAR DO TEU JEITO MAGICO PFVR 
 		///////////////////////
 		//		POUSO		//
@@ -695,7 +704,7 @@ void Player::Update(float dt) {
 				facingL = true;
 			}
 		}
-
+		*/
 
 		///////////////////////////////////////
 		//		TIRO DA PROTAGONISTA		//
@@ -747,6 +756,7 @@ void Player::Update(float dt) {
 			if (playerSFX->IsPlaying()) {
 				playerSFX->Stop();
 			}
+			
 			associated.RemoveComponent(playerSFX);
 			playerSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
 			associated.AddComponent(playerSFX);
@@ -791,20 +801,21 @@ void Player::Update(float dt) {
 				}
 			}
 		}
+		/*
 		///////////////////////////////
 		//		SFX DE POUSO		//
 		/////////////////////////////
-		else if (/*ultrapassou*/ pouso && tchfloor && !airbone) {
+		else if (pouso && tchfloor && !airbone) {
 			if (playerSFX->IsPlaying()) {
 				playerSFX->Stop();
 			}
 			associated.RemoveComponent(playerSFX);
-			//playerSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
 			playerSFX = new Sound(associated, "./assets/audio/SFX/Pouso2.1(Assim.).wav");
 			associated.AddComponent(playerSFX);
 			playerSFX->Play();
 			pouso = false;
 		}
+		*/
 		///////////////////////////////////
 		//		SFX DE PULO DUPLO		//
 		/////////////////////////////////
@@ -837,7 +848,6 @@ bool Player::Is(std::string type) {
 void Player::NotifyCollision(GameObject& other) {
 	auto laser = (Laser*)other.GetComponent("Laser");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
-	auto go = (GameObject*)other.GetComponent("GameObject");
 
 	// Prosfere dano ao jogador se o tiro for inimigo
 	if (laser && laser->robotLaser) {
@@ -891,7 +901,7 @@ void Player::NotifyCollision(GameObject& other) {
 			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE)
 				&& this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
 				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE + 1;
-				/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
+				/// todo - comentar o verticalspeed = 0 e mostrar pro nego o q acontece
 				verticalSpeed = 0;
 				tchCeiling = true;
 				ultrapassou = false;

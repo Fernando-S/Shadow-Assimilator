@@ -4,9 +4,9 @@
 
 std::unordered_map<std::string, std::shared_ptr<SDL_Texture>> Resources::imageTable;
 std::unordered_map<std::string, std::shared_ptr<Mix_Music>> Resources::musicTable;
-//std::unordered_map<std::string, std::shared_ptr<Mix_Chunk>> Resources::soundTable;
+std::unordered_map<std::string, std::shared_ptr<Mix_Chunk>> Resources::soundTable;
 std::unordered_map<std::string, std::shared_ptr<TTF_Font>> Resources::fontTable;
-std::unordered_map<std::string, Mix_Chunk*> Resources::soundTable;
+//std::unordered_map<std::string, Mix_Chunk*> Resources::soundTable;
 //std::unordered_map<std::string, SDL_Texture*> Resources::imageTable;
 
 
@@ -100,7 +100,7 @@ void Resources::ClearMusics() {
 			it++;										// avanca no vetor
 	}
 }
-/*
+
 std::shared_ptr<Mix_Chunk> Resources::GetSound(std::string file) {
 	auto search = soundTable.find(file);
 
@@ -132,10 +132,10 @@ void Resources::ClearSounds() {
 			it++;										// avanca no vetor
 	}
 }
-*/
 
 
 
+/*
 Mix_Chunk *Resources::GetSound(std::string file) {
 	auto search = soundTable.find(file);
 
@@ -163,6 +163,7 @@ void Resources::ClearSounds() {
 
 	soundTable.clear();
 }
+*/
 
 
 std::shared_ptr<TTF_Font> Resources::GetFont(std::string file, int fontSize) {

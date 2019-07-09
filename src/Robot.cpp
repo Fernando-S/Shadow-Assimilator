@@ -1,33 +1,35 @@
+﻿
 #include "Robot.h"
 #include "Game.h"
+#include "Sound.h"
 
 using namespace std;
 
 Robot* Robot::robot = nullptr;
 
+
 Robot::Robot(GameObject& associated) : Component(associated) {
 	robot = this;
 	speedH = { 1, 0 };
 	speedV = { 0, -1 };
+	speedD = { 1, -1 };
 	linearSpeed = 0;
 	angle = 0;
 	oppositeAccel = 0;
 	oppositeSpeed = 0;
 	hp = ROBOT_INITIAL_HP;
 
-	// Carrega o sprite da personagem idle
-	//sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
-	sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
+	// Carrega o sprite do robot idle
+	sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
+	//sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
 
+	// Carrega som nulo para o robot
+	robotSFX = new Sound(associated);
+
+	associated.AddComponent(robotSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-
-
-	//runningSound = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
-	runningSound = new Sound(associated, "./assets/audio/SFX/CorridaCidade(Assim.)1.wav");
-	//runningSound = new Music("./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
-	//runningSound = new Sound(associated, "./assets/audio/SFX/Passo_Unico.wav");
-	//associated.AddComponent(runningSound);
+	//	associated.angleDeg = angle * 180 / PI;
 }
 
 Robot::~Robot() {
@@ -35,55 +37,253 @@ Robot::~Robot() {
 }
 
 void Robot::Start() {
-	/*
-	// Adiciona ao PenguinCannon
-	auto cannonGO = new GameObject();
-	//	auto cannon = new PenguinCannon(*cannonGO, Game::GetInstance().GetState().GetObjectPtr(&associated));
-	auto cannon = new PenguinCannon(*cannonGO, Game::GetInstance().GetCurrentState().GetObjectPtr(&associated));
-	cannonGO->AddComponent(cannon);
-	//	pcannon = Game::GetInstance().GetState().AddObject(cannonGO);
-	pcannon = Game::GetInstance().GetCurrentState().AddObject(cannonGO);
-	*/
 	initialX = associated.box.x;
 	initialY = associated.box.y;
 }
 
+
 void Robot::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
 	double angleVariation = 0;
-	/*
-	auto runningSound = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
-	if(!associated.GetComponent("runningSound"))
-		associated.AddComponent(runningSound);
-		*/
+	double accelSpeedGain = ROBOT_ACCELERATION * dt;
+
+	if (inputManager.KeyPress(NUMPAD_ZERO_KEY)) {
+		hp = 0;
+		damaged = true;
+	}
+
 
 	if (hp <= 0) {
-		// Deleta os Penguins se o hp deles acabou
-		associated.RequestDelete();
-		//pcannon.lock()->RequestDelete();
-	//	Camera::Unfollow();				// Camera para de segui-los
 
-		// Carrega a animacao e som de explosao da morte do Alien
-		auto explosionGO = new GameObject();
-		auto explosionSound = new Sound(*explosionGO, "./assets/audio/SFX/boom.wav");
-		explosionGO->AddComponent(new Sprite(*explosionGO, "./assets/img/aliendeath.png", 4, 0.15, 1.2));
-		explosionGO->AddComponent(explosionSound);
-		explosionSound->Play();
-		explosionGO->box.PlaceCenter(associated.box.Center());
-		Game::GetInstance().GetCurrentState().AddObject(explosionGO);
+		/////////////////////////////////////////
+		//		GRAVIDADE
+		////////////////////////////////////////
+		if (airbone) {
+			Ground = 0;
+		}
 
+		contadorW1 = verticalSpeed;
+
+		if (verticalSpeed < -800) {
+			verticalSpeed = -800;
+			gforce = true;
+		}
+
+		if ((BuzzL >= 2) && (verticalSpeed > -800)) {
+
+			//cout << "\n\n\n\n\nVOCE EH UM BRINQUEDO\n\n\n\n\n";
+
+			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
+			Stop = 0;
+			if (verticalSpeed < 0) {
+				if (Fall < 10) {
+					Fall++;
+				}
+			}
+			tchfloor = false;
+			airbone = true;
+		}
+
+		if (verticalSpeed > -800 && airbone) {
+
+			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
+			Stop = 0;
+			if (verticalSpeed < 0) {
+				if (Fall < 10) {
+					Fall++;
+				}
+			}
+			tchfloor = false;
+			airbone = true;
+		}
+
+		contadorW2 = verticalSpeed;
+
+		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+			BuzzL++;
+		}
+
+		if (((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
+			BuzzL = 0;
+		}
+
+
+		associated.box += speedV * verticalSpeed*dt;
+
+
+		DeathTimer.Update(dt);
+
+		if (!dead) {
+			DeathTimer.Restart();
+			//Camera::Unfollow();				// Camera para de segui-los
+			/// todo - comentar esse verticalSpeed com o Nego e ver o que ele acha melhor
+			verticalSpeed = 0;
+
+			if (facingR) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte.png", 21, 0.1, 2.1);
+				associated.AddComponent(sprite);
+			}
+			else if (facingL) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte_inv.png", 21, 0.1, 2.1);
+				associated.AddComponent(sprite);
+				associated.box.x -= 80;
+			}
+			dead = true;
+		}
+		else {
+			///////////////////////////////
+			//		SFX DE MORTE		//
+			/////////////////////////////
+			if ((DeathTimer.Get() > 1.0) && !deathSound) {
+
+				if (robotSFX->IsPlaying()) {
+					robotSFX->Stop();
+				}
+				associated.RemoveComponent(robotSFX);
+				robotSFX = new Sound(associated, "./assets/audio/SFX/MortePrincipal(Assim.).wav");
+				associated.AddComponent(robotSFX);
+				robotSFX->Play();
+				deathSound = true;
+			}
+
+
+
+			if (DeathTimer.Get() > 2.1) {
+				/// todo - descobrir o porque disso para melhorar som de morte
+				cout << "Nem entra aqui. O robo esta sendo deletado antes em outro lugar\n";
+				// Deleta a Personagem se o hp dela acabou
+				associated.RequestDelete();
+			}
+		}
 	}
 	else {
 		double accelSpeedGain = ROBOT_ACCELERATION * dt;
-
-		cooldownTimer.Update(dt);
+		WallJumpTimer.Update(dt);
+		ShootCooldownTimer.Update(dt);
+		DashCooldownTimer.Update(dt);
+		DJTimer.Update(dt);
 		changeSideTimer.Update(dt);
-		
-		// aplica gravidade funcional a todo momento
-		if (verticalSpeed > -800 && airbone) {
-			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
+
+
+		//////////////////////////////////////////
+		//		TERMINO DO WALL JUMP
+		//////////////////////////////////////////
+		//if (WallJump && (WallJumpTimer.Get() > 0.3)) {
+		//	WallJump = false;
+			//linearSpeed = 0;
+			//verticalSpeed = 0;
+		//}
+		/*
+		else if (WallJump && (WallJumpTimer.Get() < 0.3)) {
+			doubleJump = false;
+		}*/
+
+		/////////////////////////////////////////
+		//		GRAVIDADE
+		////////////////////////////////////////
+		if (airbone) {
+			Ground = 0;
 		}
 
+
+		contadorW1 = verticalSpeed;
+
+		if (verticalSpeed < -800) {
+			verticalSpeed = -800;
+		}
+
+		if ((BuzzL >= 2) && (verticalSpeed > -800)) {
+
+			////cout << "\n\n\n\n\nVOCE E UM BRINQUEDO\n\n\n\n\n";
+
+			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
+			Stop = 0;
+			if (verticalSpeed < 0) {
+				if (Fall < 10) {
+					Fall++;
+				}
+			}
+			tchfloor = false;
+			airbone = true;
+		}
+
+		if (verticalSpeed > -800 && airbone) {
+
+			verticalSpeed -= accelSpeedGain * 0.9;	//QUEDA
+			Stop = 0;
+			if (verticalSpeed < 0) {
+				if (Fall < 10) {
+					Fall++;
+				}
+			}
+			tchfloor = false;
+			airbone = true;
+		}
+
+		contadorW2 = verticalSpeed;
+
+		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+			BuzzL++;
+		}
+		if (((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
+			BuzzL = 0;
+		}
+
+		///////////////////////////////////////////////////////////////////
+		//		IA do Robo espera um tempo parado e muda de lado		//
+		/////////////////////////////////////////////////////////////////
+		if (idle && changeSideTimer.Get() > 1.2) {
+			//cout << "ENTRA NA CONDICAO DO TEMPO\n";
+
+			// SETA PARA CORRER PARA A ESQUERDA SE ESTA PARADO OLHANDO PARA A DIREITA
+			if (facingR) {
+				moveEsquerda = true;
+				moveDireita = false;
+				//cout << "CORRE PARA A ESQUERDA\n";
+			}
+			// SETA PARA CORRER PARA A DIREITA SE ESTA PARADO OLHANDO PARA A ESQUERDA
+			else if (facingL) {
+				moveDireita = true;
+				moveEsquerda = false;
+				//cout << "CORRE PARA A DIREITA\n";
+			}
+			idle = false;
+
+		}
+
+		// Tentativa de IA apenas quando esta no chao
+		if (!airbone && tchfloor) {
+
+			// Comeca a andar
+			if (!moveDireita && !moveEsquerda && !idle)
+				moveEsquerda = true;
+
+			if (associated.box.x < initialX - /*250*/ 5 * ONETILESQUARE) {
+				if (!idle && !moveDireita) {
+					changeSideTimer.Restart();
+					moveDireita = false;
+					moveEsquerda = false;
+					idle = true;
+				}
+				//cout << "LIMITE A ESQUERDA\n";
+			}
+			else if (associated.box.x > initialX + /*250*/ 5 * ONETILESQUARE) {
+				if (!idle && !moveEsquerda) {
+					changeSideTimer.Restart();
+					moveDireita = false;
+					moveEsquerda = false;
+					idle = true;
+				}
+				//cout << "LIMITE A DIREITA\n";
+			}
+		}
+
+
+		//////////////////////////////
+		//		SPAWN DE TESTE		//
+		/////////////////////////////
 		if (inputManager.KeyRelease(SPACE_KEY)) {
 			associated.box.x = 604;
 			associated.box.y = 100;
@@ -91,116 +291,205 @@ void Robot::Update(float dt) {
 			tchfloor = false;
 			verticalSpeed = -800;
 		}
-		
-		///////////////////////////////////////////////////////////
-		//		IA do Robo espera um tempo parado e muda de lado
-		//////////////////////////////////////////////////////////
-		if (idleR && changeSideTimer.Get() > 1.2) {
-			moveEsquerda = true;
-			idleR = false;
-			moveDireita = false;
-			//cout << "CORRE PARA A ESQUERDA\n";
-		}
-		else if (idleL && changeSideTimer.Get() > 1.2) {
-			moveDireita = true;
-			idleL = false;
-			moveEsquerda = false;
-			//cout << "CORRE PARA A DIREITA\n";
-		}
-
-		// Tentativa de IA apenas quando esta no chao
-		if (!airbone && tchfloor) {
-
-			// Comeca a andar
-			if (!moveDireita && !moveEsquerda && !idleL && !idleR)
-				moveEsquerda = true;
-
-			if (associated.box.x < initialX - /*250*/ 5 * ONETILESQUARE) {
-				if (!idleL && !moveDireita) {
-					changeSideTimer.Restart();
-					moveDireita = false;
-					moveEsquerda = false;
-					idleL = true;
-				}
-				//cout << "LIMITE A ESQUERDA\n";
-			}
-			else if (associated.box.x > initialX + /*250*/ 5 * ONETILESQUARE) {
-				if (!idleR && !moveEsquerda) {
-					changeSideTimer.Restart();
-					moveDireita = false;
-					moveEsquerda = false;
-					idleR = true;
-				}
-				//cout << "LIMITE A DIREITA\n";
-			}
-		}
 
 		/*
-		if (inputManager.IsKeyDown(I_KEY) && tchfloor && !airbone) {
+		///////////////////////////
+		//		DOUBLE JUMP		//
+		/////////////////////////
+		if (airbone && !inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && jumped/*&& (Ground == 0) && (DJ == 1) && (wallAUX == 0)/) {
+			doubleJump = true; // setar para 0 quando encostar no chão
+		}
 
+		if (doubleJump && airbone && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) /*&& (wallAUX == 0)/ && DJTimer.Get() > 0.3) {
+			Fall = 0;
+			Ground = 0;
+			verticalSpeed = ROBOT_JUMP * 0.7;
+			doubleJump = false;
+			Setidle = false;
+			foguete = true;
+			jumped = false;
+
+			DJ++;
+		}
+		/*
+		if (airbone && !inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (Ground == 0) && (DJ == 1) && (wallAUX == 0)) {
+			doubleJump = true; // setar para 0 quando encostar no chão
+		}
+
+		if (doubleJump && airbone && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (wallAUX == 0) && DJTimer.Get() > 0.3) {
+			Fall = 0;
+			Ground = 0;
+			verticalSpeed = ROBOT_JUMP * 0.7;
+			doubleJump = false;
+			Setidle = false;
+			foguete = true;
+			DJ++;
+		}
+		*/
+		/*
+		///////////////////////////
+		//		WALL SLIDE		//
+		/////////////////////////
+
+		// Wall Slide A DIREITA
+		if (airbone && !tchfloor && WallgrabR) {
+			if (wallAUX < 0) {
+				wallAUX = 0;
+			}
+			if (wallAUX < 10) {
+				wallAUX++;
+			}
+
+			if (inputManager.IsKeyDown(NUMPAD_SIX_KEY) && (linearSpeed != 0)) {
+				WallgrabR = false;		// QUEDA
+				wallAUX = 0;
+			}
+
+			if (inputManager.IsKeyDown(NUMPAD_SIX_KEY) && (wallAUX > 0)) {
+				verticalSpeed = -30;		// QUEDA
+
+			}
+			Fall = 0;
+			Ground = 0;
+			Jump = 0;
+			Setidle = false;
+		}
+		// Wall Slide A ESQUERDA
+		else if (airbone && !tchfloor && WallgrabL) {
+			if (wallAUX > 0) {
+				wallAUX = 0;
+			}
+			if (wallAUX > -10) {
+				wallAUX--;
+			}
+
+			if (inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && ((linearSpeed != 0) || (linearSpeed != (-0)))) {
+				WallgrabL = false;		// QUEDA
+				wallAUX = 0;
+			}
+
+			if (inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && (wallAUX < 0)) {
+				verticalSpeed = -30;		// QUEDA
+				linearSpeed -= accelSpeedGain;
+			}
+
+			Fall = 0;
+			Ground = 0;
+			Jump = 0;
+			Setidle = false;
+		}
+
+		///////////////////////////
+		//		WALL JUMP		//
+		/////////////////////////
+		//NA PAREDE DA DIREITA
+		if (WallgrabR && inputManager.IsKeyDown(NUMPAD_SIX_KEY) && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (wallAUX > 0) && (WallJumpTimer.Get() > 0.18)) {
+			DJTimer.Restart();
+			verticalSpeed += 500;
+			speedH = { 1, 0 };
+			oppositeSpeed += 250;
+			wallAUX = 0;
+			Jump++;
+			Setidle = false;
+		}
+
+		//NA PAREDE DA ESQUERDA
+		if (WallgrabL && inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (wallAUX < 0) && (WallJumpTimer.Get() > 0.18)) {
+			DJTimer.Restart();
+			verticalSpeed += 500;
+			speedH = { -1, 0 };
+			oppositeSpeed += 250;
+			associated.box += speedH * linearSpeed*dt;
+			wallAUX = 0;
+			Jump++;
+			Setidle = false;
+		}
+
+		if (Jump == 2) {
+			WallJumpTimer.Restart();
+		}
+
+
+		///////////////////////
+		//		JUMP		//
+		/////////////////////
+		if (airbone) {
+			Ground = 0;
+			SetJump = false;
+			Setidle = false;
+		}
+
+		if (inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && tchfloor && !airbone && (Jump == 0)) {
+			//this->associated.box.y -= 10;
 			verticalSpeed = ROBOT_JUMP;
-
 			tchfloor = false;
+			SetJump = true;
 			airbone = true;
+			Jump++;
+			Ground = 0;
+			DJTimer.Restart();
+			Setidle = false;
+			jumped = true;
 			doubleJump = false;
 		}
-		else */
-			if (/*inputManager.IsKeyDown(J_KEY) ||*/ moveEsquerda) {
+		else*/
+			///////////////////////////////////////////
+			//		CORRIDA PARA A ESQUERDA			//
+			/////////////////////////////////////////
+			if (inputManager.IsKeyDown(NUMPAD_FOUR_KEY) || moveEsquerda) {
+
+				WallgrabR = false;
 
 				if (linearSpeed == 0)
 					oppositeSpeed = 0;
 
 				if (Getspeed1 == false) {
 					oppositeSpeed = linearSpeed;
-					//std::cout << "\n\nPassarvalor1" << endl << endl;
 					Getspeed1 = true;
 					Setidle = false;
 					Setrun = true;
 					Run = 0;
 					Stop = 0;
+					facingL = true;
+					facingR = false;
 				}
 
 				if (Run > -10)
 					Run--;
 
 				speedH = { -1, 0 };
-				if (oppositeSpeed > -ROBOT_SPEED) {
+				if ((oppositeSpeed > -ROBOT_SPEED) && !WallgrabL) {
 
-					if (oppositeSpeed > 0) {
-						oppositeSpeed -= accelSpeedGain;
-						linearSpeed = -oppositeSpeed;
-					}
-					if (oppositeSpeed <= 0) {
-						oppositeSpeed -= accelSpeedGain;
-						linearSpeed = -oppositeSpeed;
-					}
+					oppositeSpeed -= accelSpeedGain;
+					linearSpeed = -oppositeSpeed;
+
 				}
 				else
 					linearSpeed = -oppositeSpeed;
-
-				//std::cout << "linearSpeed1: " << linearSpeed << endl;
-				//std::cout << "oppositeSpeed1: " << oppositeSpeed << endl;
-
 			}
-			else if (/*inputManager.IsKeyDown(L_KEY) ||*/ moveDireita) {
+		///////////////////////////////////////
+		//		CORRIDA PARA A DIREITA		//
+		/////////////////////////////////////
+			else if (inputManager.IsKeyDown(NUMPAD_SIX_KEY) || moveDireita) {
 				speedH = { 1, 0 };
 
 				if (Getspeed2 == false) {
 					oppositeSpeed = linearSpeed;
-					//std::cout << "\n\nPassarvalor2" << endl << endl;
 					Getspeed2 = true;
 
 					Run = 0;
 					Stop = 0;
 					Setidle = false;
 					Setrun = true;
+					facingL = false;
+					facingR = true;
 
 				}
 
 				if (Run < 10)
 					Run++;
 
-				if (linearSpeed < ROBOT_SPEED + 50) {
+				if (linearSpeed < ROBOT_SPEED /*+ 50*/) {
 
 					if (oppositeSpeed >= 0) {
 						oppositeSpeed -= accelSpeedGain;
@@ -210,21 +499,17 @@ void Robot::Update(float dt) {
 						linearSpeed += accelSpeedGain;
 
 				}
-				
-				//cout << "linearSpeed: " << linearSpeed << endl;
-				//cout << "Run: " << Run << endl;
 			}
-		
+
 		double atrictSpeedLoss = ROBOT_ATRICT * dt;
-		
-		if (/*!inputManager.IsKeyDown(J_KEY) ||*/ !moveEsquerda)
+
+		if (!inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && !moveEsquerda)
 			Getspeed1 = false;
 
-		if (/*!inputManager.IsKeyDown(L_KEY) ||*/ !moveDireita)
+		if (!inputManager.IsKeyDown(NUMPAD_SIX_KEY) && !moveDireita)
 			Getspeed2 = false;
-		
 
-		if ((idleL && !moveDireita) || (idleR && !moveDireita)/*!inputManager.IsKeyDown(J_KEY) && !inputManager.IsKeyDown(L_KEY)*/) {
+		if (!inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && !inputManager.IsKeyDown(NUMPAD_SIX_KEY) && idle && !moveEsquerda && !moveDireita) {
 
 			if (linearSpeed > 40)
 				linearSpeed -= accelSpeedGain * 1.5;
@@ -232,140 +517,372 @@ void Robot::Update(float dt) {
 			if (linearSpeed < -40)
 				linearSpeed += accelSpeedGain * 1.5;
 
-			if ((linearSpeed < 40) && (linearSpeed > -40))
+			if ((linearSpeed <= 40) && (linearSpeed >= -40))
 				linearSpeed = 0;
-		
-			
+			Setrun = false;
+			if(tchfloor && !airbone)
+				Setidle = true;
+
+			if (runningSound) {
+				if (robotSFX->IsPlaying()) {
+					robotSFX->Stop();
+				}
+				runningSound = false;
+			}
+		}
+
+		if ((linearSpeed == 0) && (verticalSpeed == 0)) {
 			if (Stop < 10) {
 				Stop++;
-				if (Stop == 1)
-					Setrun = false;
 			}
-			Setidle = true;
-			
-			//cout << "Stop: " << Stop << endl;
-
 		}
+
+
 		//////////////////////////////////////////////////////////////
 		/////////////////////VELOCIDADE///////////////////////////////
 
-		//if (Wallgrab == false) {
 		associated.box += speedH * linearSpeed*dt;
-		//}
 		associated.box += speedV * verticalSpeed*dt;
 
-		//cout << "Centro: " << GetCenter().y << endl;
-		//cout << "Centro: " << chao << endl;
+
+		///////////////////////////////////////////////////////////////////////////////
+		//									SPRITES									//
+		/////////////////////////////////////////////////////////////////////////////
 		
-
-		//////////////////////////////////////////////////////////////
-
-		// Idle para a direita
-		if (Setidle && !Setrun && (Stop == 2) && (Run > 0)) {
+	
+		///////////////////////////////////////
+		//		Idle para a direita			//
+		/////////////////////////////////////
+		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) {
 			associated.RemoveComponent(sprite);
-			//sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
-			sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
-			//if (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
-			if(runningSound->IsPlaying())
-				runningSound->Stop();
-			associated.AddComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
 
-			facingL = false;
 			facingR = true;
+			facingL = false;
+			idle = true;
 
-			//cout << "\nTROCA, CORRE > PARA\n\n";
-		}
+			// Desnecessario para o robo, mas eh preciso trocar para um sprite idle proprio
+			if (Ground > 2){
+			//	associated.box.x += associated.box.w / 2;
+			}
 
-		// Idle para a esquerda
-		if (Setidle && !Setrun && (Stop == 2) && (Run < 0)) {
-			associated.RemoveComponent(sprite);
-			//sprite = new Sprite(associated, "./assets/img/vilao_idle_inv.png", 10, 0.09);
-			sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
-			//if (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
-			if (runningSound->IsPlaying())
-				runningSound->Stop();
+			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
+			// arruma a posicao para o sprite do robot idle aparecer do pe mais a frente apos a corrida
+			//associated.box.x += associated.box.w;//121;
+
 			associated.AddComponent(sprite);
-			facingL = true;
-			facingR = false;
-			//cout << "\nTROCA, CORRE > PARA\n\n";
 		}
 
-		// Corrida para a direita
-		if (!Setidle && Setrun && (Run == 1)) {
+
+		///////////////////////////////////////
+		//		Idle para a esquerda		//
+		/////////////////////////////////////
+		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) {
 			associated.RemoveComponent(sprite);
-			//sprite = new Sprite(associated, "./assets/img/vilao_corrida.png", 10, 0.09);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle_inv.png", 10, 0.09);
+			facingR = false;
+			facingL = true;
+			idle = true;
+
+
+			associated.AddComponent(sprite);
+
+			// Desnecessario para o robo, mas eh preciso trocar para um sprite idle proprio
+			if (Ground > 2) {
+			//	associated.box.x += associated.box.w / 2;
+			}
+
+		}
+
+
+		///////////////////////////////////////
+		//		Corrida para a direita		//
+		/////////////////////////////////////
+		if ((((Run == 1) && (Ground > 0)) || ((Ground == 1) && (Run > 0) && (inputManager.IsKeyDown(NUMPAD_SIX_KEY)))) && (Fall <= 1) && (Jump == 0)) {
+			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Robot/001W1BOM.png", 5, 0.2);
-			//auto runningSound = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1");
-			//associated.AddComponent(runningSound);
-			if(!runningSound->IsPlaying())
-			//if(Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
-				runningSound->Play();
 			associated.AddComponent(sprite);
-
-			facingL = false;
 			facingR = true;
+			facingL = false;
+			idle = false;
+			Run++;
 
-
-			//cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
 		}
 
-		// Corrida para a esquerda
-		if (!Setidle && Setrun && (Run == -1)) {
+
+		///////////////////////////////////////
+		//		Corrida para a esquerda		//
+		/////////////////////////////////////
+		if ((((Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && (inputManager.IsKeyDown(NUMPAD_FOUR_KEY)))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
-			//sprite = new Sprite(associated, "./assets/img/walk2_1.png", 6, 0.1);
-			//sprite = new Sprite(associated, "./assets/img/vilao_corrida_inv.png", 10, 0.09);
 			sprite = new Sprite(associated, "./assets/img/Robot/001W2BOM.png", 5, 0.2);
-			if (!runningSound->IsPlaying())
-			//if (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
-				runningSound->Play();
 			associated.AddComponent(sprite);
-
-			facingL = true;
 			facingR = false;
+			facingL = true;
+			idle = false;
+			Run--;
 
-			//cout << "\nTROCA, PARA > CORRE ESQUERDA\n\n";
 		}
 
-		// Pulo para a direita
-		if (!Setidle && Setjump) {
-			////////////////////////
-			//	SPRITE DE PULO PARA A DIREITA
-			////////////////////////
-
-
-			facingL = false;
+		/*
+		///////////////////////////////////
+		//		Pulo para a direita		//
+		/////////////////////////////////
+		if ((((Run >= 0) && (Jump == 1)) || ((Jump > 1) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo.png", 8, 0.1);
+			associated.AddComponent(sprite);
+			associated.box.x -= 10;
 			facingR = true;
+			facingL = false;
 
-			//cout << "\nTROCA, PULO DIREITA\n\n";
+
+			if (Jump == 1) {
+				if ((DJ == 0) && (wallAUX == 0)) {
+					DJ++;
+				}
+				Jump++;
+			}
+
 		}
 
-		// Pulo para a esquerda
-		if (!Setidle && Setjump && (Run == -1)) {
-			////////////////////////
-			//	SPRITE DE PULO PARA A ESQUERDA
-			////////////////////////
 
-
-			facingL = true;
+		///////////////////////////////////////
+		//		Pulo para a esquerda		//
+		/////////////////////////////////////
+		if ((((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo_inv.png", 8, 0.1);
+			associated.AddComponent(sprite);
+			associated.box.x -= 10;
 			facingR = false;
+			facingL = true;
 
-			//cout << "\nTROCA, PULO ESQUERDA\n\n";
+		}
+		if (Jump == 1) {
+			if ((DJ == 0) && (wallAUX == 0)) {
+				DJ++;
+			}
+			Jump++;
 		}
 
-		//if (inputManager.IsKeyDown(NUMPAD_ONE_KEY)) {
-		/// todo - fazer uma condicao parecida ou ate mesmo igual para tocar o som de corrida apenas quando esta proximo do jogador
-		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 800) && cooldownTimer.Get() > 1.8
-			&& (Player::player->GetCenter().y > this->associated.box.y - ONETILESQUARE * 3)
-			&& (Player::player->GetCenter().y < this->associated.box.y + this->associated.box.h + ONETILESQUARE * 3) ) {
-			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
-			cooldownTimer.Restart();
+
+		///////////////////////////////////////////
+		//		Pulo Duplo para a direita		//
+		/////////////////////////////////////////
+		if ((((Run >= 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo.png", 4, 0.1);
+			associated.AddComponent(sprite);
+			facingR = true;
+			facingL = false;
+			DJ++;
 		}
-		//}
+
+
+		///////////////////////////////////////////
+		//		Pulo Duplo para a esquerda		//
+		/////////////////////////////////////////
+		if ((((Run < 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo_inv.png", 4, 0.1);
+			associated.AddComponent(sprite);
+			//associated.box.x -= 10;
+			facingR = false;
+			facingL = true;
+			DJ++;					   
+		}
+
+
+		///////////////////////////////////
+		//		WallSlide A DIREITA		//
+		/////////////////////////////////
+		if ((wallAUX == 1) && (Ground == 0) && (Run > 0)) {
+
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_desliza_inv.png", 8, 0.1);
+			associated.AddComponent(sprite);
+			associated.box.x += 70;
+			facingR = false;
+			facingL = true;
+		}
+
+
+		///////////////////////////////////////
+		//		WallSlide A ESQUERDA		//
+		/////////////////////////////////////
+		if ((wallAUX == -1) && (Ground == 0) && (Run < 0)) {
+
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_desliza.png", 8, 0.1);
+			associated.AddComponent(sprite);
+			facingR = true;
+			facingL = false;
+		}
+		*/
+		
+		///////////////////////
+		//		QUEDA		//
+		/////////////////////
+		if (Ground == 0) {
+			
+			// QUEDA PRA DIREITA
+			if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1))) && (wallAUX == 0)) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_queda.png", 6, 0.1);
+				associated.AddComponent(sprite);
+				associated.box.x += 20;
+				facingR = true;
+				facingL = false;
+				idle = false;
+			}
+		
+			// QUEDA PRA ESQUERDA
+			if ((((Fall == 1) && (Run < 0)) || ((Fall > 0) && (Run == -1))) && (wallAUX == 0)) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_queda_inv.png", 6, 0.1);
+				associated.AddComponent(sprite);
+				associated.box.x += 20;
+				facingR = false;
+				facingL = true;
+				idle = false;
+			}
+		}
 		
 
+		///////////////////////////////
+		//		TIRO DO ROBO		//
+		/////////////////////////////
+		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
+			if (facingR)
+				Shoot(GetCenter());
+			else if (facingL)
+				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
+			ShootCooldownTimer.Restart();
+		}
+		/*
+		///////////////////////
+		//		DASH		//
+		/////////////////////
+		// DIREITA
+		if (inputManager.IsKeyDown(E_KEY) && DashCooldownTimer.Get() > 1.8) {
+			speedH = { 1, 0 };
+			linearSpeed += 1000;
+			associated.box += speedH * linearSpeed*dt;
+			DashCooldownTimer.Restart();
+		}
+		
+		// ESQUERDA
+		if (inputManager.IsKeyDown(Q_KEY) && DashCooldownTimer.Get() > 1.8) {
+			speedH = { -1, 0 };
+			linearSpeed += 1000;
+			associated.box += speedH * linearSpeed*dt;
+			DashCooldownTimer.Restart();
+		}
+
+		///////////////////////////////////
+		//        ATAQUE BASICO			//
+		/////////////////////////////////
+		if (inputManager.KeyPress(K_KEY)) {
+			isAtacking = true;
+		}
+		else
+			isAtacking = false;
+		*/
+		///////////////////////////////////////////////////////////////////////////////
+		//							EFEITOS SONOROS									//
+		/////////////////////////////////////////////////////////////////////////////
+		/*
+		///////////////////////////
+		//		SFX DE PULO		//
+		/////////////////////////
+		if (SetJump) {
+			if (robotSFX->IsPlaying()) {
+				robotSFX->Stop();
+			}
+			associated.RemoveComponent(robotSFX);
+			robotSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
+			associated.AddComponent(robotSFX);
+			robotSFX->Play();
+			runningSound = false;
+		}
+		*/
+		///////////////////////////////
+		//		SFX DE CORRIDA		//
+		/////////////////////////////
+		else if (Setrun && tchfloor) {
+			if (!runningSound) {
+				if (robotSFX->IsPlaying()) {
+					robotSFX->Stop();
+				}
+				associated.RemoveComponent(robotSFX);
+				//robotSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
+				robotSFX = new Sound(associated, "./assets/audio/SFX/CorridaCidade(Assim.)1.wav");
+				associated.AddComponent(robotSFX);
+				runningSound = true;
+			}
+			else {
+				if (!robotSFX->IsPlaying()) {
+					robotSFX->Play();
+				}
+			}
+		}
+		/*
+		///////////////////////////////
+		//		SFX DE WALLSLIDE	//
+		/////////////////////////////
+		else if (airbone && !tchfloor && (WallgrabL || WallgrabR)) {
+			if (!wallSlideSound) {
+				if (robotSFX->IsPlaying()) {
+					robotSFX->Stop();
+				}
+				associated.RemoveComponent(robotSFX);
+				robotSFX = new Sound(associated, "./assets/audio/SFX/ArrastarPrincipal(Assim.)2.wav");
+				associated.AddComponent(robotSFX);
+				wallSlideSound = true;
+			}
+			else {
+				if (!robotSFX->IsPlaying()) {
+					robotSFX->Play();
+				}
+			}
+		}
+		*/
+		/*
+		///////////////////////////////
+		//		SFX DE POUSO		//
+		/////////////////////////////
+		else if (pouso && tchfloor && !airbone) {
+			if (robotSFX->IsPlaying()) {
+				robotSFX->Stop();
+			}
+			associated.RemoveComponent(robotSFX);
+			//robotSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
+			robotSFX = new Sound(associated, "./assets/audio/SFX/Pouso2.1(Assim.).wav");
+			associated.AddComponent(robotSFX);
+			robotSFX->Play();
+			pouso = false;
+		}
+		*/
+		/*
+		///////////////////////////////////
+		//		SFX DE PULO DUPLO		//
+		/////////////////////////////////
+		else if (foguete) {
+			if (robotSFX->IsPlaying()) {
+				robotSFX->Stop();
+			}
+			associated.RemoveComponent(robotSFX);
+			robotSFX = new Sound(associated, "./assets/audio/SFX/Foguete2.1(Assim.).wav");
+			associated.AddComponent(robotSFX);
+			robotSFX->Play();
+			foguete = false;
+		}
+		*/
 	}
 
 }
+
 
 void Robot::Render() {
 
@@ -377,7 +894,6 @@ bool Robot::Is(std::string type) {
 	else
 		return false;
 }
-
 
 void Robot::NotifyCollision(GameObject& other) {
 	auto laser = (Laser*)other.GetComponent("Laser");
@@ -395,369 +911,172 @@ void Robot::NotifyCollision(GameObject& other) {
 		hp -= 2;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
 	}
 
+
 	if (tile) {
 		if (tile->colide) {
 
-			//////////////////////
-			//		FORMA 1
-			//////////////////////
-			/*
-			// Colisao com o chao
-			if (this->associated.box.y + this->associated.box.h <= tile->GetY() + 120) {
-				if (!airbone && tchfloor) {
-					verticalSpeed = 0;
-					this->associated.box.y = tile->GetY() - this->associated.box.h;
-				}
-				tchfloor = true;
-				airbone = false;
-				Jump = 0;
-				doubleJump = false;
-				tchCeiling = false;
-
-				// Checa se esta saindo de uma plataforma
-				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
-					airbone = true;
-					tchfloor = false;
-				}
-			}
-			// Colisao com tetos
-			/*
-			else if ((associated.box.y < tile->GetY() + 80) && (tile->GetY() + 80 <= this->associated.box.y + this->associated.box.h)/* && tchCeiling/) {
-				this->associated.box.y = tile->GetY() + 80;
-				verticalSpeed = 0;
-				tchCeiling = true;
-			}
-			*6
-			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE)
-	   				  && this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
-				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE;
-				/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
-				verticalSpeed = 0;
-				tchCeiling = true;
-			}
-			// Colisao com uma parede A DIREITA
-			/*
-			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w)
-				&& (this->associated.box.x + this->associated.box.w <= tile->GetX() + 90)) {
-				this->associated.box.x = tile->GetX() - this->associated.box.w;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-				tchCeiling = false;
-			}
-			/
-			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling
-				&& (this->associated.box.x + this->associated.box.w <= tile->GetX() + ONETILESQUARE)) {
-				this->associated.box.x = tile->GetX() - this->associated.box.w;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-				//WallgrabL = false;
-				tchCeiling = false;
-				/*
-				// Wall Slide A DIREITA
-				if (airbone && !tchfloor) {
-					verticalSpeed /= 2;		// QUEDA
-					wallX = tile->GetX();
-					WallgrabR = true;
-				}
-				/
-			}
-			// Coliscao com uma parede A ESQUERDA
-			/*
-			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * 80)
-				&& ((tile->GetX() + tile->GetWidth() * 80 - 80) <= associated.box.x)) {
-				this->associated.box.x = tile->GetX() + tile->GetWidth() * 80;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-				tchCeiling = false;
-			}
-			/
-			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
-				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)
-				&& !tchCeiling) {
-				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-
-				//WallgrabR = false;
-				tchCeiling = false;
-
-				// Wall Slide A ESQUERDA
-				/*
-				if (airbone && !tchfloor) {
-					verticalSpeed /= 2;//QUEDA
-					WallgrabL = true;
-				}
-				/
-			}
-			/// todo - checar se isso ainda funciona
-			// Momento que sai da colisao com o chao para impedir pulo aereo
-			else
-			{
-				
-				airbone = true;
-				tchfloor = false;
-			}
-			*/
-
-
-
-			//////////////////////
-			//		FORMA 2
-			//////////////////////
-			/*
-			if ( (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149//* + 90/ + 120)) {
-				if (!airbone && tchfloor) {
-					verticalSpeed = 0;
-					this->associated.box.y = tile->GetY() - this->associated.box.h;
-				}
-				tchfloor = true;
-				airbone = false;
-				Jump = 0;
-				doubleJump = false;
-				tchCeiling = false;
-
-				// Checa se esta saindo de uma plataforma
-				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
-					airbone = true;
-					tchfloor = false;
-					//tchCeiling = false;
-					//cout << "Desencostou\n";
-				}
-			}
-			// Colisao com tetos
-			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE) 
-				&& this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
-				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE;
-				verticalSpeed = 0;
-				tchCeiling = true;
-			}
-			// Colisao com uma parede A DIREITA
-			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling
-					  && ((this->associated.box.x + this->associated.box.w <= tile->GetX() + tile->GetWidth()*ONETILESQUARE)
-					  || this->GetCenter().Distancia(Vec2(tile->GetX(), this->GetCenter().y)) < 32)	) {
-				this->associated.box.x = tile->GetX() - this->associated.box.w;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-				//WallgrabL = false;
-				tchCeiling = false;
-
-				// Wall Slide A DIREITA
-				if (airbone && !tchfloor) {
-					verticalSpeed /= 2;		// QUEDA
-				//	wallX = tile->GetX();
-				//	WallgrabR = true;
-				}
-			}
-			// Coliscao com uma parede A ESQUERDA
-			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
-				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)
-				&& !tchCeiling) {
-				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
-				linearSpeed = 0;
-				oppositeSpeed = 0;
-
-				//WallgrabR = false;
-				tchCeiling = false;
-
-				// Wall Slide A ESQUERDA
-				if (airbone && !tchfloor) {
-					verticalSpeed /= 2;	// QUEDA
-				//	WallgrabL = true;
-				}
-			}
-			else {
-				//WallgrabL = false;
-				//WallgrabR = false;
-				tchfloor = false;
-				tchCeiling = false;
-				airbone = true;
-				//cout << "desencostou do tile\n";
-
-				// Checa se esta desencostando da parede A ESQUERDA
-				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
-					//cout << "desencostou dessa parede <<\n";
-					if (airbone)
-						doubleJump = true;
-				}
-
-				// Checa se esta desencostando da parede A DIREITA
-				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
-					//cout << "desencostou dessa parede >>\n";
-					if (airbone)
-						doubleJump = true;
-				}
-
-				// Checa se esta desencostando do teto
-				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
-					//cout << "desencostou do teto ^\n";
-					//for (int i = 0; i < 50; i++);
-					tchCeiling = false;
-				}
-			}
-			*/
-
-
-
-			//////////////////////
-			//		FORMA 3
-			//////////////////////
+			// Colisao com chaos
 			if ( (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
-				 || this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2
-				) {
-				if (!airbone && tchfloor/* && !SetJump*/) {
+				|| (this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2)	) {
+				if (this->associated.box.y + this->associated.box.h > tile->GetY()) {
+					ultrapassou = true;
+				}
+				if (!airbone && tchfloor && !SetJump) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
-					/*if (facingR) {
-						/*associated.RemoveComponent(sprite);
-						sprite = new Sprite(associated, "./assets/img/sprite_prot_idle(63x128).png", 12, 0.1);
-						associated.AddComponent(sprite);
-					}
-					else if (facingL) {
-						associated.RemoveComponent(sprite);
-						sprite = new Sprite(associated, "./assets/img/sprite_prot_idle_invertida.png", 12, 0.1);
-						associated.AddComponent(sprite);
-					}
-						*/
+					ultrapassou = false;
 				}
-				//WallgrabL = false;
-				//WallgrabR = false;
+				WallgrabL = false;
+				WallgrabR = false;
 				tchfloor = true;
 				airbone = false;
-				Jump = 0;
 				doubleJump = false;
 				tchCeiling = false;
+				jumped = false;
+				if (Ground < 10) {
+					Ground++;
+				}
+
+				if (Ground <= 2)
+					pouso = true;
+
+				DJ = 0;
+				wallAUX = 0;
+				Jump = 0;
+				Fall = 0;
 
 				// Checa se esta saindo de uma plataforma
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
 					airbone = true;
 					tchfloor = false;
 					doubleJump = true;
-					//tchCeiling = false;
-					//cout << "Desencostou\n";
+					Stop = 0;
+					wallAUX = 0;
+					ultrapassou = false;
 				}
 			}
 			// Colisao com tetos
-			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE) 
-				&& this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE
-				//&& !WallgrabR && !WallgrabL//&& tile->floor
-				//|| this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY() + tile->GetHeight() * ONETILESQUARE)) <= this->associated.box.h / 2
-				) {
+			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE)
+				&& this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
 				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE + 1;
 				/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
 				verticalSpeed = 0;
 				tchCeiling = true;
+				ultrapassou = false;
 
 			}
 			// Colisao com uma parede A DIREITA
-			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling //&& !tile->floor
-				&& ((this->associated.box.x + this->associated.box.w <= tile->GetX() + tile->GetWidth()*ONETILESQUARE/* /4*/)
+			else if ((tile->GetX() <= this->associated.box.x + this->associated.box.w) && !tchCeiling
+				&& ((this->associated.box.x + this->associated.box.w <= tile->GetX() + tile->GetWidth()*ONETILESQUARE)
 					|| this->GetCenter().Distancia(Vec2(tile->GetX(), this->GetCenter().y)) < 32)) {
 				this->associated.box.x = tile->GetX() - this->associated.box.w;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
-				//WallgrabL = false;
+				WallgrabL = false;
 				tchCeiling = false;
+				WallgrabR = true;
+				ultrapassou = false;
 
-				// Wall Slide A DIREITA
-				if (airbone && !tchfloor) {
-					verticalSpeed /= 2;		// QUEDA
-					//wallX = tile->GetX();
-					//WallgrabR = true;
+				if (airbone && !tchfloor && WallgrabR) {
+					wallX = tile->GetX();
+					WallgrabR = true;
 				}
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
 				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)	/// todo - talvez mudar essa condicao
-				&& !tchCeiling //&& !tile->floor
+				&& !tchCeiling
 				) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
 
-				//WallgrabR = false;
+				WallgrabR = false;
 				tchCeiling = false;
+				WallgrabL = true;
+				ultrapassou = false;
 
-				// Wall Slide A ESQUERDA
-				if (airbone && !tchfloor) {
-					verticalSpeed /= 2;	// QUEDA
-					//WallgrabL = true;
-				}
 			}
 			else {
-				//WallgrabL = false;
-				//WallgrabR = false;
+				WallgrabL = false;
+				WallgrabR = false;
 				tchfloor = false;
 				tchCeiling = false;
 				airbone = true;
-				//cout << "desencostou do tile\n";
+				wallAUX = 0;
+				ultrapassou = false;
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
-					//cout << "desencostou dessa parede <<\n";
-					//	if (airbone) {
-							//doubleJump = true;
-					//		WallgrabL = false;
-					//	}
+					wallAUX = 0;
+					WallgrabL = false;
+					if (robotSFX->IsPlaying()) {
+						robotSFX->Stop();
+					}
+					wallSlideSound = false;
 				}
 
 				// Checa se esta desencostando da parede A DIREITA
 				if (this->associated.box.x + this->associated.box.w < tile->GetX()) {
-					//cout << "desencostou dessa parede >>\n";
-					//	if (airbone) {
-							//doubleJump = true;
-					//		WallgrabR = false;
-					//	}
+					WallgrabR = false;
+					if (airbone) {
+						associated.box.x -= 15;
+					}
+					wallAUX = 0;
+					ultrapassou = false;
+					if (robotSFX->IsPlaying()) {
+						robotSFX->Stop();
+					}
+					wallSlideSound = false;
 				}
 
 				// Checa se esta desencostando do teto
 				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
-					//cout << "desencostou do teto ^\n";
-					//for (int i = 0; i < 50; i++);
 					tchCeiling = false;
+					ultrapassou = false;
 				}
 			}
 		}
 	}
 }
 
-
 Vec2 Robot::GetCenter() {
 	return associated.box.Center();
 }
 
-
 void Robot::Shoot(Vec2 target) {
 
-	linearSpeed = 0;
-	oppositeSpeed = 0;
-
-	// Coloca a animacao de tiro
+	// Muda para sprite de tiro
+	associated.RemoveComponent(sprite);
 	if (facingR) {
-		associated.RemoveComponent(sprite);
 		sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
-		associated.AddComponent(sprite);
 	}
 	else if (facingL) {
-		associated.RemoveComponent(sprite);
 		sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
-		associated.AddComponent(sprite);
 	}
-
+	associated.AddComponent(sprite);
 
 
 
 	// Carrega um Tiro do Robo
 	auto laserGO = new GameObject();
-	laserGO->box = associated.box.Center();		// faz o tiro sair do centro do rob�
-	laserGO->box.y = associated.box.y + 25;		// faz ele sair do olho
+	laserGO->box = associated.box.Center();
 
 	auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
-		                     ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+		ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
 	laser->robotLaser = true;
 	auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
 	laserGO->AddComponent(laserSound);
+	/// todo - Parar robotSFX nao fez a menor diferenca
+	if (robotSFX->IsPlaying()) {
+		robotSFX->Stop();
+	}
 	laserSound->Play();
 	laserGO->AddComponent(laser);
 
 	Game::GetInstance().GetCurrentState().AddObject(laserGO);
+}
+
+int Robot::GetHP() {
+	return hp;
 }

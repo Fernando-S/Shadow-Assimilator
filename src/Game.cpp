@@ -146,7 +146,7 @@ Game::Game(const char* title, int width, int height) {
 		std::cerr << "ERROR: impossible to create render" << std::endl;
 		exit(1);
 	}
-	SDL_SetRenderDrawColor(renderer, 25, 0, 51, 0);		// Seta a cor de fundo Red, Green, Blue, Alpha
+	//SDL_SetRenderDrawColor(renderer, 25, 0, 51, 0);		// Seta a cor de fundo Red, Green, Blue, Alpha
 
 
 	storedState = nullptr;

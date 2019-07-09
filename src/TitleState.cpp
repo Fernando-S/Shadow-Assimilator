@@ -12,8 +12,8 @@ TitleState::~TitleState() {
 void TitleState::LoadAssets() {
 	// Background de titulo
 	auto bgGO = new GameObject();
-	bgGO->box = { 0,0 };
-	auto bg = new Sprite(*bgGO, "./assets/img/title.jpg");
+	bgGO->box = { 0, -36 };
+	auto bg = new Sprite(*bgGO, "./assets/img/Menu/menu.png");
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
 
