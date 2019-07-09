@@ -24,7 +24,7 @@
 #define ROBOT_ANGULAR_SPEED PI			// em rads/s
 #define ROBOT_INITIAL_HP 4			// em hit points
 #define ONETILESQUARE 64				// tamanho de 1 tile
-#define ROBOT_LASER_DAMAGE 2			// em hit points
+#define ROBOT_LASER_DAMAGE 0			// em hit points
 #define MAX_SPEED 400
 #define SPEED_STEP 50
 #define ROBOT_SPEED 100
@@ -100,14 +100,14 @@ private:
 	//std::weak_ptr<GameObject> pcannon;
 	Timer WallJumpTimer, DeathTimer, DJTimer;
 	Timer ShootCooldownTimer, DashCooldownTimer;
-	Timer changeSideTimer;
+	Timer changeSideTimer, recoilTimer;
 	Vec2 speedH, speedV, speedD;
 	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed, initialX, initialY;
 
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
 		tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
 		SetJump = false, runningSound = false, wallSlideSound = false, deathSound = false, dead = false, notDJ = false, pouso = false, foguete = false,
-		jumped = false, gforce = false, moveDireita = false, moveEsquerda = false, idle = false;
+		jumped = false, gforce = false, moveDireita = false, moveEsquerda = false, idle = false, shooting = false, alreadyShot = false;
 
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0;
 	int contadorW1 = 0, contadorW2 = 0;
