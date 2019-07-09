@@ -90,7 +90,7 @@ public:
 	//float secondsToSelfDestruction = 1.5;
 	Sprite* sprite;
 	bool damaged = false, isAtacking = false, ultrapassou = false;
-	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX, *playerSFX;
+	Sound* playerSFX;
 
 private:
 	//std::weak_ptr<GameObject> pcannon;
