@@ -3,12 +3,9 @@
 
 using namespace std;
 
-bool moveDireita = false;
-bool moveEsquerda = false;
-
 Robot* Robot::robot = nullptr;
 
-Robot::Robot(GameObject& associated) : Component(associated)/*, pcannon() */ {
+Robot::Robot(GameObject& associated) : Component(associated) {
 	robot = this;
 	speedH = { 1, 0 };
 	speedV = { 0, -1 };
@@ -19,13 +16,15 @@ Robot::Robot(GameObject& associated) : Component(associated)/*, pcannon() */ {
 	hp = ROBOT_INITIAL_HP;
 
 	// Carrega o sprite da personagem idle
-	sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
+	//sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
+	sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
 
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
 
 
-	runningSound = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
+	//runningSound = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
+	runningSound = new Sound(associated, "./assets/audio/SFX/CorridaCidade(Assim.)1.wav");
 	//runningSound = new Music("./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
 	//runningSound = new Sound(associated, "./assets/audio/SFX/Passo_Unico.wav");
 	//associated.AddComponent(runningSound);
@@ -86,7 +85,7 @@ void Robot::Update(float dt) {
 		}
 
 		if (inputManager.KeyRelease(SPACE_KEY)) {
-			associated.box.x = 704;
+			associated.box.x = 604;
 			associated.box.y = 100;
 			airbone = true;
 			tchfloor = false;
@@ -96,13 +95,13 @@ void Robot::Update(float dt) {
 		///////////////////////////////////////////////////////////
 		//		IA do Robo espera um tempo parado e muda de lado
 		//////////////////////////////////////////////////////////
-		if (idleR && changeSideTimer.Get() > 2) {
+		if (idleR && changeSideTimer.Get() > 1.2) {
 			moveEsquerda = true;
 			idleR = false;
 			moveDireita = false;
 			//cout << "CORRE PARA A ESQUERDA\n";
 		}
-		else if (idleL && changeSideTimer.Get() > 2) {
+		else if (idleL && changeSideTimer.Get() > 1.2) {
 			moveDireita = true;
 			idleL = false;
 			moveEsquerda = false;
@@ -116,7 +115,7 @@ void Robot::Update(float dt) {
 			if (!moveDireita && !moveEsquerda && !idleL && !idleR)
 				moveEsquerda = true;
 
-			if (associated.box.x < initialX - /*250*/ 10 * ONETILESQUARE) {
+			if (associated.box.x < initialX - /*250*/ 5 * ONETILESQUARE) {
 				if (!idleL && !moveDireita) {
 					changeSideTimer.Restart();
 					moveDireita = false;
@@ -125,7 +124,7 @@ void Robot::Update(float dt) {
 				}
 				//cout << "LIMITE A ESQUERDA\n";
 			}
-			else if (associated.box.x > initialX + /*250*/ 10 * ONETILESQUARE) {
+			else if (associated.box.x > initialX + /*250*/ 5 * ONETILESQUARE) {
 				if (!idleR && !moveEsquerda) {
 					changeSideTimer.Restart();
 					moveDireita = false;
@@ -264,11 +263,15 @@ void Robot::Update(float dt) {
 		// Idle para a direita
 		if (Setidle && !Setrun && (Stop == 2) && (Run > 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
+			//sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
+			sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
 			//if (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
 			if(runningSound->IsPlaying())
 				runningSound->Stop();
 			associated.AddComponent(sprite);
+
+			facingL = false;
+			facingR = true;
 
 			//cout << "\nTROCA, CORRE > PARA\n\n";
 		}
@@ -276,24 +279,31 @@ void Robot::Update(float dt) {
 		// Idle para a esquerda
 		if (Setidle && !Setrun && (Stop == 2) && (Run < 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/vilao_idle_inv.png", 10, 0.09);
+			//sprite = new Sprite(associated, "./assets/img/vilao_idle_inv.png", 10, 0.09);
+			sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
 			//if (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
 			if (runningSound->IsPlaying())
 				runningSound->Stop();
 			associated.AddComponent(sprite);
+			facingL = true;
+			facingR = false;
 			//cout << "\nTROCA, CORRE > PARA\n\n";
 		}
 
 		// Corrida para a direita
 		if (!Setidle && Setrun && (Run == 1)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/vilao_corrida.png", 10, 0.09);
+			//sprite = new Sprite(associated, "./assets/img/vilao_corrida.png", 10, 0.09);
+			sprite = new Sprite(associated, "./assets/img/Robot/001W1BOM.png", 5, 0.2);
 			//auto runningSound = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1");
 			//associated.AddComponent(runningSound);
 			if(!runningSound->IsPlaying())
 			//if(Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
 				runningSound->Play();
 			associated.AddComponent(sprite);
+
+			facingL = false;
+			facingR = true;
 
 
 			//cout << "\nTROCA, PARA > CORRE DIREITA\n\n";
@@ -303,12 +313,15 @@ void Robot::Update(float dt) {
 		if (!Setidle && Setrun && (Run == -1)) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/walk2_1.png", 6, 0.1);
-			sprite = new Sprite(associated, "./assets/img/vilao_corrida_inv.png", 10, 0.09);
+			//sprite = new Sprite(associated, "./assets/img/vilao_corrida_inv.png", 10, 0.09);
+			sprite = new Sprite(associated, "./assets/img/Robot/001W2BOM.png", 5, 0.2);
 			if (!runningSound->IsPlaying())
 			//if (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)
 				runningSound->Play();
 			associated.AddComponent(sprite);
 
+			facingL = true;
+			facingR = false;
 
 			//cout << "\nTROCA, PARA > CORRE ESQUERDA\n\n";
 		}
@@ -320,6 +333,9 @@ void Robot::Update(float dt) {
 			////////////////////////
 
 
+			facingL = false;
+			facingR = true;
+
 			//cout << "\nTROCA, PULO DIREITA\n\n";
 		}
 
@@ -328,6 +344,10 @@ void Robot::Update(float dt) {
 			////////////////////////
 			//	SPRITE DE PULO PARA A ESQUERDA
 			////////////////////////
+
+
+			facingL = true;
+			facingR = false;
 
 			//cout << "\nTROCA, PULO ESQUERDA\n\n";
 		}
@@ -707,6 +727,25 @@ Vec2 Robot::GetCenter() {
 
 
 void Robot::Shoot(Vec2 target) {
+
+	linearSpeed = 0;
+	oppositeSpeed = 0;
+
+	// Coloca a animacao de tiro
+	if (facingR) {
+		associated.RemoveComponent(sprite);
+		sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
+		associated.AddComponent(sprite);
+	}
+	else if (facingL) {
+		associated.RemoveComponent(sprite);
+		sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
+		associated.AddComponent(sprite);
+	}
+
+
+
+
 	// Carrega um Tiro do Robo
 	auto laserGO = new GameObject();
 	laserGO->box = associated.box.Center();		// faz o tiro sair do centro do robô
