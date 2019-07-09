@@ -30,15 +30,6 @@ Player::Player(GameObject& associated) : Component(associated) {
 	// Carrega som nulo para a personagem
 	playerSFX = new Sound(associated);
 
-	/*
-	runSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
-	jumpSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
-	DjumpSFX = new Sound(associated, "./assets/audio/SFX/PuloDuplo(Assim.)1.wav");
-	landSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
-	LightAttackSFX = new Sound(associated, "./assets/audio/SFX/AtaqueFraco(Assim.)1.wav");
-	HeavyAttackSFX = new Sound(associated, "./assets/audio/SFX/AtaqueForte(Assim.)1.wav");
-	*/
-
 	associated.AddComponent(playerSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
@@ -479,8 +470,11 @@ void Player::Update(float dt) {
 		//									SPRITES									//
 		/////////////////////////////////////////////////////////////////////////////
 
-		// Idle para a direita
-		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) {
+
+		///////////////////////////////////
+		//		Idle para a direita		//
+		/////////////////////////////////
+		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)/* && !pouso*/) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_idle(63x128).png", 12, 0.1);
 
@@ -501,7 +495,10 @@ void Player::Update(float dt) {
 			associated.AddComponent(sprite);
 		}
 
-		// Idle para a esquerda
+
+		///////////////////////////////////////
+		//		Idle para a esquerda		//
+		/////////////////////////////////////
 		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_idle_invertida.png", 12, 0.1);
@@ -520,7 +517,10 @@ void Player::Update(float dt) {
 
 		}
 
-		// Corrida para a direita
+
+		///////////////////////////////////////
+		//		Corrida para a direita		//
+		/////////////////////////////////////
 		if ((((Run == 1) && (Ground > 0)) || ((Ground == 1) && (Run > 0) && (inputManager.IsKeyDown(D_KEY)))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_corrida(142x128).png", 12, 0.08);
@@ -530,7 +530,10 @@ void Player::Update(float dt) {
 			Run++;
 		}
 
-		// Corrida para a esquerda
+
+		///////////////////////////////////////
+		//		Corrida para a esquerda		//
+		/////////////////////////////////////
 		if ((((Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && (inputManager.IsKeyDown(A_KEY)))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_corrida_invertida.png", 12, 0.08);
@@ -540,7 +543,10 @@ void Player::Update(float dt) {
 			Run--;
 		}
 
-		// Pulo para a direita
+
+		///////////////////////////////////
+		//		Pulo para a direita		//
+		/////////////////////////////////
 		if ((((Run >= 0) && (Jump == 1)) || ((Jump > 1) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo.png", 8, 0.1);
@@ -557,7 +563,11 @@ void Player::Update(float dt) {
 			}
 
 		}
-		// Pulo para a esquerda
+
+
+		///////////////////////////////////////
+		//		Pulo para a esquerda		//
+		/////////////////////////////////////
 		if ((((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo_inv.png", 8, 0.1);
@@ -574,7 +584,9 @@ void Player::Update(float dt) {
 		}
 
 
-		// Pulo Duplo para a direita
+		///////////////////////////////////////////
+		//		Pulo Duplo para a direita		//
+		/////////////////////////////////////////
 		if ((((Run >= 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo.png", 4, 0.1);
@@ -584,7 +596,10 @@ void Player::Update(float dt) {
 			DJ++;
 		}
 
-		// Pulo Duplo para a esquerda
+
+		///////////////////////////////////////////
+		//		Pulo Duplo para a esquerda		//
+		/////////////////////////////////////////
 		if ((((Run < 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo_inv.png", 4, 0.1);
@@ -595,7 +610,10 @@ void Player::Update(float dt) {
 			DJ++;
 		}
 
-		// WallSlide A DIREITA
+
+		///////////////////////////////////
+		//		WallSlide A DIREITA		//
+		/////////////////////////////////
 		if ((wallAUX == 1) && (Ground == 0) && (Run > 0)) {
 
 			associated.RemoveComponent(sprite);
@@ -606,7 +624,10 @@ void Player::Update(float dt) {
 			facingL = true;
 		}
 
-		// WallSlide A ESQUERDA
+
+		///////////////////////////////////////
+		//		WallSlide A ESQUERDA		//
+		/////////////////////////////////////
 		if ((wallAUX == -1) && (Ground == 0) && (Run < 0)) {
 
 			associated.RemoveComponent(sprite);
@@ -616,9 +637,13 @@ void Player::Update(float dt) {
 			facingL = false;
 		}
 
-		// QUEDA PRA DIREITA
+
+		///////////////////////
+		//		QUEDAS 		//
+		/////////////////////
 		if (Ground == 0) {
 
+			// PRA DIREITA
 			if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1))) && (wallAUX == 0)) {
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_queda.png", 6, 0.1);
@@ -638,6 +663,39 @@ void Player::Update(float dt) {
 				facingL = true;
 			}
 		}
+
+
+		/// TODO - NEGRAO, FAZ ISSO FUNCIONAR DO TEU JEITO MAGICO PFVR 
+		///////////////////////
+		//		POUSO		//
+		/////////////////////
+		if (pouso) {
+
+			cout << "ENTRA NO POUSO\n";
+
+			// PARA A DIREITA
+			//if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1))) && (wallAUX == 0)) {
+			if (facingR) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pouso.png", 3, 0.1);
+				associated.AddComponent(sprite);
+				//associated.box.x -= 1;
+				facingR = true;
+				facingL = false;
+			}
+
+			// PARA A ESQUERDA
+			//if ((((Fall == 1) && (Run < 0)) || ((Fall > 0) && (Run == -1))) && (wallAUX == 0)) {
+			if (facingL) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pouso_inv.png", 3, 0.1);
+				associated.AddComponent(sprite);
+				associated.box.x -= 5;
+				facingR = false;
+				facingL = true;
+			}
+		}
+
 
 		///////////////////////////////////////
 		//		TIRO DA PROTAGONISTA		//
