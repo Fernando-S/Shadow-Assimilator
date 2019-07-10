@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "InputManager.h"
 #include "GameState0.h"
+#include "CreditsState.h"
 #include "Text.h"
 #include "Camera.h"
 
