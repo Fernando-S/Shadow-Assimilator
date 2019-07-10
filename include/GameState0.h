@@ -16,6 +16,7 @@
 #include "Collision.h"
 #include "State.h"
 #include "EndState.h"
+#include "FinalBoss.h"
 
 #define PI 3.14159265
 #define ALIEN_NUMBER 3
@@ -44,6 +45,7 @@ private:
 	GameObject* playerGO;
 	GameObject* coatGuyGO;
 	GameObject* chaoGO;
+	GameObject* finalBossGo;
 	Player* player;
 
 	bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;

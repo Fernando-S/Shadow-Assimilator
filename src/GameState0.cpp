@@ -106,7 +106,19 @@ void GameState0::LoadAssets() {
 	objectArray.emplace_back(surpriseGO);
 	surpriseGO->render = false;
 
+	///////////////////////////////////
+	//		Carrega Final BOSS		//
+	/////////////////////////////////
+	/*
+	auto finalBossGO = new GameObject();
+	auto finalBoss = new FinalBoss(*finalBossGO);
 
+	finalBossGO->AddComponent(finalBoss);
+	finalBossGO->box.x = 800;
+	finalBossGO->box.y = 800 - finalBossGO->box.h;
+
+	objectArray.emplace_back(finalBossGO);
+	*/
 	///////////////////////////////////
 	//		Carrega um Robo			//
 	/////////////////////////////////
