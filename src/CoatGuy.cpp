@@ -246,11 +246,12 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////
 		//		DOUBLE JUMP		//
 		/////////////////////////
-		if (airbone && !inputManager.IsKeyDown(UP_ARROW_KEY) && jumped/*&& (Ground == 0) && (DJ == 1) && (wallAUX == 0)*/) {
+		/*
+		if (airbone && !inputManager.IsKeyDown(UP_ARROW_KEY) && jumped/*&& (Ground == 0) && (DJ == 1) && (wallAUX == 0)/) {
 			doubleJump = true; // setar para 0 quando encostar no chão
 		}
 
-		if (doubleJump && airbone && inputManager.IsKeyDown(UP_ARROW_KEY) /*&& (wallAUX == 0)*/ && DJTimer.Get() > 0.3) {
+		if (doubleJump && airbone && inputManager.IsKeyDown(UP_ARROW_KEY) /*&& (wallAUX == 0)/ && DJTimer.Get() > 0.3) {
 			Fall = 0;
 			Ground = 0;
 			verticalSpeed = COATGUY_JUMP * 0.7;
@@ -280,7 +281,7 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////
 		//		WALL SLIDE		//
 		/////////////////////////
-
+		/*
 		// Wall Slide A DIREITA
 		if (airbone && !tchfloor && WallgrabR) {
 			if (wallAUX < 0) {
@@ -328,10 +329,12 @@ void CoatGuy::Update(float dt) {
 			Jump = 0;
 			Setidle = false;
 		}
+		*/
 
 		///////////////////////////
 		//		WALL JUMP		//
 		/////////////////////////
+		/*
 		//NA PAREDE DA DIREITA
 		if (WallgrabR && inputManager.IsKeyDown(RIGHT_ARROW_KEY) && inputManager.IsKeyDown(UP_ARROW_KEY) && (wallAUX > 0) && (WallJumpTimer.Get() > 0.18)) {
 			DJTimer.Restart();
@@ -358,7 +361,7 @@ void CoatGuy::Update(float dt) {
 		if (Jump == 2) {
 			WallJumpTimer.Restart();
 		}
-
+		*/
 
 		///////////////////////
 		//		JUMP		//
@@ -498,217 +501,7 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////////////////////////////////////////////
 		//									SPRITES									//
 		/////////////////////////////////////////////////////////////////////////////
-		
-		// Tentativa de outra forma
-		/*
-		/////////////////////
-		//		Idle	  //
-		///////////////////
-		if (Setidle) {
-			
-			//	PARA A DIREITA
-			if (facingR && !spriteAlreadyIdleR) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/vilao_idle.png", 10, 0.09);
-				associated.AddComponent(sprite);
-
-			//	facingR = true;
-			//	facingL = false;
-
-				// Arruma a posicao e hitbox do CoatGuy ao mudar de Corrida Direita >> Idle Direita
-				if(Ground > 2)
-					associated.box.x += associated.box.w / 2;
-
-
-				/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
-				// arruma a posicao para o sprite do coatGuy idle aparecer do pe mais a frente apos a corrida
-				//associated.box.x += associated.box.w;//121;
-				
-				spriteAlreadyIdleL = false;
-				spriteAlreadyIdleR = true;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-			}
-			// PARA A ESQUERDA
-			else if (facingL && !spriteAlreadyIdleL) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/vilao_idle_inv.png", 10, 0.09);
-				associated.AddComponent(sprite);
-
-			//	facingR = false;
-			//	facingL = true;
-
-
-				if(Ground > 2)
-					associated.box.x += associated.box.w / 2;
-
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = true;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-			}
-		}
-		
-
-		///////////////////////////
-		//		Corrida			//
-		////////////////////////
-		if (Setrun && tchfloor && !airbone) {
-
-			// PARA A DIREITA
-			if (facingR && !spriteAlreadyRunR) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/vilao_corrida.png", 10, 0.09);
-				associated.AddComponent(sprite);
-			//	facingR = true;
-			//	facingL = false;
-				Run++;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = true;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
-			}
-			// PARA A ESQUERDA
-			else if (facingL && !spriteAlreadyRunL) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/vilao_corrida_inv.png", 10, 0.09);
-				associated.AddComponent(sprite);
-			//	facingR = false;
-			//	facingL = true;
-				Run--;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = true;
-				spriteAlreadyRunR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
-			}
-
-		}
-
-
-		///////////////////////
-		//		Pulo		//
-		/////////////////////
-		if (SetJump && !doubleJump /*jumped  && airbone && !tchfloor && !gforce/) {
-
-			// PARA A DIREITA
-			if (facingR /*&& !spriteAlreadyJumpR/) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/prot_pulo.png", 8, 0.1);
-				associated.AddComponent(sprite);
-				associated.box.x -= 10;
-			//	facingR = true;
-			//	facingL = false;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = false;
-				spriteAlreadyJumpR = true;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
-			}
-			// PARA A ESQUERDA
-			else if (facingL /*&& !spriteAlreadyJumpL/) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/prot_pulo_inv.png", 8, 0.1);
-				associated.AddComponent(sprite);
-				associated.box.x -= 10;
-			//	facingR = false;
-			//	facingL = true;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = true;
-				spriteAlreadyJumpR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
-			}
-		}
-
-		/*
-		///////////////////////////
-		//		Pulo Duplo		//
-		/////////////////////////
-		if (/*airbone && !SetJump && !doubleJump/ foguete) {
-			if (facingR) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/prot_puloduplo.png", 4, 0.1);
-				associated.AddComponent(sprite);
-			//	facingR = true;
-			//	facingL = false;
-				DJ++;
-
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = false;
-				spriteAlreadyJumpR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = true;
-			}
-			else if (facingL) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/prot_puloduplo_inv.png", 4, 0.1);
-				associated.AddComponent(sprite);
-				associated.box.x -= 10;
-			//	facingR = false;
-			//	facingL = true;
-				DJ++;
-
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = false;
-				spriteAlreadyJumpR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
-			}
-		}
-
-
-		///////////////////////
-		//		QUEDA		//
-		/////////////////////
-		if (gforce && !tchfloor && airbone) {
-			
-			if (facingR) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/prot_queda.png", 6, 0.1);
-				associated.AddComponent(sprite);
-				associated.box.x += 20;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = false;
-				spriteAlreadyJumpR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
-			}
-			else if (facingL) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/prot_queda_inv.png", 6, 0.1);
-				associated.AddComponent(sprite);
-				associated.box.x += 20;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = false;
-				spriteAlreadyJumpR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
-			}
-		}*/
-
-
+	
 
 		///////////////////////////////////////
 		//		Idle para a direita			//
@@ -791,7 +584,7 @@ void CoatGuy::Update(float dt) {
 		/////////////////////////////////
 		if ((((Run >= 0) && (Jump == 1)) || ((Jump > 1) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo.png", 8, 0.1);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_pulo.png", 4, 0.15);
 			associated.AddComponent(sprite);
 			associated.box.x -= 10;
 			facingR = true;
@@ -819,7 +612,7 @@ void CoatGuy::Update(float dt) {
 		/////////////////////////////////////
 		if ((((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo_inv.png", 8, 0.1);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_pulo_inv.png", 4, 0.15);
 			associated.AddComponent(sprite);
 			associated.box.x -= 10;
 			facingR = false;
@@ -839,7 +632,7 @@ void CoatGuy::Update(float dt) {
 			Jump++;
 		}
 		
-
+		/*
 		///////////////////////////////////////////
 		//		Pulo Duplo para a direita		//
 		/////////////////////////////////////////
@@ -927,7 +720,7 @@ void CoatGuy::Update(float dt) {
 			spriteAlreadyDJR = false;
 
 		}
-
+		*/
 		
 		///////////////////////
 		//		QUEDA		//
@@ -937,7 +730,7 @@ void CoatGuy::Update(float dt) {
 			// QUEDA PRA DIREITA
 			if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1))) && (wallAUX == 0)) {
 				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_queda.png", 6, 0.1);
+				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_queda.png", 4, 0.15);
 				associated.AddComponent(sprite);
 				associated.box.x += 20;
 				facingR = true;
@@ -956,7 +749,7 @@ void CoatGuy::Update(float dt) {
 			// QUEDA PRA ESQUERDA
 			if ((((Fall == 1) && (Run < 0)) || ((Fall > 0) && (Run == -1))) && (wallAUX == 0)) {
 				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_queda_inv.png", 6, 0.1);
+				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_queda_inv.png", 4, 0.15);
 				associated.AddComponent(sprite);
 				associated.box.x += 20;
 				facingR = false;
@@ -988,6 +781,8 @@ void CoatGuy::Update(float dt) {
 		///////////////////////
 		//		DASH		//
 		/////////////////////
+		/*
+
 		// DIREITA
 		if (inputManager.IsKeyDown(E_KEY) && DashCooldownTimer.Get() > 1.8) {
 			speedH = { 1, 0 };
@@ -1003,6 +798,8 @@ void CoatGuy::Update(float dt) {
 			associated.box += speedH * linearSpeed*dt;
 			DashCooldownTimer.Restart();
 		}
+		*/
+
 
 		///////////////////////////////////
 		//        ATAQUE BASICO			//
