@@ -57,9 +57,9 @@ void CreditsState::Update(float dt) {
 	auto& inputManager = InputManager::GetInstance();
 
 	// Seta o quitRequested ao fechar o jogo ou apertar ESC
-	quitRequested = inputManager.KeyPress(ESCAPE_KEY) || inputManager.QuitRequested();
+	quitRequested = /*inputManager.KeyPress(ESCAPE_KEY) ||*/ inputManager.QuitRequested();
 
-	if (inputManager.KeyPress(BACKSPACE_KEY))
+	if (inputManager.KeyPress(ESCAPE_KEY))
 		popRequested = true;
 
 	UpdateArray(dt);	// executa o update em cada um dos objetos no objectArray

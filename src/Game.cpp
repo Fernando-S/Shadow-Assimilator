@@ -134,7 +134,7 @@ Game::Game(const char* title, int width, int height) {
 	}
 	
 	// Cria uma nova janela
-	window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);		// title, pos x, pos y, width, height, fullscreen
+	window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, /*SDL_WINDOW_FULLSCREEN_DESKTOP*/ 0);		// title, pos x, pos y, width, height, fullscreen
 	if (!window) {
 		std::cerr << "ERROR: impossible to create window" << std::endl;
 		exit(1);

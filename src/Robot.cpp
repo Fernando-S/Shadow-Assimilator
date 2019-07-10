@@ -236,7 +236,7 @@ void Robot::Update(float dt) {
 		///////////////////////////////////////////////////////////////////
 		//		IA do Robo espera um tempo parado e muda de lado		//
 		/////////////////////////////////////////////////////////////////
-		if (idle && changeSideTimer.Get() > 1.2 && !shooting) {
+		if (idle && changeSideTimer.Get() > 1.2 && !shooting || patrol) {
 			//cout << "ENTRA NA CONDICAO DO TEMPO\n";
 
 			// SETA PARA CORRER PARA A ESQUERDA SE ESTA PARADO OLHANDO PARA A DIREITA
@@ -252,7 +252,8 @@ void Robot::Update(float dt) {
 				//cout << "CORRE PARA A DIREITA\n";
 			}
 			idle = false;
-
+			patrol = false;
+			cout << "PATRULHANDO\n";
 		}
 
 		// Tentativa de IA apenas quando esta no chao
@@ -260,8 +261,11 @@ void Robot::Update(float dt) {
 
 			if (shooting && recoilTimer.Get() > 1.2) {
 				//idle = false;
+				idle = true;
 				shooting = false;
 				alreadyShot = false;
+				patrol = true;
+				cout << "ENTRA AQUI\n";
 			}
 
 
@@ -329,147 +333,7 @@ void Robot::Update(float dt) {
 			verticalSpeed = -800;
 		}
 
-		/*
-		///////////////////////////
-		//		DOUBLE JUMP		//
-		/////////////////////////
-		if (airbone && !inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && jumped/*&& (Ground == 0) && (DJ == 1) && (wallAUX == 0)/) {
-			doubleJump = true; // setar para 0 quando encostar no chão
-		}
 
-		if (doubleJump && airbone && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) /*&& (wallAUX == 0)/ && DJTimer.Get() > 0.3) {
-			Fall = 0;
-			Ground = 0;
-			verticalSpeed = ROBOT_JUMP * 0.7;
-			doubleJump = false;
-			Setidle = false;
-			foguete = true;
-			jumped = false;
-
-			DJ++;
-		}
-		/*
-		if (airbone && !inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (Ground == 0) && (DJ == 1) && (wallAUX == 0)) {
-			doubleJump = true; // setar para 0 quando encostar no chão
-		}
-
-		if (doubleJump && airbone && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (wallAUX == 0) && DJTimer.Get() > 0.3) {
-			Fall = 0;
-			Ground = 0;
-			verticalSpeed = ROBOT_JUMP * 0.7;
-			doubleJump = false;
-			Setidle = false;
-			foguete = true;
-			DJ++;
-		}
-		*/
-		/*
-		///////////////////////////
-		//		WALL SLIDE		//
-		/////////////////////////
-
-		// Wall Slide A DIREITA
-		if (airbone && !tchfloor && WallgrabR) {
-			if (wallAUX < 0) {
-				wallAUX = 0;
-			}
-			if (wallAUX < 10) {
-				wallAUX++;
-			}
-
-			if (inputManager.IsKeyDown(NUMPAD_SIX_KEY) && (linearSpeed != 0)) {
-				WallgrabR = false;		// QUEDA
-				wallAUX = 0;
-			}
-
-			if (inputManager.IsKeyDown(NUMPAD_SIX_KEY) && (wallAUX > 0)) {
-				verticalSpeed = -30;		// QUEDA
-
-			}
-			Fall = 0;
-			Ground = 0;
-			Jump = 0;
-			Setidle = false;
-		}
-		// Wall Slide A ESQUERDA
-		else if (airbone && !tchfloor && WallgrabL) {
-			if (wallAUX > 0) {
-				wallAUX = 0;
-			}
-			if (wallAUX > -10) {
-				wallAUX--;
-			}
-
-			if (inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && ((linearSpeed != 0) || (linearSpeed != (-0)))) {
-				WallgrabL = false;		// QUEDA
-				wallAUX = 0;
-			}
-
-			if (inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && (wallAUX < 0)) {
-				verticalSpeed = -30;		// QUEDA
-				linearSpeed -= accelSpeedGain;
-			}
-
-			Fall = 0;
-			Ground = 0;
-			Jump = 0;
-			Setidle = false;
-		}
-
-		///////////////////////////
-		//		WALL JUMP		//
-		/////////////////////////
-		//NA PAREDE DA DIREITA
-		if (WallgrabR && inputManager.IsKeyDown(NUMPAD_SIX_KEY) && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (wallAUX > 0) && (WallJumpTimer.Get() > 0.18)) {
-			DJTimer.Restart();
-			verticalSpeed += 500;
-			speedH = { 1, 0 };
-			oppositeSpeed += 250;
-			wallAUX = 0;
-			Jump++;
-			Setidle = false;
-		}
-
-		//NA PAREDE DA ESQUERDA
-		if (WallgrabL && inputManager.IsKeyDown(NUMPAD_FOUR_KEY) && inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && (wallAUX < 0) && (WallJumpTimer.Get() > 0.18)) {
-			DJTimer.Restart();
-			verticalSpeed += 500;
-			speedH = { -1, 0 };
-			oppositeSpeed += 250;
-			associated.box += speedH * linearSpeed*dt;
-			wallAUX = 0;
-			Jump++;
-			Setidle = false;
-		}
-
-		if (Jump == 2) {
-			WallJumpTimer.Restart();
-		}
-
-
-		///////////////////////
-		//		JUMP		//
-		/////////////////////
-		if (airbone) {
-			Ground = 0;
-			SetJump = false;
-			Setidle = false;
-		}
-
-		if (inputManager.IsKeyDown(NUMPAD_EIGHT_KEY) && tchfloor && !airbone && (Jump == 0)) {
-			//this->associated.box.y -= 10;
-			verticalSpeed = ROBOT_JUMP;
-			tchfloor = false;
-			SetJump = true;
-			airbone = true;
-			Jump++;
-			Ground = 0;
-			DJTimer.Restart();
-			Setidle = false;
-			jumped = true;
-			doubleJump = false;
-		}
-		else*/
 		///////////////////////////////////////////
 		//		CORRIDA PARA A ESQUERDA			//
 		/////////////////////////////////////////
@@ -660,102 +524,6 @@ void Robot::Update(float dt) {
 
 		}
 
-		/*
-		///////////////////////////////////
-		//		Pulo para a direita		//
-		/////////////////////////////////
-		if ((((Run >= 0) && (Jump == 1)) || ((Jump > 1) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo.png", 8, 0.1);
-			associated.AddComponent(sprite);
-			associated.box.x -= 10;
-			facingR = true;
-			facingL = false;
-
-
-			if (Jump == 1) {
-				if ((DJ == 0) && (wallAUX == 0)) {
-					DJ++;
-				}
-				Jump++;
-			}
-
-		}
-
-
-		///////////////////////////////////////
-		//		Pulo para a esquerda		//
-		/////////////////////////////////////
-		if ((((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_pulo_inv.png", 8, 0.1);
-			associated.AddComponent(sprite);
-			associated.box.x -= 10;
-			facingR = false;
-			facingL = true;
-
-		}
-		if (Jump == 1) {
-			if ((DJ == 0) && (wallAUX == 0)) {
-				DJ++;
-			}
-			Jump++;
-		}
-
-
-		///////////////////////////////////////////
-		//		Pulo Duplo para a direita		//
-		/////////////////////////////////////////
-		if ((((Run >= 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo.png", 4, 0.1);
-			associated.AddComponent(sprite);
-			facingR = true;
-			facingL = false;
-			DJ++;
-		}
-
-
-		///////////////////////////////////////////
-		//		Pulo Duplo para a esquerda		//
-		/////////////////////////////////////////
-		if ((((Run < 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo_inv.png", 4, 0.1);
-			associated.AddComponent(sprite);
-			//associated.box.x -= 10;
-			facingR = false;
-			facingL = true;
-			DJ++;					   
-		}
-
-
-		///////////////////////////////////
-		//		WallSlide A DIREITA		//
-		/////////////////////////////////
-		if ((wallAUX == 1) && (Ground == 0) && (Run > 0)) {
-
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_desliza_inv.png", 8, 0.1);
-			associated.AddComponent(sprite);
-			associated.box.x += 70;
-			facingR = false;
-			facingL = true;
-		}
-
-
-		///////////////////////////////////////
-		//		WallSlide A ESQUERDA		//
-		/////////////////////////////////////
-		if ((wallAUX == -1) && (Ground == 0) && (Run < 0)) {
-
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_desliza.png", 8, 0.1);
-			associated.AddComponent(sprite);
-			facingR = true;
-			facingL = false;
-		}
-		*/
 		
 		///////////////////////
 		//		QUEDA		//
@@ -797,53 +565,12 @@ void Robot::Update(float dt) {
 			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
 			ShootCooldownTimer.Restart();
 		}
-		/*
-		///////////////////////
-		//		DASH		//
-		/////////////////////
-		// DIREITA
-		if (inputManager.IsKeyDown(E_KEY) && DashCooldownTimer.Get() > 1.8) {
-			speedH = { 1, 0 };
-			linearSpeed += 1000;
-			associated.box += speedH * linearSpeed*dt;
-			DashCooldownTimer.Restart();
-		}
 		
-		// ESQUERDA
-		if (inputManager.IsKeyDown(Q_KEY) && DashCooldownTimer.Get() > 1.8) {
-			speedH = { -1, 0 };
-			linearSpeed += 1000;
-			associated.box += speedH * linearSpeed*dt;
-			DashCooldownTimer.Restart();
-		}
 
-		///////////////////////////////////
-		//        ATAQUE BASICO			//
-		/////////////////////////////////
-		if (inputManager.KeyPress(K_KEY)) {
-			isAtacking = true;
-		}
-		else
-			isAtacking = false;
-		*/
 		///////////////////////////////////////////////////////////////////////////////
 		//							EFEITOS SONOROS									//
 		/////////////////////////////////////////////////////////////////////////////
-		/*
-		///////////////////////////
-		//		SFX DE PULO		//
-		/////////////////////////
-		if (SetJump) {
-			if (robotSFX->IsPlaying()) {
-				robotSFX->Stop();
-			}
-			associated.RemoveComponent(robotSFX);
-			robotSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
-			associated.AddComponent(robotSFX);
-			robotSFX->Play();
-			runningSound = false;
-		}
-		*/
+
 		///////////////////////////////
 		//		SFX DE CORRIDA		//
 		/////////////////////////////
@@ -853,7 +580,6 @@ void Robot::Update(float dt) {
 					robotSFX->Stop();
 				}
 				associated.RemoveComponent(robotSFX);
-				//robotSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
 				robotSFX = new Sound(associated, "./assets/audio/SFX/CorridaCidade(Assim.)1.wav");
 				associated.AddComponent(robotSFX);
 				runningSound = true;
@@ -864,27 +590,6 @@ void Robot::Update(float dt) {
 				}
 			}
 		}
-		/*
-		///////////////////////////////
-		//		SFX DE WALLSLIDE	//
-		/////////////////////////////
-		else if (airbone && !tchfloor && (WallgrabL || WallgrabR)) {
-			if (!wallSlideSound) {
-				if (robotSFX->IsPlaying()) {
-					robotSFX->Stop();
-				}
-				associated.RemoveComponent(robotSFX);
-				robotSFX = new Sound(associated, "./assets/audio/SFX/ArrastarPrincipal(Assim.)2.wav");
-				associated.AddComponent(robotSFX);
-				wallSlideSound = true;
-			}
-			else {
-				if (!robotSFX->IsPlaying()) {
-					robotSFX->Play();
-				}
-			}
-		}
-		*/
 		/*
 		///////////////////////////////
 		//		SFX DE POUSO		//
@@ -901,21 +606,7 @@ void Robot::Update(float dt) {
 			pouso = false;
 		}
 		*/
-		/*
-		///////////////////////////////////
-		//		SFX DE PULO DUPLO		//
-		/////////////////////////////////
-		else if (foguete) {
-			if (robotSFX->IsPlaying()) {
-				robotSFX->Stop();
-			}
-			associated.RemoveComponent(robotSFX);
-			robotSFX = new Sound(associated, "./assets/audio/SFX/Foguete2.1(Assim.).wav");
-			associated.AddComponent(robotSFX);
-			robotSFX->Play();
-			foguete = false;
-		}
-		*/
+	
 	}
 
 }

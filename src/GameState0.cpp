@@ -346,16 +346,21 @@ void GameState0::Update(float dt){
 
 
 	// Tela de GAME OVER
-	if (!Player::player) {
+	if (!Player::player && playerGO->IsDead()) {
 		GameData::playerVictory = false;
 		popRequested = true;
 		Game::GetInstance().Push(new EndState());
-	}	// Tela de WIN
+	}	
+	// Tela de WIN
 	/// todo - colocar uma condicao de vitoria
-	else if (/*Alien::alienCount == 0*/inputManager.KeyPress(BACKSPACE_KEY)) {
+	else if (inputManager.KeyPress(BACKSPACE_KEY)) {
 		GameData::playerVictory = true;
 		popRequested = true;
 		Game::GetInstance().Push(new EndState());
+	}
+	else if (inputManager.KeyPress(NUMPAD_NINE_KEY)) {	
+		//popRequested = true;		/// todo - comentar se for poder voltar nas telas
+		Game::GetInstance().Push(new GameState1());
 	}
 	
 }

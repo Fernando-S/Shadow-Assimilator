@@ -10,9 +10,16 @@ TitleState::~TitleState() {
 }
 
 void TitleState::LoadAssets() {
+
+	/////////////////////////////////////////////
+	//	  Carrega a Musica e aperta o play	  //
+	///////////////////////////////////////////
+	backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow_Assimilator_demo.ogg");
+	backgroundMusic.Play();
+
 	// Background de titulo
-	auto bgGO = new GameObject();
-	bgGO->box = { 0, -36 };
+	bgGO = new GameObject();
+	bgGO->box = { 0, /*-36 */ 0 };		/// todo - mudar se nao for fullscreen
 	auto bg = new Sprite(*bgGO, "./assets/img/Menu/menu.png");
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
@@ -30,38 +37,87 @@ void TitleState::LoadAssets() {
 
 
 	// Botao de START
-	auto startButtonGO = new GameObject();
+	startButtonGO = new GameObject();
 	auto startButton = new Sprite(*startButtonGO, "./assets/img/Menu/menu_start.png");
 	startButtonGO->AddComponent(startButton);
 	startButtonGO->box.h = startButton->GetHeight();
 	startButtonGO->box.w = startButton->GetWidth();
-	startButtonGO->box.PlaceCenter( {Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 4,
-									 Game::GetInstance().GetHeight() / 2.0f + 3 * startButtonGO->box.h + 11} );
+	startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 4,
+										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 7 });
 	objectArray.emplace_back(startButtonGO);
 
 	// Botao de CREDITS
-	auto creditsButtonGO = new GameObject();
+	creditsButtonGO = new GameObject();
 	auto creditsButton = new Sprite(*creditsButtonGO, "./assets/img/Menu/credits.png");
 	creditsButtonGO->AddComponent(creditsButton);
 	creditsButtonGO->box.h = creditsButton->GetHeight();
 	creditsButtonGO->box.w = creditsButton->GetWidth();
-	creditsButtonGO->box.PlaceCenter(  {Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
-										Game::GetInstance().GetHeight() / 2.0f + 4 * creditsButtonGO->box.h + 7} );
+	creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
+											bgGO->box.Center().y + 4 * creditsButtonGO->box.h + 2 });
 	objectArray.emplace_back(creditsButtonGO);
 
+	hoverSound = new Sound(*startButtonGO, "./assets/audio/SFX/DashPrincipal(Assim.)1.wav");
+	clickSound = new Sound(*startButtonGO, "./assets/audio/SFX/Hit_Fraco.wav");
+	
+	startButtonGO->AddComponent(hoverSound);
+	startButtonGO->AddComponent(clickSound);
+
+	creditsButtonGO->AddComponent(hoverSound);
+	creditsButtonGO->AddComponent(clickSound);
 
 }
 
 void TitleState::Update(float dt) {
 	auto& inputManager = InputManager::GetInstance();
+	mousePos = Vec2(inputManager.GetMouseX(), inputManager.GetMouseY());
+
+	if (GameData::backToMenuScreen) {
+		backgroundMusic.Play();
+		GameData::backToMenuScreen = false;
+	}
 
 	// Seta o quitRequested ao fechar o jogo ou apertar ESC
 	quitRequested = inputManager.KeyPress(ESCAPE_KEY) || inputManager.QuitRequested();
 
-	if (inputManager.KeyPress(ENTER_KEY) || inputManager.KeyPress(NUMPAD_ENTER_KEY))
-		Game::GetInstance().Push(new GameState0);
-	else if (inputManager.KeyPress(BACKSPACE_KEY))
-		Game::GetInstance().Push(new CreditsState);
+
+	if (startButtonGO->box.Contains(mousePos)) {
+		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 2,
+										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 6});
+		
+		if(startHoverSound)
+			hoverSound->Play();
+		startHoverSound = false;
+
+		if (inputManager.MousePress(LEFT_MOUSE_BUTTON)) {
+			backgroundMusic.Stop();
+			clickSound->Play();
+			Game::GetInstance().Push(new GameState0);
+		}
+	}
+	else {
+		startHoverSound = true;
+		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 4,
+										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 7});
+	}
+
+	if (creditsButtonGO->box.Contains(mousePos)) {
+		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 2,
+											 bgGO->box.Center().y + 4 * creditsButtonGO->box.h + 1});
+
+		if (creditsHoverSound)
+			hoverSound->Play();
+		creditsHoverSound = false;
+
+		if (inputManager.MousePress(LEFT_MOUSE_BUTTON)) {
+			clickSound->Play();
+			Game::GetInstance().Push(new CreditsState);
+		}
+	}
+	else {
+		creditsHoverSound = true;
+		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
+											bgGO->box.Center().y + 4 * creditsButtonGO->box.h + 2});
+	}
 
 	UpdateArray(dt);	// executa o update em cada um dos objetos no objectArray
 }
