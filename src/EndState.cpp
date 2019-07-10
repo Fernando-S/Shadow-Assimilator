@@ -3,19 +3,29 @@
 
 
 EndState::EndState() {
+
+}
+
+EndState::~EndState() {
+	objectArray.clear();				// Esvazia o vetor de objetos
+}
+
+void EndState::LoadAssets() {
 	auto bgGO = new GameObject();
 	bgGO->box = { 0,0 };
 	Sprite* bg = nullptr;
 
 	if (GameData::playerVictory) {
-		//backgroundMusic = Music("./assets/audio/endStateWin.ogg");
-		//backgroundMusic.Play();
+		backgroundMusic = Music("./assets/audio/soundtrack/shadowWIN.ogg");
+		//backgroundMusic.Play();			// Toca em loop
+		backgroundMusic.Play(1);			// Toca soh uma vez
 
 		bg = new Sprite(*bgGO, "./assets/img/win.jpg");
 	}
 	else {
-		//backgroundMusic = Music("./assets/audio/endStateLose.ogg");
-		//backgroundMusic.Play();
+		backgroundMusic = Music("./assets/audio/soundtrack/shadowLOSS.ogg");
+		//backgroundMusic.Play();			// Toca em loop
+		backgroundMusic.Play(1);			// Toca soh uma vez
 
 		bg = new Sprite(*bgGO, "./assets/img/lose.jpg");
 	}
@@ -25,19 +35,11 @@ EndState::EndState() {
 
 	// criacao do texto de "press to play"
 	auto textGO = new GameObject();
-//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
 	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 40, Text::SOLID, "Press ENTER to play again, or ESC to exit", { 255, 150, 0, 255 }/*textColor/*, 0.7*/);
 	textGO->AddComponent(text);
 	textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, Game::GetInstance().GetHeight() / 2.0f });
 	objectArray.emplace_back(textGO);
-}
-
-EndState::~EndState() {
-	objectArray.clear();				// Esvazia o vetor de objetos
-}
-
-void EndState::LoadAssets() {
-
 }
 
 void EndState::Update(float dt) {
