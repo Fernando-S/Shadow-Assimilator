@@ -107,7 +107,7 @@ private:
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
 		tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
 		SetJump = false, runningSound = false, wallSlideSound = false, deathSound = false, dead = false, notDJ = false, pouso = false, foguete = false,
-		jumped = false, gforce = false, moveDireita = false, moveEsquerda = false, idle = false, shooting = false, alreadyShot = false;
+		jumped = false, gforce = false, moveDireita = false, moveEsquerda = false, idle = false, shooting = false, alreadyShot = false, patrol = false;
 
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0;
 	int contadorW1 = 0, contadorW2 = 0;

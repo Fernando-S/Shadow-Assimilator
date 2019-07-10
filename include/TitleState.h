@@ -23,6 +23,16 @@ public:
 	void Pause() override;
 	void Resume() override;
 	
+private:
+	GameObject* startButtonGO;
+	GameObject* creditsButtonGO;
+	GameObject* bgGO;
+	Vec2 mousePos = { 0, 0 };
+	Music backgroundMusic;
+	Sound* hoverSound;
+	Sound* clickSound;
+	bool startHoverSound = false, creditsHoverSound = false;
+
 };
 
 #endif	//TITLESTATE_H
