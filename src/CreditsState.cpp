@@ -1,15 +1,16 @@
-#include "TitleState.h"
+#include "CreditsState.h"
 #include "Game.h"
 
-TitleState::TitleState() {
+CreditsState::CreditsState() {
 
 }
 
-TitleState::~TitleState() {
+CreditsState::~CreditsState() {
 	objectArray.clear();				// Esvazia o vetor de objetos
 }
 
-void TitleState::LoadAssets() {
+void CreditsState::LoadAssets() {
+	/*
 	// Background de titulo
 	auto bgGO = new GameObject();
 	bgGO->box = { 0, -36 };
@@ -21,7 +22,7 @@ void TitleState::LoadAssets() {
 	auto textGO = new GameObject();
 	SDL_Color textColor = { 120, 120, 255, 255 };		// R, G, B, A
 	// todo - colocar ultimo parametro para ser o tempo de pisca pisca
-	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ENTER to play!", textColor/*, 0.7*/);
+	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ENTER to play!", textColor/*, 0.7/);
 	textGO->AddComponent(text);
 
 	// Posiciona o texto
@@ -48,37 +49,36 @@ void TitleState::LoadAssets() {
 	creditsButtonGO->box.PlaceCenter(  {Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
 										Game::GetInstance().GetHeight() / 2.0f + 4 * creditsButtonGO->box.h + 7} );
 	objectArray.emplace_back(creditsButtonGO);
-
+	*/
 
 }
 
-void TitleState::Update(float dt) {
+void CreditsState::Update(float dt) {
 	auto& inputManager = InputManager::GetInstance();
 
 	// Seta o quitRequested ao fechar o jogo ou apertar ESC
 	quitRequested = inputManager.KeyPress(ESCAPE_KEY) || inputManager.QuitRequested();
 
-	if (inputManager.KeyPress(ENTER_KEY) || inputManager.KeyPress(NUMPAD_ENTER_KEY))
-		Game::GetInstance().Push(new GameState0);
-	else if (inputManager.KeyPress(BACKSPACE_KEY))
-		Game::GetInstance().Push(new CreditsState);
+	if (inputManager.KeyPress(BACKSPACE_KEY))
+		popRequested = true;
 
 	UpdateArray(dt);	// executa o update em cada um dos objetos no objectArray
+	
 }
 
-void TitleState::Render() {
+void CreditsState::Render() {
 	RenderArray();					// Renderiza cada GameObject no objectArray
 }
 
-void TitleState::Start() {
+void CreditsState::Start() {
 	LoadAssets();
 	StartArray();					// Da Start em cada GameObject no objectArray
 }
 
-void TitleState::Pause() {
+void CreditsState::Pause() {
 
 }
 
-void TitleState::Resume() {
+void CreditsState::Resume() {
 	Camera::pos = { 0,0 };
 }
