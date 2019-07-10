@@ -65,6 +65,13 @@ void GameState0::LoadAssets() {
 	prediosGO->AddComponent(prediosBackground);
 	objectArray.emplace_back(prediosGO);
 
+	// Teste do novo TileSet
+	chaoGO->box.x = 0;
+	chaoGO->box.y = 800;
+
+	// Carrega os tiles que colidem
+	LoadLevel();
+
 	// Detalhes dos predios
 	auto detalhesGO = new GameObject();
 	auto tileSet_Detalhes = new TileSet(64, 64, "./assets/img/Level0/tileENFEITES001.png");
@@ -82,25 +89,6 @@ void GameState0::LoadAssets() {
 
 	detalhesGO->AddComponent(detalhesBackground);
 	objectArray.emplace_back(detalhesGO);
-	
-
-
-
-
-	
-	// Teste do novo TileSet
-	chaoGO->box.x = 0;
-	chaoGO->box.y = 800;
-
-	LoadLevel();
-
-	auto colidemGO = new GameObject();
-	colidemGO->box.x = 0;
-	colidemGO->box.y = -288;
-
-	auto backgroundGO = new GameObject();
-	backgroundGO->box.x = 0;
-	backgroundGO->box.y = -352;
 	
 
 	////////////////////////////////
@@ -389,19 +377,368 @@ void GameState0::LoadLevel() {
 	//auto tileSet = new TileSet(64, 64, "./assets/img/tilesaaaaa.png");
 	//auto Chao = new TileMap(*chaoGO, "./assets/map/Tile31_Chao_pra_caralho.txt", tileSet);
 
-	auto tileSet_Chao = new TileSet(64, 64, "./assets/img/Level0/tile001.png");
-	auto Chao = new TileMap(*chaoGO, "./assets/map/Level0/TileMap_Chao.txt", tileSet_Chao);
+	auto tileSet = new TileSet(64, 64, "./assets/img/Level0/tile001.png");
+	auto Chao = new TileMap(*chaoGO, "./assets/map/Level0/TileMap_Chao.txt", tileSet);
 
 	Chao->colide = true;
 
 	//chaoGO->box.w = Chao->GetWidth() * tileSet->GetTileWidth();
 	//chaoGO->box.h = Chao->GetHeight() * tileSet->GetTileHeight();
 
-	chaoGO->box.w = Chao->GetWidth() * tileSet_Chao->GetTileWidth();
-	chaoGO->box.h = Chao->GetHeight() * tileSet_Chao->GetTileHeight();
+	chaoGO->box.w = Chao->GetWidth() * tileSet->GetTileWidth();
+	chaoGO->box.h = Chao->GetHeight() * tileSet->GetTileHeight();
 
 	chaoGO->AddComponent(Chao);
 	objectArray.emplace_back(chaoGO);
+	
+
+	///////////////////////////////
+	//		MAXIMUM EFFORT		//
+	/////////////////////////////
+	auto Tile00_ColunaGO = new GameObject();
+	Tile00_ColunaGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile00_ColunaGO->box.y = (-21) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile00_Coluna = new TileMap(*Tile00_ColunaGO, "./assets/map/Level0/Tile00_Coluna.txt", tileSet);
+	tileMap_Tile00_Coluna->colide = true;
+
+	Tile00_ColunaGO->box.w = tileMap_Tile00_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile00_ColunaGO->box.h = tileMap_Tile00_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile00_ColunaGO->AddComponent(tileMap_Tile00_Coluna);
+	objectArray.emplace_back(Tile00_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile01_ColunaGO = new GameObject();
+	Tile01_ColunaGO->box.x = (12) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile01_ColunaGO->box.y = (-21) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile01_Coluna = new TileMap(*Tile01_ColunaGO, "./assets/map/Level0/Tile01_Coluna.txt", tileSet);
+	tileMap_Tile01_Coluna->colide = true;
+
+	Tile01_ColunaGO->box.w = tileMap_Tile01_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile01_ColunaGO->box.h = tileMap_Tile01_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile01_ColunaGO->AddComponent(tileMap_Tile01_Coluna);
+	objectArray.emplace_back(Tile01_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile02_ColunaGO = new GameObject();
+	Tile02_ColunaGO->box.x = (33) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile02_ColunaGO->box.y = (-13) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile02_Coluna = new TileMap(*Tile02_ColunaGO, "./assets/map/Level0/Tile02_Coluna.txt", tileSet);
+	tileMap_Tile02_Coluna->colide = true;
+
+	Tile02_ColunaGO->box.w = tileMap_Tile02_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile02_ColunaGO->box.h = tileMap_Tile02_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile02_ColunaGO->AddComponent(tileMap_Tile02_Coluna);
+	objectArray.emplace_back(Tile02_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile03_ColunaGO = new GameObject();
+	Tile03_ColunaGO->box.x = (42) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile03_ColunaGO->box.y = (-13) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile03_Coluna = new TileMap(*Tile03_ColunaGO, "./assets/map/Level0/Tile03_Coluna.txt", tileSet);
+	tileMap_Tile03_Coluna->colide = true;
+
+	Tile03_ColunaGO->box.w = tileMap_Tile03_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile03_ColunaGO->box.h = tileMap_Tile03_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile03_ColunaGO->AddComponent(tileMap_Tile03_Coluna);
+	objectArray.emplace_back(Tile03_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile04_ColunaGO = new GameObject();
+	Tile04_ColunaGO->box.x = (50) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile04_ColunaGO->box.y = (-16) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile04_Coluna = new TileMap(*Tile04_ColunaGO, "./assets/map/Level0/Tile04_Coluna.txt", tileSet);
+	tileMap_Tile04_Coluna->colide = true;
+
+	Tile04_ColunaGO->box.w = tileMap_Tile04_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile04_ColunaGO->box.h = tileMap_Tile04_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile04_ColunaGO->AddComponent(tileMap_Tile04_Coluna);
+	objectArray.emplace_back(Tile04_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile05_ColunaGO = new GameObject();
+	Tile05_ColunaGO->box.x = (57) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile05_ColunaGO->box.y = (-16) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile05_Coluna = new TileMap(*Tile05_ColunaGO, "./assets/map/Level0/Tile05_Coluna.txt", tileSet);
+	tileMap_Tile05_Coluna->colide = true;
+
+	Tile05_ColunaGO->box.w = tileMap_Tile05_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile05_ColunaGO->box.h = tileMap_Tile05_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile05_ColunaGO->AddComponent(tileMap_Tile05_Coluna);
+	objectArray.emplace_back(Tile05_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile06_ColunaGO = new GameObject();
+	Tile06_ColunaGO->box.x = (61) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile06_ColunaGO->box.y = (-21) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile06_Coluna = new TileMap(*Tile06_ColunaGO, "./assets/map/Level0/Tile06_Coluna.txt", tileSet);
+	tileMap_Tile06_Coluna->colide = true;
+
+	Tile06_ColunaGO->box.w = tileMap_Tile06_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile06_ColunaGO->box.h = tileMap_Tile06_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile06_ColunaGO->AddComponent(tileMap_Tile06_Coluna);
+	objectArray.emplace_back(Tile06_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile07_ColunaGO = new GameObject();
+	Tile07_ColunaGO->box.x = (69) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile07_ColunaGO->box.y = (-21) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile07_Coluna = new TileMap(*Tile07_ColunaGO, "./assets/map/Level0/Tile07_Coluna.txt", tileSet);
+	tileMap_Tile07_Coluna->colide = true;
+
+	Tile07_ColunaGO->box.w = tileMap_Tile07_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile07_ColunaGO->box.h = tileMap_Tile07_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile07_ColunaGO->AddComponent(tileMap_Tile07_Coluna);
+	objectArray.emplace_back(Tile07_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile08_ColunaGO = new GameObject();
+	Tile08_ColunaGO->box.x = (75) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile08_ColunaGO->box.y = (-19) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile08_Coluna = new TileMap(*Tile08_ColunaGO, "./assets/map/Level0/Tile08_Coluna.txt", tileSet);
+	tileMap_Tile08_Coluna->colide = true;
+
+	Tile08_ColunaGO->box.w = tileMap_Tile08_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile08_ColunaGO->box.h = tileMap_Tile08_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile08_ColunaGO->AddComponent(tileMap_Tile08_Coluna);
+	objectArray.emplace_back(Tile08_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile09_ColunaGO = new GameObject();
+	Tile09_ColunaGO->box.x = (83) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile09_ColunaGO->box.y = (-19) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile09_Coluna = new TileMap(*Tile09_ColunaGO, "./assets/map/Level0/Tile09_Coluna.txt", tileSet);
+	tileMap_Tile09_Coluna->colide = true;
+
+	Tile09_ColunaGO->box.w = tileMap_Tile09_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile09_ColunaGO->box.h = tileMap_Tile09_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile09_ColunaGO->AddComponent(tileMap_Tile09_Coluna);
+	objectArray.emplace_back(Tile09_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile10_ColunaGO = new GameObject();
+	Tile10_ColunaGO->box.x = (88) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile10_ColunaGO->box.y = (-29) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile10_Coluna = new TileMap(*Tile10_ColunaGO, "./assets/map/Level0/Tile10_Coluna.txt", tileSet);
+	tileMap_Tile10_Coluna->colide = true;
+
+	Tile10_ColunaGO->box.w = tileMap_Tile10_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile10_ColunaGO->box.h = tileMap_Tile10_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile10_ColunaGO->AddComponent(tileMap_Tile10_Coluna);
+	objectArray.emplace_back(Tile10_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile11_LinhaGO = new GameObject();
+	Tile11_LinhaGO->box.x = (89) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile11_LinhaGO->box.y = (-29) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile11_Linha = new TileMap(*Tile11_LinhaGO, "./assets/map/Level0/Tile11_Linha.txt", tileSet);
+	tileMap_Tile11_Linha->colide = true;
+
+	Tile11_LinhaGO->box.w = tileMap_Tile11_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile11_LinhaGO->box.h = tileMap_Tile11_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile11_LinhaGO->AddComponent(tileMap_Tile11_Linha);
+	objectArray.emplace_back(Tile11_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile12_LinhaGO = new GameObject();
+	Tile12_LinhaGO->box.x = (4) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile12_LinhaGO->box.y = (-21) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile12_Linha = new TileMap(*Tile12_LinhaGO, "./assets/map/Level0/Tile12_Linha.txt", tileSet);
+	tileMap_Tile12_Linha->colide = true;
+
+	Tile12_LinhaGO->box.w = tileMap_Tile12_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile12_LinhaGO->box.h = tileMap_Tile12_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile12_LinhaGO->AddComponent(tileMap_Tile12_Linha);
+	objectArray.emplace_back(Tile12_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile13_LinhaGO = new GameObject();
+	Tile13_LinhaGO->box.x = (62) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile13_LinhaGO->box.y = (-21) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile13_Linha = new TileMap(*Tile13_LinhaGO, "./assets/map/Level0/Tile13_Linha.txt", tileSet);
+	tileMap_Tile13_Linha->colide = true;
+
+	Tile13_LinhaGO->box.w = tileMap_Tile13_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile13_LinhaGO->box.h = tileMap_Tile13_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile13_LinhaGO->AddComponent(tileMap_Tile13_Linha);
+	objectArray.emplace_back(Tile13_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile14_LinhaGO = new GameObject();
+	Tile14_LinhaGO->box.x = (76) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile14_LinhaGO->box.y = (-19) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile14_Linha = new TileMap(*Tile14_LinhaGO, "./assets/map/Level0/Tile14_Linha.txt", tileSet);
+	tileMap_Tile14_Linha->colide = true;
+
+	Tile14_LinhaGO->box.w = tileMap_Tile14_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile14_LinhaGO->box.h = tileMap_Tile14_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile14_LinhaGO->AddComponent(tileMap_Tile14_Linha);
+	objectArray.emplace_back(Tile14_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile15_LinhaGO = new GameObject();
+	Tile15_LinhaGO->box.x = (51) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile15_LinhaGO->box.y = (-16) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile15_Linha = new TileMap(*Tile15_LinhaGO, "./assets/map/Level0/Tile15_Linha.txt", tileSet);
+	tileMap_Tile15_Linha->colide = true;
+
+	Tile15_LinhaGO->box.w = tileMap_Tile15_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile15_LinhaGO->box.h = tileMap_Tile15_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile15_LinhaGO->AddComponent(tileMap_Tile15_Linha);
+	objectArray.emplace_back(Tile15_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile16_LinhaGO = new GameObject();
+	Tile16_LinhaGO->box.x = (34) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile16_LinhaGO->box.y = (-13) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile16_Linha = new TileMap(*Tile16_LinhaGO, "./assets/map/Level0/Tile16_Linha.txt", tileSet);
+	tileMap_Tile16_Linha->colide = true;
+
+	Tile16_LinhaGO->box.w = tileMap_Tile16_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile16_LinhaGO->box.h = tileMap_Tile16_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile16_LinhaGO->AddComponent(tileMap_Tile16_Linha);
+	objectArray.emplace_back(Tile16_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile17_LinhaGO = new GameObject();
+	Tile17_LinhaGO->box.x = (43) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile17_LinhaGO->box.y = (-10) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile17_Linha = new TileMap(*Tile17_LinhaGO, "./assets/map/Level0/Tile17_Linha.txt", tileSet);
+	tileMap_Tile17_Linha->colide = true;
+
+	Tile17_LinhaGO->box.w = tileMap_Tile17_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile17_LinhaGO->box.h = tileMap_Tile17_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile17_LinhaGO->AddComponent(tileMap_Tile17_Linha);
+	objectArray.emplace_back(Tile17_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile18_LinhaGO = new GameObject();
+	Tile18_LinhaGO->box.x = (34) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile18_LinhaGO->box.y = (-6) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile18_Linha = new TileMap(*Tile18_LinhaGO, "./assets/map/Level0/Tile18_Linha.txt", tileSet);
+	tileMap_Tile18_Linha->colide = true;
+
+	Tile18_LinhaGO->box.w = tileMap_Tile18_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile18_LinhaGO->box.h = tileMap_Tile18_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile18_LinhaGO->AddComponent(tileMap_Tile18_Linha);
+	objectArray.emplace_back(Tile18_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile19_LinhaGO = new GameObject();
+	Tile19_LinhaGO->box.x = (62) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile19_LinhaGO->box.y = (-6) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile19_Linha = new TileMap(*Tile19_LinhaGO, "./assets/map/Level0/Tile19_Linha.txt", tileSet);
+	tileMap_Tile19_Linha->colide = true;
+
+	Tile19_LinhaGO->box.w = tileMap_Tile19_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile19_LinhaGO->box.h = tileMap_Tile19_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile19_LinhaGO->AddComponent(tileMap_Tile19_Linha);
+	objectArray.emplace_back(Tile19_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile20_LinhaGO = new GameObject();
+	Tile20_LinhaGO->box.x = (76) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile20_LinhaGO->box.y = (-6) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile20_Linha = new TileMap(*Tile20_LinhaGO, "./assets/map/Level0/Tile20_Linha.txt", tileSet);
+	tileMap_Tile20_Linha->colide = true;
+
+	Tile20_LinhaGO->box.w = tileMap_Tile20_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile20_LinhaGO->box.h = tileMap_Tile20_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile20_LinhaGO->AddComponent(tileMap_Tile20_Linha);
+	objectArray.emplace_back(Tile20_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+
+
+
+
+
+
+
+
 
 	/*
 	////////////////////////////////////
