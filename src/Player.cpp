@@ -99,6 +99,7 @@ void Player::Update(float dt) {
 
 		contadorW2 = verticalSpeed;
 
+
 		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
 			BuzzL++;
 		}
@@ -479,7 +480,7 @@ void Player::Update(float dt) {
 
 			if (runningSound) {
 				if (playerSFX->IsPlaying()) {
-					playerSFX->Stop();
+					//playerSFX->Stop();
 				}
 				runningSound = false;
 			}
@@ -516,7 +517,11 @@ void Player::Update(float dt) {
 			facingR = true;
 			facingL = false;
 
-			if ((Ground > 2) && (Atk0 == false)) {
+			if (atakR) {
+				associated.box.x -= 16;
+				atakR = false;
+			}
+			else if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
 			}
 			if (Atk0 == true) {
@@ -541,7 +546,11 @@ void Player::Update(float dt) {
 			facingR = false;
 			facingL = true;
 
-			if ((Ground > 2) && (Atk0 == false)) {
+			if (atakL) {
+				associated.box.x += 16;
+				atakL = false;
+			}
+			else if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
 				cout << "AJUSTE\n";
 			}
@@ -726,7 +735,7 @@ void Player::Update(float dt) {
 					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1.png", 5, 0.08);
 				}
 				associated.AddComponent(sprite);
-				associated.box.x -= 20;
+				atakR = true;
 				Atk1++;
 			}
 
@@ -742,7 +751,7 @@ void Player::Update(float dt) {
 					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1_inv.png", 5, 0.09);
 				}
 				associated.AddComponent(sprite);
-				associated.box.x -= 60;
+				atakL = true;
 				Atk1++;
 			}
 			//cout << "Atk0: " << Atk0 << endl;
@@ -768,7 +777,7 @@ void Player::Update(float dt) {
 						sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk2.png", 5, 0.1);
 					}
 					associated.AddComponent(sprite);
-					associated.box.x -= 20;
+					atakR = true;
 					Atk2++;
 				}
 				// PRA ESQUERDA
@@ -782,7 +791,7 @@ void Player::Update(float dt) {
 						sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk2_inv.png", 5, 0.1);
 					}
 					associated.AddComponent(sprite);
-					associated.box.x -= 20;
+					atakL = true;
 					Atk2++;
 				}
 
@@ -826,20 +835,36 @@ void Player::Update(float dt) {
 		//		TIRO DA PROTAGONISTA		//
 		/////////////////////////////////////
 		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.2) {
-			if (facingR) {
+			
+			if (Run >= 0) {
 				Shoot(GetCenter());
 			}
-			else if (facingL) {
+			else if (Run < 0) {
+				//Shoot(GetCenter());
 				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
+				//Shoot(GetRotated((float)(7 * PI / 4)));
 			}
-
+			
+			//Shoot(GetCenter());
 			shootaux++;
 
-			if (shootaux == 1) {
+			// Direita
+			if ((shootaux == 1) && (Run >= 0)) {
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk4.png", 5, 0.1);
 				associated.AddComponent(sprite);
+				atakR = true;
 			}
+
+			// Esuqerda
+			if ((shootaux == 1) && (Run < 0)) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk4_inv.png", 5, 0.1);
+				associated.AddComponent(sprite);
+				//associated.box.x -= 80;
+				atakL = true;
+			}
+
 			shootaux++;
 			ShootCooldownTimer.Restart();
 			ATK1CooldownTimer.Restart();
@@ -927,10 +952,10 @@ void Player::Update(float dt) {
 		else if (Setrun && tchfloor) {
 			if (!runningSound) {
 				if (playerSFX->IsPlaying()) {
-					playerSFX->Stop();
+					//playerSFX->Stop();
 				}
 				associated.RemoveComponent(playerSFX);
-				playerSFX = new Sound(associated, "./assets/audio/SFX/CorridaNormal(Assim.)1.wav");
+				playerSFX = new Sound(associated, "./assets/audio/SFX/PassoNormal(Assim.).wav");
 				associated.AddComponent(playerSFX);
 				runningSound = true;
 			}
@@ -946,6 +971,7 @@ void Player::Update(float dt) {
 		else if (airbone && !tchfloor && (WallgrabL || WallgrabR)) {
 			if (!wallSlideSound) {
 				if (playerSFX->IsPlaying()) {
+					
 					playerSFX->Stop();
 				}
 				associated.RemoveComponent(playerSFX);
@@ -979,7 +1005,7 @@ void Player::Update(float dt) {
 		/////////////////////////////////
 		else if (foguete) {
 			if (playerSFX->IsPlaying()) {
-				playerSFX->Stop();
+				//playerSFX->Stop();
 			}
 			associated.RemoveComponent(playerSFX);
 			playerSFX = new Sound(associated, "./assets/audio/SFX/Foguete2.1(Assim.).wav");
@@ -1147,11 +1173,50 @@ Vec2 Player::GetCenter() {
 
 void Player::Shoot(Vec2 target) {
 	// Carrega um Tiro do Robo
+
+	auto laserGO = new GameObject();
+	//laserGO->box = associated.box.Center() + Vec2(0, -80);
+
+	if (Run >= 0) {
+		laserGO->box = associated.box.Center();
+		auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
+		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
+		//PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionbullet2.png", 3, 0.1);
+		laser->playerLaser = true;
+		auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
+		laserGO->AddComponent(laserSound);
+		/// todo - Parar playerSFX nao fez a menor diferenca
+		if (playerSFX->IsPlaying()) {
+			playerSFX->Stop();
+		}
+		laserSound->Play();
+		laserGO->AddComponent(laser);
+
+		Game::GetInstance().GetCurrentState().AddObject(laserGO);
+	}
+	else if(Run < 0) {
+		laserGO->box = associated.box.Center() + Vec2(-60, -30);
+		auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
+		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
+		//PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionbullet2.png", 3, 0.1);
+		laser->playerLaser = true;
+		auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
+		laserGO->AddComponent(laserSound);
+		/// todo - Parar playerSFX nao fez a menor diferenca
+		if (playerSFX->IsPlaying()) {
+			playerSFX->Stop();
+		}
+		laserSound->Play();
+		laserGO->AddComponent(laser);
+
+		Game::GetInstance().GetCurrentState().AddObject(laserGO);
+	}
+	/*
 	auto laserGO = new GameObject();
 	laserGO->box = associated.box.Center();
-
 	auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
-		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
+	PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
+	//PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionbullet2.png", 3, 0.1);
 	laser->playerLaser = true;
 	auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
 	laserGO->AddComponent(laserSound);
@@ -1163,6 +1228,7 @@ void Player::Shoot(Vec2 target) {
 	laserGO->AddComponent(laser);
 
 	Game::GetInstance().GetCurrentState().AddObject(laserGO);
+	*/
 }
 
 int Player::GetHP() {
