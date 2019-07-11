@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
 	ofs.open("TileCode.txt", std::ofstream::out | std::ofstream::trunc); // da clear no txt
 	ofs.close();
 	
-	file.open("TileMap_Colisao.txt");
+	file.open("TileMap_Colisao1.txt");
 	
 
 	file>>linha;
