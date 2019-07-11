@@ -16,7 +16,7 @@ void CreditsState::LoadAssets() {
 	/////////////////////////////////
 	auto creditsGO = new GameObject();
 	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
-	auto creditsText = new Text(*creditsGO, "./assets/font/hellovetica.ttf", 60, Text::SOLID, "CREDITS", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	auto creditsText = new Text(*creditsGO, "./assets/font/ARCADE.ttf", 120, Text::SOLID, "CREDITS", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
 	creditsGO->AddComponent(creditsText);
 	creditsGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, 100 });
 	objectArray.emplace_back(creditsGO);

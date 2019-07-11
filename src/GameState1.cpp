@@ -38,6 +38,23 @@ void GameState1::LoadAssets() {
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
 
+	// Background de detalhe
+	auto bgDetalheGO = new GameObject();
+	auto bgDetalhe = new Sprite(*bgDetalheGO, "./assets/img/Level1/objeto_mapa2.png");
+
+	// Seta a escala e posiciona no centro da tela
+	//bg->SetScale(1.3333, 1.42);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
+
+	//auto bgCamFollower = new CameraFollower(*bgDetalheGO);
+	//bgDetalheGO->AddComponent(bgCamFollower);
+
+
+	bgDetalheGO->box.h = bgDetalhe->GetHeight();
+	bgDetalheGO->box.w = bgDetalhe->GetWidth();
+
+	bgDetalheGO->AddComponent(bgDetalhe);
+	objectArray.emplace_back(bgDetalheGO);
+
 
 	///////////////////////////////////////////////////
 	//		Carrega os Predios de Background		//
@@ -105,7 +122,7 @@ void GameState1::LoadAssets() {
 	//		Carrega o CoatGuy		//
 	/////////////////////////////////
 	//auto coatGuyGO = new GameObject();
-	auto coatGuy = new CoatGuy(*coatGuyGO);
+	coatGuy = new CoatGuy(*coatGuyGO);
 
 	coatGuyGO->AddComponent(coatGuy);
 	coatGuyGO->box.x = 60 * ONETILESQUARE;
@@ -137,12 +154,28 @@ void GameState1::LoadAssets() {
 
 	HPbarGO->AddComponent(HPbarSprite);
 	objectArray.emplace_back(HPbarGO);
+
+	//////////////////////////////////
+	//	  Barra de HP do Coat Guy	//
+	//////////////////////////////////
 	
+	HPbarGOCoatGuy = new GameObject();
+	HPbarSpriteCG = new Sprite(*HPbarGOCoatGuy, "./assets/img/Protagonista/barra_de_HP/HP_22.png");
+
+	auto HPbarCamFollower = new CameraFollower(*HPbarGOCoatGuy);
+	HPbarGOCoatGuy->AddComponent(HPbarCamFollower);
+
+	HPbarGOCoatGuy->AddComponent(HPbarSprite);
+	objectArray.emplace_back(HPbarGOCoatGuy);
+
 }
 
 void GameState1::Update(float dt){
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
+
+	playerHitTimer.Update(dt);
+	coatGuyHitTimer.Update(dt);
 
 
 	// Faz o update na camera e na box do mapa
@@ -176,8 +209,89 @@ void GameState1::Update(float dt){
 		playerGO->box.x = 64 * ONETILESQUARE - playerGO->box.w;
 	}
 	*/
+
+	// Reseta o contador para piscar a personagem
+	if (player->damaged) {
+		playerHitTimer.Restart();
+	}
+
+	// Reseta o contador para piscar o coatGuy
+	if (coatGuy->damaged) {
+		coatGuyHitTimer.Restart();
+		coatGuy->damaged = false;
+	}
+
 	ChangePlayerHP();
 
+	// Pisca o jogador
+	if (player->gotHit) {
+		if (playerHitTimer.Get() > 1.0) {
+			playerGO->render = true;
+			player->gotHit = false;
+		}
+		else if (playerHitTimer.Get() > 0.9) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.8) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.7) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.6) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.5) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.4) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.3) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.2) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.1) {
+			playerGO->render = false;
+		}
+	}
+
+	// Pisca o coatGuy
+	if (coatGuy->gotHit) {
+		if (coatGuyHitTimer.Get() > 1.0) {
+			coatGuyGO->render = true;
+			coatGuy->gotHit = false;
+		}
+		else if (coatGuyHitTimer.Get() > 0.9) {
+			coatGuyGO->render = false;
+		}
+		else if (coatGuyHitTimer.Get() > 0.8) {
+			coatGuyGO->render = true;
+		}
+		else if (coatGuyHitTimer.Get() > 0.7) {
+			coatGuyGO->render = false;
+		}
+		else if (coatGuyHitTimer.Get() > 0.6) {
+			coatGuyGO->render = true;
+		}
+		else if (coatGuyHitTimer.Get() > 0.5) {
+			coatGuyGO->render = false;
+		}
+		else if (coatGuyHitTimer.Get() > 0.4) {
+			coatGuyGO->render = true;
+		}
+		else if (coatGuyHitTimer.Get() > 0.3) {
+			coatGuyGO->render = false;
+		}
+		else if (coatGuyHitTimer.Get() > 0.2) {
+			coatGuyGO->render = true;
+		}
+		else if (coatGuyHitTimer.Get() > 0.1) {
+			coatGuyGO->render = false;
+		}
+	}
 
 	// KONAMI CODE
 	// todo - Apertar 2 teclas seguidas nao funciona (reconhece as duas apertando soh uma vez). Usar um timer pra resolver isso
@@ -434,6 +548,162 @@ void GameState1::LoadLevel() {
 	objectArray.emplace_back(tetoGO);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+}
+
+void GameState1::ChangeCoatGuyHP() {
+	int hp = coatGuy->GetHP();
+
+	if (coatGuy->damaged) {
+		switch (hp) {
+		case 0:
+
+			HPbarGOCoatGuy->RemoveComponent(HPbarSpriteCG);
+			HPbarSpriteCG = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_00.png");
+
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_00.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 1:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_01.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 2:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_02.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 3:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_03.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 4:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_04.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 5:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_05.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 6:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_06.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 7:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_07.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 8:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_08.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 9:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_09.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 10:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_10.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 11:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_11.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 12:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_12.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 13:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_13.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 14:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_14.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 15:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_15.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 16:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_16.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 17:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_17.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 18:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_18.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 19:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_19.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 20:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_20.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 21:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_21.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		case 22:
+			HPbarGO->RemoveComponent(HPbarSprite);
+			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_22.png");
+			HPbarGO->AddComponent(HPbarSprite);
+			break;
+
+		default:
+			break;
+		}
+
+
+		coatGuy->damaged = false;
+	}
 }
 
 void GameState1::ChangePlayerHP() {

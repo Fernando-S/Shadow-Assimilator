@@ -667,10 +667,14 @@ void Robot::NotifyCollision(GameObject& other) {
 	if (laser && laser->playerLaser) {
 		//std::cout << "Vida do Robo: " << hp << std::endl;
 		hp -= laser->GetDamage();
+		damaged = true;
+		gotHit = true;
 	}
 	else if (player1 && Player::player->isAtacking) {
 		//cout << "Deu dano no robo\n";
 		hp -= 2;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
+		damaged = true;
+		gotHit = true;
 	}
 
 

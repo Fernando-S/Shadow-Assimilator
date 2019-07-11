@@ -48,7 +48,7 @@ public:
 
 	static CoatGuy* coatGuy;
 	Sprite* sprite;
-	bool damaged = false, isAtacking = false, ultrapassou = false;
+	bool damaged = false, isAtacking = false, ultrapassou = false, gotHit = false;;
 	Sound* coatGuySFX;
 
 private:

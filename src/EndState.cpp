@@ -27,9 +27,9 @@ void EndState::LoadAssets() {
 		auto textGO = new GameObject();
 		//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
 		//auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "YOU WIN", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
-		auto text = new Text(*textGO, "./assets/font/hellovetica.ttf", 60, Text::SOLID, "YOU WIN", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+		auto text = new Text(*textGO, "./assets/font/ARCADE.ttf", 200, Text::SOLID, "YOU WIN", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
 		textGO->AddComponent(text);
-		textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, 100 });
+		textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, 220 });
 		objectArray.emplace_back(textGO);
 
 	}
@@ -44,9 +44,9 @@ void EndState::LoadAssets() {
 		auto textGO = new GameObject();
 		//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
 		//auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "SE FODEU", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
-		auto text = new Text(*textGO, "./assets/font/hellovetica.ttf", 60, Text::SOLID, "SE FODEU", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+		auto text = new Text(*textGO, "./assets/font/ARCADE.ttf", 200, Text::SOLID, "GAME OVER", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
 		textGO->AddComponent(text);
-		textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, 100 });
+		textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, 220 });
 		objectArray.emplace_back(textGO);
 	}
 

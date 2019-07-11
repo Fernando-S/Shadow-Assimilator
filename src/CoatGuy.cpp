@@ -1024,12 +1024,15 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 		//std::cout << "Vida do CoatGuy: " << hp << std::endl;
 		hp -= laser->GetDamage();
 		falsehp--;
-
+		damaged = true;
+		gotHit = true;
 	}
 	else if (player1 && Player::player->isAtacking) {
 		//cout << "Deu dano no robo\n";
 		hp -= 2;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
 		falsehp--;
+		damaged = true;
+		gotHit = true;
 	}
 
 	if (falsehp < 1 && !FinishHimEneable && StartLoop) {

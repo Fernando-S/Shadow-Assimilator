@@ -15,9 +15,8 @@ void GameState3::LoadAssets() {
 	/////////////////////////////////////////////
 	//	  Carrega a Musica e aperta o play	  //
 	///////////////////////////////////////////
-	//backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow_Assimilator_-_Theme_1.mp3");
-	//backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow Assimilator track 1.ogg");
-	//backgroundMusic.Play();
+	backgroundMusic = *new Music("./assets/audio/soundtrack/shadowboss.ogg");
+	backgroundMusic.Play();
 
 	
 	/////////////////////////////////

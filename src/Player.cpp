@@ -835,7 +835,7 @@ void Player::Update(float dt) {
 		//		TIRO DA PROTAGONISTA		//
 		/////////////////////////////////////
 		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.2) {
-			
+
 			if (Run >= 0) {
 				Shoot(GetCenter());
 			}
@@ -844,7 +844,7 @@ void Player::Update(float dt) {
 				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
 				//Shoot(GetRotated((float)(7 * PI / 4)));
 			}
-			
+
 			//Shoot(GetCenter());
 			shootaux++;
 
@@ -971,7 +971,7 @@ void Player::Update(float dt) {
 		else if (airbone && !tchfloor && (WallgrabL || WallgrabR)) {
 			if (!wallSlideSound) {
 				if (playerSFX->IsPlaying()) {
-					
+
 					playerSFX->Stop();
 				}
 				associated.RemoveComponent(playerSFX);
@@ -1034,7 +1034,7 @@ void Player::NotifyCollision(GameObject& other) {
 	auto tile = (TileMap*)other.GetComponent("TileMap");
 
 	// Prosfere dano ao jogador se o tiro for inimigo
-	if (laser && laser->robotLaser) {
+	if (laser && (laser->robotLaser || laser->coatGuyLaser)) {
 		hp -= laser->GetDamage();
 		damaged = true;
 		gotHit = true;
@@ -1180,7 +1180,7 @@ void Player::Shoot(Vec2 target) {
 	if (Run >= 0) {
 		laserGO->box = associated.box.Center();
 		auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
-		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
+			PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
 		//PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionbullet2.png", 3, 0.1);
 		laser->playerLaser = true;
 		auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
@@ -1194,10 +1194,10 @@ void Player::Shoot(Vec2 target) {
 
 		Game::GetInstance().GetCurrentState().AddObject(laserGO);
 	}
-	else if(Run < 0) {
+	else if (Run < 0) {
 		laserGO->box = associated.box.Center() + Vec2(-60, -30);
 		auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
-		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
+			PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
 		//PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionbullet2.png", 3, 0.1);
 		laser->playerLaser = true;
 		auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
@@ -1226,7 +1226,6 @@ void Player::Shoot(Vec2 target) {
 	}
 	laserSound->Play();
 	laserGO->AddComponent(laser);
-
 	Game::GetInstance().GetCurrentState().AddObject(laserGO);
 	*/
 }

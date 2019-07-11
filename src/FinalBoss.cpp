@@ -12,8 +12,8 @@ FinalBoss::FinalBoss(GameObject& associated) : Component(associated) {
 
 	hp = FINALBOSS_INITIAL_HP;
 
-	// Carrega o sprite do boss final e do escudodele
-	sprite = new Sprite(associated, "./assets/img/Boss Final/Boss_final.png");
+	// Carrega o sprite do boss final
+	//sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
 
 	// Carrega som do boss Final
 	FinalBossSFX = new Sound(associated);
@@ -48,8 +48,8 @@ void FinalBoss::Update(float dt) {
 
 	}
 	else {
-		//LightRecoilTimer.Update(dt);
-		//HeavyRecoilTimer.Update(dt);
+		LightRecoilTimer.Update(dt);
+		HeavyRecoilTimer.Update(dt);
 	}
 }
 
@@ -66,26 +66,21 @@ bool FinalBoss::Is(string type) {
 
 void FinalBoss::NotifyCollision(GameObject& other) {
 	auto laser = (Laser*)other.GetComponent("Laser");
+	auto tile = (TileMap*)other.GetComponent("TileMap");
 	auto player1 = (Player*)other.GetComponent("Player");
-	auto coatGuy = (CoatGuy*)other.GetComponent("CoatGuy");
 
 	// Prosfere dano ao boss se o tiro for do jogador
-	if (laser && (laser->playerLaser || laser->coatGuyLaser)) {
+	if (laser && laser->playerLaser) {
 		//std::cout << "Vida do Boss: " << hp << std::endl;
 		hp -= laser->GetDamage();
 	}
-	else if (player1 && (Player::player->isAtacking || CoatGuy::coatGuy->isAtacking)) {
+	else if (player1 && Player::player->isAtacking) {
 		//cout << "Deu dano no boss\n";
 		hp -= 2;		// Prosfere dano ao boss se ele sofrer um ataque melee do jogador
 	}
 
 }
 
-int FinalBoss::GetHP() {
-	return hp;
-}
-
-/*
 void FinalBoss::LightShoot(Vec2 target) {
 	LightRecoilTimer.Restart();
 
@@ -112,4 +107,3 @@ void FinalBoss::HeavyShoot(Vec2 target) {
 	}
 	associated.AddComponent(sprite);
 }
-*/
