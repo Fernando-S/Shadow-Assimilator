@@ -165,6 +165,7 @@ void Player::Update(float dt) {
 		ShootCooldownTimer.Update(dt);
 		DashCooldownTimer.Update(dt);
 		DJTimer.Update(dt);
+		ATK1CooldownTimer.Update(dt);
 
 
 		//////////////////////////////////////////
@@ -259,7 +260,7 @@ void Player::Update(float dt) {
 			foguete = true;
 			DJ++;
 		}
-		
+
 
 		///////////////////////////
 		//		WALL SLIDE		//
@@ -348,92 +349,101 @@ void Player::Update(float dt) {
 			SetJump = false;
 
 		}
-
-		if (Jump == 1) {
-
+		
+		if (Atk1 != 0) {
+			froze = 0.6;
 		}
-
-		if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
-			//this->associated.box.y -= 10;
-			verticalSpeed = PLAYER_JUMP;
-			tchfloor = false;
-			SetJump = true;
-			airbone = true;
-			Jump++;
-			Ground = 0;
-			DJTimer.Restart();
-			//auto laserSound2 = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
-
-			//auto laserSound2 = new Sound(associated, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
-			//if (!laserSound2->IsPlaying()) {
-			//4laserSound2->Play();
-			//cout << "nao ta tocando\n";
-			//}
+		if (Atk2 != 0) {
+			froze = 1.2;
 		}
-		else
-			///////////////////////////////////////////
-			//		CORRIDA PARA A ESQUERDA			//
-			/////////////////////////////////////////
-			if (inputManager.IsKeyDown(A_KEY)) {
+		if (ATK1CooldownTimer.Get() > froze) {
+			if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
+				//this->associated.box.y -= 10;
+				verticalSpeed = PLAYER_JUMP;
+				tchfloor = false;
+				SetJump = true;
+				airbone = true;
+				Jump++;
+				Ground = 0;
+				DJTimer.Restart();
+				//auto laserSound2 = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
 
-				WallgrabR = false;
-
-				if (linearSpeed == 0)
-					oppositeSpeed = 0;
-
-				if (Getspeed1 == false) {
-					oppositeSpeed = linearSpeed;
-					Getspeed1 = true;
-					Setidle = false;
-					Setrun = true;
-					Run = 0;
-					Stop = 0;
-				}
-
-				if (Run > -10)
-					Run--;
-
-				speedH = { -1, 0 };
-				if ((oppositeSpeed > -PLAYER_SPEED) && !WallgrabL) {
-
-					oppositeSpeed -= accelSpeedGain;
-					linearSpeed = -oppositeSpeed;
-
-				}
-				else
-					linearSpeed = -oppositeSpeed;
+				//auto laserSound2 = new Sound(associated, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
+				//if (!laserSound2->IsPlaying()) {
+				//4laserSound2->Play();
+				//cout << "nao ta tocando\n";
+				//}
 			}
+			else
+				///////////////////////////////////////////
+				//		CORRIDA PARA A ESQUERDA			//
+				/////////////////////////////////////////
+				if ((inputManager.IsKeyDown(A_KEY)) && (!isAtacking)) {
+
+					WallgrabR = false;
+
+					if (linearSpeed == 0)
+						oppositeSpeed = 0;
+
+					if (Getspeed1 == false) {
+						oppositeSpeed = linearSpeed;
+						Getspeed1 = true;
+						Setidle = false;
+						Setrun = true;
+						Run = 0;
+						Stop = 0;
+					}
+
+					if (Run > -10)
+						Run--;
+
+					speedH = { -1, 0 };
+					if ((oppositeSpeed > -PLAYER_SPEED) && !WallgrabL) {
+
+						oppositeSpeed -= accelSpeedGain;
+						linearSpeed = -oppositeSpeed;
+
+					}
+					else
+						linearSpeed = -oppositeSpeed;
+				}
 			///////////////////////////////////////
 			//		CORRIDA PARA A DIREITA		//
 			/////////////////////////////////////
-			else if (inputManager.IsKeyDown(D_KEY)) {
-				speedH = { 1, 0 };
+				else if ((inputManager.IsKeyDown(D_KEY)) && (!isAtacking)) {
+					speedH = { 1, 0 };
 
-				if (Getspeed2 == false) {
-					oppositeSpeed = linearSpeed;
-					Getspeed2 = true;
+					if (Getspeed2 == false) {
+						oppositeSpeed = linearSpeed;
+						Getspeed2 = true;
 
-					Run = 0;
-					Stop = 0;
-					Setidle = false;
-					Setrun = true;
+						Run = 0;
+						Stop = 0;
+						Setidle = false;
+						Setrun = true;
 
-				}
-
-				if (Run < 10)
-					Run++;
-
-				if (linearSpeed < PLAYER_SPEED + 50) {
-
-					if (oppositeSpeed >= 0) {
-						oppositeSpeed -= accelSpeedGain;
-						linearSpeed = -oppositeSpeed;
 					}
-					else
-						linearSpeed += accelSpeedGain;
 
+					if (Run < 10)
+						Run++;
+
+					if (linearSpeed < PLAYER_SPEED + 50) {
+
+						if (oppositeSpeed >= 0) {
+							oppositeSpeed -= accelSpeedGain;
+							linearSpeed = -oppositeSpeed;
+						}
+						else
+							linearSpeed += accelSpeedGain;
+
+					}
 				}
-			}
+
+		}
+	
+		if ((Atk1 != 0) || (Atk2 != 0)) {
+			linearSpeed = 0;
+		}
 
 		double atrictSpeedLoss = PLAYER_ATRICT * dt;
 
@@ -487,45 +497,50 @@ void Player::Update(float dt) {
 		///////////////////////////////////
 		//		Idle para a direita		//
 		/////////////////////////////////
-		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)/* && !pouso*/) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_idle(63x128).png", 12, 0.1);
+		if (((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) || ((Atk0 == true) && (Run >= 0))) {
 
 			facingR = true;
 			facingL = false;
 
-			if (Ground > 2) {
+			if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
 			}
-
+			if (Atk0 == true) {
+				Atk0 = false;
+			}
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_idle(63x128).png", 12, 0.1);
 			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
 			// arruma a posicao para o sprite do personagem idle aparecer do pe mais a frente apos a corrida
 			//associated.box.x += associated.box.w;//121;
 
 			associated.AddComponent(sprite);
-			playerSFX->Stop();
+			//playerSFX->Stop();
+
 		}
 
 
 		///////////////////////////////////////
 		//		Idle para a esquerda		//
 		/////////////////////////////////////
-		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_idle_invertida.png", 12, 0.1);
+		if (((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) || ((Atk0 == true) && (Run < 0))) {			
 			facingR = false;
 			facingL = true;
-
-
-			associated.AddComponent(sprite);
-
-			if (Ground > 2) {
+		
+			if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
 			}
-			playerSFX->Stop();
+			if (Atk0 == true) {
+				Atk0 = false;
+			}
+
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Protagonista/sprite_prot_idle_invertida.png", 12, 0.1);
+			associated.AddComponent(sprite);
+
+			//playerSFX->Stop();
 
 		}
-
 
 		///////////////////////////////////////
 		//		Corrida para a direita		//
@@ -673,6 +688,93 @@ void Player::Update(float dt) {
 			}
 		}
 
+		///////////////////////
+		//		ATAQUES		//
+		/////////////////////
+		if (inputManager.IsKeyDown(P_KEY)){
+			Neon = true;
+		}
+		if (inputManager.IsKeyDown(O_KEY)){
+			Neon = false;
+		}
+		//ATAQUE - 1///////////////////////////////////////////////////////
+		if (Ground != 0) {
+
+			// PRA DIREITA
+			if ((Atk1 == 1) && (Run >= 0)) {
+				//Camera::Unfollow();
+				associated.RemoveComponent(sprite);
+				if (Neon == true) {
+					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1_rastro.png", 5, 0.08);
+				}
+				else {
+					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1.png", 5, 0.08);
+				}
+				associated.AddComponent(sprite);
+				associated.box.x -= 20;			
+			}
+
+			// PRA ESQUERDA
+			if ((Atk1 == 1) && (Run < 0)) {
+				//Camera::Unfollow();
+				associated.RemoveComponent(sprite);
+				//if(Neon == false)
+				if (Neon == true) {
+					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1_rastro_inv.png", 5, 0.08);
+				}
+				else {
+					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1_inv.png", 5, 0.09);
+				}
+				associated.AddComponent(sprite);
+				associated.box.x -= 20;
+
+			}
+			if ((ATK1CooldownTimer.Get() >= 0.45) && (ATK1CooldownTimer.Get() <= 0.48) && (linearSpeed == 0)) {
+				if (Atk2 == 0) {
+					Atk0 = true;
+				}
+				Atk1 = 0;
+			}
+			////////////////////////////////////////////////////////////////////////////////
+			//ATAQUE - 2
+			////////////////////////////////////////////////////////////////////////////////
+			if ((ATK1CooldownTimer.Get() >= 0.45)){
+
+				// PRA DIREITA
+				if ((Atk2 == 1) && (Run >= 0)) {
+					//Camera::Unfollow();
+					associated.RemoveComponent(sprite);
+					if (Neon == true) {
+						sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk2_rastro.png", 5, 0.1);
+					}
+					else {
+						sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk2.png", 5, 0.1);
+					}
+					associated.AddComponent(sprite);
+					associated.box.x -= 20;
+					Atk2++;
+				}
+				// PRA ESQUERDA
+				if ((Atk2 == 1) && (Run < 0)) {
+					//Camera::Unfollow();
+					associated.RemoveComponent(sprite);
+					if (Neon == true) {
+						sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk2_rastro_inv.png", 5, 0.1);
+					}
+					else {
+						sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk2_inv.png", 5, 0.1);
+					}
+					associated.AddComponent(sprite);
+					associated.box.x -= 20;
+					Atk2++;
+				}
+
+				if ((ATK1CooldownTimer.Get() >= 0.95) && (ATK1CooldownTimer.Get() <= 1) && (Atk2 != 0) && (linearSpeed == 0)) {
+					Atk0 = true;
+					Atk2 = 0;
+				}
+			}
+		}
 		/*
 		/// TODO - NEGRAO, FAZ ISSO FUNCIONAR DO TEU JEITO MAGICO PFVR 
 		///////////////////////
@@ -739,11 +841,39 @@ void Player::Update(float dt) {
 		///////////////////////////////////
 		//        ATAQUE BASICO			//
 		/////////////////////////////////
-		if (inputManager.KeyPress(K_KEY)) {
+
+		if ((inputManager.KeyPress(K_KEY)) && (ATK1CooldownTimer.Get() > 0.2) && ((ATK1CooldownTimer.Get() < 0.5))) {
+			linearSpeed = 0;
+			if (Atk2 < 10) {
+				Atk2++;
+				Atk1 = 0;
+				Atk2delay = 0.37;
+			}
 			isAtacking = true;
 		}
-		else
+		else {
+			Atk2delay = 0;
+		}
+
+
+		if ((inputManager.KeyPress(K_KEY)) && (ATK1CooldownTimer.Get() > 0.5 + Atk2delay)) {
+			linearSpeed = 0;
+			if (Atk1 < 10) {
+				Atk1++;
+				Atk2 = 0;
+			}
+			
+			isAtacking = true;
+			ATK1CooldownTimer.Restart();
+		}
+
+		
+
+		else {
 			isAtacking = false;
+			Atk1 = 0;
+		}
+			
 
 		///////////////////////////////////////////////////////////////////////////////
 		//							EFEITOS SONOROS									//
