@@ -5,8 +5,10 @@
 
 GameState0::GameState0() {
 	playerGO = new GameObject();
-	coatGuyGO = new GameObject();
 	chaoGO = new GameObject();
+	robot1GO = new GameObject();
+	robot2GO = new GameObject();
+	robot3GO = new GameObject();
 }
 
 void GameState0::LoadAssets() {
@@ -116,8 +118,7 @@ void GameState0::LoadAssets() {
 	/////////////////////////////////
 	
 	// Primeiro Robo
-	auto robot1GO = new GameObject();
-	auto robot1 = new Robot(*robot1GO);
+	robot1 = new Robot(*robot1GO);
 
 	robot1GO->AddComponent(robot1);
 	robot1GO->box.x = 38 * ONETILESQUARE;
@@ -126,8 +127,7 @@ void GameState0::LoadAssets() {
 	objectArray.emplace_back(robot1GO);
 
 	// Segundo Robo
-	auto robot2GO = new GameObject();
-	auto robot2 = new Robot(*robot2GO);
+	robot2 = new Robot(*robot2GO);
 
 	robot2GO->AddComponent(robot2);
 	robot2GO->box.x = 65 * ONETILESQUARE;
@@ -136,8 +136,7 @@ void GameState0::LoadAssets() {
 	objectArray.emplace_back(robot2GO);
 
 	// Terceiro Robo
-	auto robot3GO = new GameObject();
-	auto robot3 = new Robot(*robot3GO);
+	robot3 = new Robot(*robot3GO);
 
 	robot3GO->AddComponent(robot3);
 	robot3GO->box.x = 80 * ONETILESQUARE;
@@ -179,6 +178,9 @@ void GameState0::Update(float dt){
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
 	playerHitTimer.Update(dt);
+	robot1HitTimer.Update(dt);
+	robot2HitTimer.Update(dt);
+	robot3HitTimer.Update(dt);
 
 
 	// Faz o update na camera e na box do mapa
@@ -203,17 +205,32 @@ void GameState0::Update(float dt){
 		Game::GetInstance().Push(new GameState1());
 	}
 
-
+	// Reseta o contador para piscar a personagem
 	if (player->damaged) {
 		playerHitTimer.Restart();
-		std::cout << "Comeca a contar o tempo\n";
+	}
+
+	// Reseta o contador para piscar o primeiro robo
+	if (robot1->damaged) {
+		robot1HitTimer.Restart();
+		robot1->damaged = false;
+	}
+
+	// Reseta o contador para piscar o segundo robo
+	if (robot2->damaged) {
+		robot2HitTimer.Restart();
+		robot2->damaged = false;
+	}
+
+	// Reseta o contador para piscar o terceiro robo
+	if (robot3->damaged) {
+		robot3HitTimer.Restart();
+		robot3->damaged = false;
 	}
 
 	ChangePlayerHP();
 
-	std::cout << playerHitTimer.Get() << std::endl;
-
-
+	// Pisca o jogador
 	if (player->gotHit) {
 		if (playerHitTimer.Get() > 1.0) {
 			playerGO->render = true;
@@ -248,6 +265,113 @@ void GameState0::Update(float dt){
 		}
 	}
 
+	// Pisca o primeiro robo
+	if (robot1->gotHit) {
+
+		if (robot1HitTimer.Get() > 1.0) {
+			robot1GO->render = true;
+			robot1->gotHit = false;
+		}
+		else if (robot1HitTimer.Get() > 0.9) {
+			robot1GO->render = false;
+		}
+		else if (robot1HitTimer.Get() > 0.8) {
+			robot1GO->render = true;
+		}
+		else if (robot1HitTimer.Get() > 0.7) {
+			robot1GO->render = false;
+		}
+		else if (robot1HitTimer.Get() > 0.6) {
+			robot1GO->render = true;
+		}
+		else if (robot1HitTimer.Get() > 0.5) {
+			robot1GO->render = false;
+		}
+		else if (robot1HitTimer.Get() > 0.4) {
+			robot1GO->render = true;
+		}
+		else if (robot1HitTimer.Get() > 0.3) {
+			robot1GO->render = false;
+		}
+		else if (robot1HitTimer.Get() > 0.2) {
+			robot1GO->render = true;
+		}
+		else if (robot1HitTimer.Get() > 0.1) {
+			robot1GO->render = false;
+		}
+	}
+
+	// Pisca o segundo robo
+	if (robot2->gotHit) {
+
+		if (robot2HitTimer.Get() > 1.0) {
+			robot2GO->render = true;
+			robot2->gotHit = false;
+		}
+		else if (robot2HitTimer.Get() > 0.9) {
+			robot2GO->render = false;
+		}
+		else if (robot2HitTimer.Get() > 0.8) {
+			robot2GO->render = true;
+		}
+		else if (robot2HitTimer.Get() > 0.7) {
+			robot2GO->render = false;
+		}
+		else if (robot2HitTimer.Get() > 0.6) {
+			robot2GO->render = true;
+		}
+		else if (robot2HitTimer.Get() > 0.5) {
+			robot2GO->render = false;
+		}
+		else if (robot2HitTimer.Get() > 0.4) {
+			robot2GO->render = true;
+		}
+		else if (robot2HitTimer.Get() > 0.3) {
+			robot2GO->render = false;
+		}
+		else if (robot2HitTimer.Get() > 0.2) {
+			robot2GO->render = true;
+		}
+		else if (robot2HitTimer.Get() > 0.1) {
+			robot2GO->render = false;
+		}
+	}
+
+	// Pisca o segundo robo
+	if (robot3->gotHit) {
+
+		if (robot3HitTimer.Get() > 1.0) {
+			robot3GO->render = true;
+			robot3->gotHit = false;
+		}
+		else if (robot3HitTimer.Get() > 0.9) {
+			robot3GO->render = false;
+		}
+		else if (robot3HitTimer.Get() > 0.8) {
+			robot3GO->render = true;
+		}
+		else if (robot3HitTimer.Get() > 0.7) {
+			robot3GO->render = false;
+		}
+		else if (robot3HitTimer.Get() > 0.6) {
+			robot3GO->render = true;
+		}
+		else if (robot3HitTimer.Get() > 0.5) {
+			robot3GO->render = false;
+		}
+		else if (robot3HitTimer.Get() > 0.4) {
+			robot3GO->render = true;
+		}
+		else if (robot3HitTimer.Get() > 0.3) {
+			robot3GO->render = false;
+		}
+		else if (robot3HitTimer.Get() > 0.2) {
+			robot3GO->render = true;
+		}
+		else if (robot3HitTimer.Get() > 0.1) {
+			robot2GO->render = false;
+		}
+	}
 
 	// KONAMI CODE
 	// todo - Apertar 2 teclas seguidas nao funciona (reconhece as duas apertando soh uma vez). Usar um timer pra resolver isso
