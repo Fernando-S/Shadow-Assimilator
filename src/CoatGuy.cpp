@@ -210,6 +210,7 @@ void CoatGuy::Update(float dt) {
 		DJTimer.Update(dt);
 		FinishHimTimer.Update(dt);
 		LoopTimer.Update(dt);
+		ATKTimer.Update(dt);
 
 
 		//////////////////////////////////////////
@@ -417,89 +418,89 @@ void CoatGuy::Update(float dt) {
 			SetJump = false;
 			Setidle = false;
 		}
-
-		if (inputManager.IsKeyDown(UP_ARROW_KEY) && tchfloor && !airbone && (Jump == 0)) {
-			//this->associated.box.y -= 10;
-			verticalSpeed = COATGUY_JUMP;
-			tchfloor = false;
-			SetJump = true;
-			airbone = true;
-			Jump++;
-			Ground = 0;
-			DJTimer.Restart();
-			Setidle = false;
-			jumped = true;
-			doubleJump = false;
-		}
-		else
-			///////////////////////////////////////////
-			//		CORRIDA PARA A ESQUERDA			//
-			/////////////////////////////////////////
-			if (inputManager.IsKeyDown(LEFT_ARROW_KEY)) {
-
-				WallgrabR = false;
-
-				if (linearSpeed == 0)
-					oppositeSpeed = 0;
-
-				if (Getspeed1 == false) {
-					oppositeSpeed = linearSpeed;
-					Getspeed1 = true;
-					Setidle = false;
-					Setrun = true;
-					Run = 0;
-					Stop = 0;
-					facingL = true;
-					facingR = false;
-				}
-
-				if (Run > -10)
-					Run--;
-
-				speedH = { -1, 0 };
-				if ((oppositeSpeed > -COATGUY_SPEED) && !WallgrabL) {
-
-					oppositeSpeed -= accelSpeedGain;
-					linearSpeed = -oppositeSpeed;
-
-				}
-				else
-					linearSpeed = -oppositeSpeed;
+		if (ATKTimer.Get() > 1 + dt) {
+			if (inputManager.IsKeyDown(UP_ARROW_KEY) && tchfloor && !airbone && (Jump == 0)) {
+				//this->associated.box.y -= 10;
+				verticalSpeed = COATGUY_JUMP;
+				tchfloor = false;
+				SetJump = true;
+				airbone = true;
+				Jump++;
+				Ground = 0;
+				DJTimer.Restart();
+				Setidle = false;
+				jumped = true;
+				doubleJump = false;
 			}
+			else
+				///////////////////////////////////////////
+				//		CORRIDA PARA A ESQUERDA			//
+				/////////////////////////////////////////
+				if (inputManager.IsKeyDown(LEFT_ARROW_KEY)) {
+
+					WallgrabR = false;
+
+					if (linearSpeed == 0)
+						oppositeSpeed = 0;
+
+					if (Getspeed1 == false) {
+						oppositeSpeed = linearSpeed;
+						Getspeed1 = true;
+						Setidle = false;
+						Setrun = true;
+						Run = 0;
+						Stop = 0;
+						facingL = true;
+						facingR = false;
+					}
+
+					if (Run > -10)
+						Run--;
+
+					speedH = { -1, 0 };
+					if ((oppositeSpeed > -COATGUY_SPEED) && !WallgrabL) {
+
+						oppositeSpeed -= accelSpeedGain;
+						linearSpeed = -oppositeSpeed;
+
+					}
+					else
+						linearSpeed = -oppositeSpeed;
+				}
 			///////////////////////////////////////
 			//		CORRIDA PARA A DIREITA		//
 			/////////////////////////////////////
-			else if (inputManager.IsKeyDown(RIGHT_ARROW_KEY)) {
-				speedH = { 1, 0 };
+				else if (inputManager.IsKeyDown(RIGHT_ARROW_KEY)) {
+					speedH = { 1, 0 };
 
-				if (Getspeed2 == false) {
-					oppositeSpeed = linearSpeed;
-					Getspeed2 = true;
+					if (Getspeed2 == false) {
+						oppositeSpeed = linearSpeed;
+						Getspeed2 = true;
 
-					Run = 0;
-					Stop = 0;
-					Setidle = false;
-					Setrun = true;
-					facingL = false;
-					facingR = true;
+						Run = 0;
+						Stop = 0;
+						Setidle = false;
+						Setrun = true;
+						facingL = false;
+						facingR = true;
 
-				}
-
-				if (Run < 10)
-					Run++;
-
-				if (linearSpeed < COATGUY_SPEED + 50) {
-
-					if (oppositeSpeed >= 0) {
-						oppositeSpeed -= accelSpeedGain;
-						linearSpeed = -oppositeSpeed;
 					}
-					else
-						linearSpeed += accelSpeedGain;
 
+					if (Run < 10)
+						Run++;
+
+					if (linearSpeed < COATGUY_SPEED + 50) {
+
+						if (oppositeSpeed >= 0) {
+							oppositeSpeed -= accelSpeedGain;
+							linearSpeed = -oppositeSpeed;
+						}
+						else
+							linearSpeed += accelSpeedGain;
+
+					}
 				}
-			}
-
+		}
 		double atrictSpeedLoss = COATGUY_ATRICT * dt;
 
 		if (!inputManager.IsKeyDown(LEFT_ARROW_KEY))
@@ -552,15 +553,19 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a direita			//
 		/////////////////////////////////////
-		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) {
+		if (((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) || ((Run >= 0) && (Atk0 == true))) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
 
 			facingR = true;
 			facingL = false;
 
-			if (Ground > 2) {
+			if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
+			}
+
+			if (Atk0 == true) {
+				Atk0 = false;
 			}
 
 			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
@@ -574,7 +579,7 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a esquerda		//
 		/////////////////////////////////////
-		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) {
+		if (((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) || ((Run < 0) && (Atk0 == true))) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle_inv.png", 10, 0.09);
 			facingR = false;
@@ -584,8 +589,12 @@ void CoatGuy::Update(float dt) {
 
 			associated.AddComponent(sprite);
 
-			if (Ground > 2) {
+			if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
+			}
+
+			if (Atk0 == true) {
+				Atk0 = false;
 			}
 
 		}
@@ -850,11 +859,83 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////
 		//        ATAQUE BASICO			//
 		/////////////////////////////////
-		if (inputManager.KeyPress(K_KEY)) {
+		//cout << "ATKTimer: " << ATKTimer.Get() << endl;
+		if (inputManager.KeyPress(K_KEY) && (ATKTimer.Get() > 1.0)) {
 			isAtacking = true;
+			cout << "Atk1: " << Atk1 << endl;
+			cout << "Atk0: " << Atk0 << endl;
+			Atk1 = 0;
+			Atk0 = false;
+			Atk1++;
+			ATKTimer.Restart();
 		}
-		else
+		if ((Atk1 == 1) && (Run >= 0)) {
+			cout << "PRIMEIRO ATAQUE\n";
+			//Camera::Unfollow();
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk1.png", 5, 0.1);
+			associated.AddComponent(sprite);
+			associated.box.x -= 20;
+			Atk1++;
+			Atk0 = false;
+			//cout << "Atk1: " << Atk1 << endl;
+			//cout << "Atk0: " << Atk0 << endl;
+		}
+
+		if ((Atk1 == 1) && (Run < 0)) {
+			cout << "PRIMEIRO ATAQUE\n";
+			//Camera::Unfollow();
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk1_inv.png", 5, 0.1);
+			associated.AddComponent(sprite);
+			associated.box.x -= 20;
+			Atk1++;
+			Atk0 = false;
+			//cout << "Atk1: " << Atk1 << endl;
+			//cout << "Atk0: " << Atk0 << endl;
+		}
+
+		if ((ATKTimer.Get() > 0.5) && (ATKTimer.Get() < 0.5 + dt) && (Atk1 == 2)) {
+			cout << "incrementa Atk1\n";
+			Atk1++;
+			//cout << "Atk1: " << Atk1 << endl;
+			//cout << "Atk0: " << Atk0 << endl;
+		}
+		if ((Atk1 == 3) && (Run >= 0)) {
+			cout << "SEGUNDO ATAQUE\n";
+			//Camera::Unfollow();
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk2.png", 5, 0.1);
+			associated.AddComponent(sprite);
+			associated.box.x -= 20;
+			Atk1++;
+			//cout << "Atk1: " << Atk1 << endl;
+			//cout << "Atk0: " << Atk0 << endl;
+		}
+
+		if ((Atk1 == 3) && (Run < 0)) {
+			cout << "SEGUNDO ATAQUE\n";
+			//Camera::Unfollow();
+			associated.RemoveComponent(sprite);
+			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk2_inv.png", 5, 0.1);
+			associated.AddComponent(sprite);
+			associated.box.x -= 20;
+			Atk1++;
+			//cout << "Atk1: " << Atk1 << endl;
+			//cout << "Atk0: " << Atk0 << endl;
+		}
+
+		if ((ATKTimer.Get() > 1.0) && (Atk1 == 4)) {
+			Atk1 = 0;
+			Atk0 = true;
+			//cout << "Atk1: " << Atk1 << endl;
+			//cout << "Atk0: " << Atk0 << endl;
+		}
+		else {
+			//Atk1 = 0;
 			isAtacking = false;
+		}
+			
 
 		///////////////////////////////////////////////////////////////////////////////
 		//							EFEITOS SONOROS									//

@@ -351,11 +351,20 @@ void Player::Update(float dt) {
 		}
 		
 		if (Atk1 != 0) {
-			froze = 0.6;
+			froze = 0.45;
 		}
 		if (Atk2 != 0) {
-			froze = 1.2;
+			froze = 0.95;
 		}
+		if (shootaux != 0) {
+			froze = 0.5;
+		}
+
+		//cout << "froze: " << froze << endl;
+		if ( ( (ATK1CooldownTimer.Get() > froze - dt) && (ATK1CooldownTimer.Get() < froze) ) && ( (inputManager.IsKeyDown(D_KEY)) || (inputManager.IsKeyDown(A_KEY)) ) ) {
+			Run = 0;
+		}
+
 		if (ATK1CooldownTimer.Get() > froze) {
 			if (inputManager.IsKeyDown(W_KEY) && tchfloor && !airbone && (Jump == 0)) {
 				//this->associated.box.y -= 10;
@@ -440,9 +449,12 @@ void Player::Update(float dt) {
 				}
 
 		}
+		else {
+			//cout << "CONGELADO\n";
+		}
 	
 		if ((Atk1 != 0) || (Atk2 != 0)) {
-			linearSpeed = 0;
+			//linearSpeed = 0;
 		}
 
 		double atrictSpeedLoss = PLAYER_ATRICT * dt;
@@ -474,6 +486,7 @@ void Player::Update(float dt) {
 			}
 
 		}
+		
 
 		if ((linearSpeed == 0) && (verticalSpeed == 0)) {
 			if (Stop < 10) {
@@ -493,11 +506,13 @@ void Player::Update(float dt) {
 		//									SPRITES									//
 		/////////////////////////////////////////////////////////////////////////////
 
+		//cout << "linarSpeed: " << linearSpeed << endl;
+		//cout << "Run: " << Run << endl << endl;
 
 		///////////////////////////////////
 		//		Idle para a direita		//
 		/////////////////////////////////
-		if (((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) || ((Atk0 == true) && (Run >= 0))) {
+		if (((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) || ((Atk0 == true) && (Run >= 0) && (!inputManager.IsKeyDown(D_KEY)))) {
 
 			facingR = true;
 			facingL = false;
@@ -523,12 +538,13 @@ void Player::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a esquerda		//
 		/////////////////////////////////////
-		if (((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) || ((Atk0 == true) && (Run < 0))) {			
+		if (((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) || ((Atk0 == true) && (Run < 0) && (!inputManager.IsKeyDown(A_KEY)))) {
 			facingR = false;
 			facingL = true;
 		
 			if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
+				cout << "AJUSTE\n";
 			}
 			if (Atk0 == true) {
 				Atk0 = false;
@@ -702,7 +718,7 @@ void Player::Update(float dt) {
 
 			// PRA DIREITA
 			if ((Atk1 == 1) && (Run >= 0)) {
-				//Camera::Unfollow();
+				Camera::Unfollow();
 				associated.RemoveComponent(sprite);
 				if (Neon == true) {
 					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1_rastro.png", 5, 0.08);
@@ -711,7 +727,8 @@ void Player::Update(float dt) {
 					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1.png", 5, 0.08);
 				}
 				associated.AddComponent(sprite);
-				associated.box.x -= 20;			
+				associated.box.x -= 20;	
+				Atk1++;
 			}
 
 			// PRA ESQUERDA
@@ -726,10 +743,11 @@ void Player::Update(float dt) {
 					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1_inv.png", 5, 0.09);
 				}
 				associated.AddComponent(sprite);
-				associated.box.x -= 20;
-
+				associated.box.x -= 60;
+				Atk1++;
 			}
-			if ((ATK1CooldownTimer.Get() >= 0.45) && (ATK1CooldownTimer.Get() <= 0.48) && (linearSpeed == 0)) {
+			//cout << "Atk0: " << Atk0 << endl;
+			if ((ATK1CooldownTimer.Get() >= 0.45) && (ATK1CooldownTimer.Get() <= 0.48) /*&& (linearSpeed == 0)*/) {
 				if (Atk2 == 0) {
 					Atk0 = true;
 				}
@@ -828,6 +846,7 @@ void Player::Update(float dt) {
 			}
 			shootaux++;
 			ShootCooldownTimer.Restart();
+			ATK1CooldownTimer.Restart();
 		}
 		if (inputManager.KeyRelease(J_KEY)) {
 			shootaux = 0;
@@ -861,11 +880,9 @@ void Player::Update(float dt) {
 
 		if ((inputManager.KeyPress(K_KEY)) && (ATK1CooldownTimer.Get() > 0.2) && ((ATK1CooldownTimer.Get() < 0.5))) {
 			linearSpeed = 0;
-			if (Atk2 < 10) {
-				Atk2++;
-				Atk1 = 0;
-				Atk2delay = 0.5;
-			}
+			Atk2 = 1;
+			//Atk1 = 0;
+			Atk2delay = 0.5;
 			isAtacking = true;
 		}
 		else {
@@ -875,22 +892,20 @@ void Player::Update(float dt) {
 
 		if ((inputManager.KeyPress(K_KEY)) && (ATK1CooldownTimer.Get() > 0.5 + Atk2delay)) {
 			linearSpeed = 0;
-			if (Atk1 < 10) {
-				Atk1++;
-				Atk2 = 0;
-			}
+			Atk1 = 1;
+			Atk2 = 0;
 			
 			isAtacking = true;
 			ATK1CooldownTimer.Restart();
 		}
 
-		
-
 		else {
 			isAtacking = false;
-			Atk1 = 0;
+			//Atk1 = 0;
+			//Atk2 = 0;
 		}
-			
+		
+		//cout << "atktimer:" << ATK1CooldownTimer.Get() << endl;
 
 		///////////////////////////////////////////////////////////////////////////////
 		//							EFEITOS SONOROS									//
