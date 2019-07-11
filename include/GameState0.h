@@ -44,12 +44,17 @@ private:
 	GameObject* HPbarGO;
 	GameObject* surpriseGO;
 	GameObject* playerGO;
-	GameObject* coatGuyGO;
+	GameObject* robot1GO;
+	GameObject* robot2GO;
+	GameObject* robot3GO;
 	GameObject* chaoGO;
 	GameObject* finalBossGo;
 	Player* player;
+	Robot* robot1;
+	Robot* robot2;
+	Robot* robot3;
 
-	Timer playerHitTimer, robotHitTimer;
+	Timer playerHitTimer, robot1HitTimer, robot2HitTimer, robot3HitTimer;
 
 	bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
 	bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false, direita1 = false, direita2 = false;
