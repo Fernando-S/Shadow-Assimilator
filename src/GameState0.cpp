@@ -45,24 +45,14 @@ void GameState0::LoadAssets() {
 	/////////////////////////////////////////////////
 	
 	auto prediosGO = new GameObject();
-	//auto tileSet_Level0 = new TileSet(64, 64, "./assets/img/Level0/tileLevel0.png");
-	//auto tileSet_Background = new TileSet(64, 64, "./assets/img/Level0/tile001.png");
-	//auto prediosBackground = new TileMap(*prediosGO, "./assets/map/Level0/TileMap_Predios.txt", tileSet_Background);
-	//auto prediosBackground = new TileMap(*prediosGO, "./assets/img/Level0/TileMap_Predios.txt", tileSet_Level0);
 
 	tileSet = new TileSet(64, 64, "./assets/img/Level0/agora vai/tile003.png");
 	auto prediosBackground = new TileMap(*prediosGO, "./assets/map/Level0/TileMap_Predios1.txt", tileSet);
-
-
 
 	prediosBackground->colide = false;
 
 	prediosGO->box.x = 0;
 	prediosGO->box.y =  800 - 29 * ONETILESQUARE;
-	//prediosGO->box.w = prediosBackground->GetWidth() * tileSet_Background->GetTileWidth();
-	//prediosGO->box.h = prediosBackground->GetHeight() * tileSet_Background->GetTileHeight();
-	//prediosGO->box.w = prediosBackground->GetWidth() * tileSet_Level0->GetTileWidth();
-	//prediosGO->box.h = prediosBackground->GetHeight() * tileSet_Level0->GetTileHeight();
 
 	prediosGO->box.w = prediosBackground->GetWidth() * tileSet->GetTileWidth();
 	prediosGO->box.h = prediosBackground->GetHeight() * tileSet->GetTileHeight();
@@ -205,8 +195,8 @@ void GameState0::Update(float dt){
 		coatGuyGO->box.y = 800 - coatGuyGO->box.h;
 	}
 
-	if (playerGO->box.x - 10 < 0) {
-		playerGO->box.x = -10;
+	if (playerGO->box.x < 10) {
+		playerGO->box.x = 10;
 	}
 
 	if (playerGO->box.x + playerGO->box.w > 96 * ONETILESQUARE) {
