@@ -4,18 +4,17 @@
 #																					#
 #	       Alunos 										Matriculas	 				#
 #								Programadores										#
-#	Fernando Sobral Nóbrega								15/0034911					#																					
-#	Pedro Augusto de Sousa Negrão						17/0153789					#
+#	Fernando Sobral Nobrega								15/0034911					#																					
+#	Pedro Augusto de Sousa Negrao						17/0153789					#
 #																					#
 #								Artistas											#
 #	Camila Bontempo Sidersky							15/0120753					#
-#	Ralison Marçal Resende 								17/0154858					#
-#	Paty/Tayna																		#
+#	Patricia Tayna Pereira Silva						14/0029753					#
+#	Ralison Marcal Resende 								17/0154858					#
 #																					#
 #								Musicos												#
 #	Enzo Aprile Lopes Velloso							16/0118999					#
 #	Filipe Campos Nunes de Souza						13/0147532					#
-#	Marina Morena Rizério do Prado						14/002791					#
 #																					#
 #	OS: Windows 10 Pro																#
 #	IDE: Visual Studio 2017															#

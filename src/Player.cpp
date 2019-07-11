@@ -1,5 +1,4 @@
-﻿
-#include "Player.h"
+﻿#include "Player.h"
 #include "Game.h"
 #include "Sound.h"
 
@@ -150,7 +149,7 @@ void Player::Update(float dt) {
 			}
 
 
-			
+
 			if (DeathTimer.Get() > 2.1) {
 				/// todo - descobrir o porque disso para melhorar som de morte
 				cout << "Nem entra aqui. A personagem esta sendo deletada antes em outro lugar\n";
@@ -349,7 +348,7 @@ void Player::Update(float dt) {
 			SetJump = false;
 
 		}
-		
+
 		if (Atk1 != 0) {
 			froze = 0.45;
 		}
@@ -361,7 +360,7 @@ void Player::Update(float dt) {
 		}
 
 		//cout << "froze: " << froze << endl;
-		if ( ( (ATK1CooldownTimer.Get() > froze - dt) && (ATK1CooldownTimer.Get() < froze) ) && ( (inputManager.IsKeyDown(D_KEY)) || (inputManager.IsKeyDown(A_KEY)) ) ) {
+		if (((ATK1CooldownTimer.Get() > froze - dt) && (ATK1CooldownTimer.Get() < froze)) && ((inputManager.IsKeyDown(D_KEY)) || (inputManager.IsKeyDown(A_KEY)))) {
 			Run = 0;
 		}
 
@@ -452,7 +451,7 @@ void Player::Update(float dt) {
 		else {
 			//cout << "CONGELADO\n";
 		}
-	
+
 		if ((Atk1 != 0) || (Atk2 != 0)) {
 			//linearSpeed = 0;
 		}
@@ -486,7 +485,7 @@ void Player::Update(float dt) {
 			}
 
 		}
-		
+
 
 		if ((linearSpeed == 0) && (verticalSpeed == 0)) {
 			if (Stop < 10) {
@@ -541,7 +540,7 @@ void Player::Update(float dt) {
 		if (((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) || ((Atk0 == true) && (Run < 0) && (!inputManager.IsKeyDown(A_KEY)))) {
 			facingR = false;
 			facingL = true;
-		
+
 			if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
 				cout << "AJUSTE\n";
@@ -707,10 +706,10 @@ void Player::Update(float dt) {
 		///////////////////////
 		//		ATAQUES		//
 		/////////////////////
-		if (inputManager.IsKeyDown(P_KEY)){
+		if (inputManager.IsKeyDown(P_KEY)) {
 			Neon = true;
 		}
-		if (inputManager.IsKeyDown(O_KEY)){
+		if (inputManager.IsKeyDown(O_KEY)) {
 			Neon = false;
 		}
 		//ATAQUE - 1///////////////////////////////////////////////////////
@@ -718,7 +717,7 @@ void Player::Update(float dt) {
 
 			// PRA DIREITA
 			if ((Atk1 == 1) && (Run >= 0)) {
-				Camera::Unfollow();
+				//Camera::Unfollow();
 				associated.RemoveComponent(sprite);
 				if (Neon == true) {
 					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1_rastro.png", 5, 0.08);
@@ -727,7 +726,7 @@ void Player::Update(float dt) {
 					sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk1.png", 5, 0.08);
 				}
 				associated.AddComponent(sprite);
-				associated.box.x -= 20;	
+				associated.box.x -= 20;
 				Atk1++;
 			}
 
@@ -753,10 +752,10 @@ void Player::Update(float dt) {
 				}
 				Atk1 = 0;
 			}
-		
+
 			//ATAQUE - 2//////////////////////////////////////////////
 
-			if ((ATK1CooldownTimer.Get() >= 0.45)){
+			if ((ATK1CooldownTimer.Get() >= 0.45)) {
 
 				// PRA DIREITA
 				if ((Atk2 == 1) && (Run >= 0)) {
@@ -794,14 +793,12 @@ void Player::Update(float dt) {
 			}
 		}
 		/*
-		/// TODO - NEGRAO, FAZ ISSO FUNCIONAR DO TEU JEITO MAGICO PFVR 
+		/// TODO - NEGRAO, FAZ ISSO FUNCIONAR DO TEU JEITO MAGICO PFVR
 		///////////////////////
 		//		POUSO		//
 		/////////////////////
 		if (pouso) {
-
 			cout << "ENTRA NO POUSO\n";
-
 			// PARA A DIREITA
 			//if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1))) && (wallAUX == 0)) {
 			if (facingR) {
@@ -812,7 +809,6 @@ void Player::Update(float dt) {
 				facingR = true;
 				facingL = false;
 			}
-
 			// PARA A ESQUERDA
 			//if ((((Fall == 1) && (Run < 0)) || ((Fall > 0) && (Run == -1))) && (wallAUX == 0)) {
 			if (facingL) {
@@ -836,7 +832,7 @@ void Player::Update(float dt) {
 			else if (facingL) {
 				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
 			}
-				
+
 			shootaux++;
 
 			if (shootaux == 1) {
@@ -865,7 +861,7 @@ void Player::Update(float dt) {
 			associated.box += speedH * linearSpeed*dt;
 			DashCooldownTimer.Restart();
 		}
-		
+
 		// ESQUERDA
 		if (inputManager.IsKeyDown(Q_KEY) && DashCooldownTimer.Get() > 1.8) {
 			speedH = { -1, 0 };
@@ -894,7 +890,7 @@ void Player::Update(float dt) {
 			linearSpeed = 0;
 			Atk1 = 1;
 			Atk2 = 0;
-			
+
 			isAtacking = true;
 			ATK1CooldownTimer.Restart();
 		}
@@ -904,7 +900,7 @@ void Player::Update(float dt) {
 			//Atk1 = 0;
 			//Atk2 = 0;
 		}
-		
+
 		//cout << "atktimer:" << ATK1CooldownTimer.Get() << endl;
 
 		///////////////////////////////////////////////////////////////////////////////
@@ -918,7 +914,7 @@ void Player::Update(float dt) {
 			if (playerSFX->IsPlaying()) {
 				playerSFX->Stop();
 			}
-			
+
 			associated.RemoveComponent(playerSFX);
 			playerSFX = new Sound(associated, "./assets/audio/SFX/PuloPrincipal(Assim.)1.wav");
 			associated.AddComponent(playerSFX);
@@ -1022,9 +1018,9 @@ void Player::NotifyCollision(GameObject& other) {
 		if (tile->colide) {
 
 			// Colisao com chaos
-			if ( (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
-				|| (this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2)	) {
-				
+			if ((this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
+				|| (this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2)) {
+
 				if (this->associated.box.y + this->associated.box.h > tile->GetY()) {
 					ultrapassou = true;
 				}

@@ -28,7 +28,8 @@ void TitleState::LoadAssets() {
 	auto textGO = new GameObject();
 	SDL_Color textColor = { 120, 120, 255, 255 };		// R, G, B, A
 	// todo - colocar ultimo parametro para ser o tempo de pisca pisca
-	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ENTER to play!", textColor/*, 0.7*/);
+	//auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ENTER to play!", textColor/*, 0.7*/);
+	auto text = new Text(*textGO, "./assets/font/hellovetica.ttf", 60, Text::SOLID, "Press ENTER to play!", textColor/*, 0.7*/);
 	textGO->AddComponent(text);
 
 	// Posiciona o texto
@@ -81,8 +82,8 @@ void TitleState::Update(float dt) {
 
 
 	if (startButtonGO->box.Contains(mousePos)) {
-		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w * 2/3 + 18,
-										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 12});
+		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w/2 - 1 /** 2/3 + 18*/,
+										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 11});
 		
 		if(startHoverSound)
 			hoverSound->Play();
@@ -96,13 +97,13 @@ void TitleState::Update(float dt) {
 	}
 	else {
 		startHoverSound = true;
-		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w * 2/3 + 17,
-										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 14});
+		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w/2 - 3 /** 2/3 + 17*/,
+										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 13});
 	}
 
 	if (creditsButtonGO->box.Contains(mousePos)) {
-		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w *2/3 + 16,
-											 bgGO->box.Center().y + 6 * creditsButtonGO->box.h - 4});
+		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w/2 - 2 /**2/3 + 16*/,
+											 bgGO->box.Center().y + 6 * creditsButtonGO->box.h - 3});
 
 		if (creditsHoverSound)
 			hoverSound->Play();
@@ -115,8 +116,8 @@ void TitleState::Update(float dt) {
 	}
 	else {
 		creditsHoverSound = true;
-		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w *2/3 + 15,
-											bgGO->box.Center().y + 6 * creditsButtonGO->box.h - 2});
+		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w/2 - 4/* *2/3 + 15*/,
+											bgGO->box.Center().y + 6 * creditsButtonGO->box.h - 1});
 	}
 
 	UpdateArray(dt);	// executa o update em cada um dos objetos no objectArray
@@ -128,6 +129,7 @@ void TitleState::Render() {
 
 void TitleState::Start() {
 	LoadAssets();
+	Camera::pos = { 0,0 };
 	StartArray();					// Da Start em cada GameObject no objectArray
 }
 
@@ -136,5 +138,4 @@ void TitleState::Pause() {
 }
 
 void TitleState::Resume() {
-	Camera::pos = { 0,0 };
 }

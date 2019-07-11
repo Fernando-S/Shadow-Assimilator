@@ -10,46 +10,123 @@ CreditsState::~CreditsState() {
 }
 
 void CreditsState::LoadAssets() {
-	/*
-	// Background de titulo
-	auto bgGO = new GameObject();
-	bgGO->box = { 0, -36 };
-	auto bg = new Sprite(*bgGO, "./assets/img/Menu/menu.png");
-	bgGO->AddComponent(bg);
-	objectArray.emplace_back(bgGO);
+	
+	///////////////////////////////////
+	//		Texto de CREDITS		//
+	/////////////////////////////////
+	auto creditsGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto creditsText = new Text(*creditsGO, "./assets/font/hellovetica.ttf", 60, Text::SOLID, "CREDITS", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	creditsGO->AddComponent(creditsText);
+	creditsGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, 100 });
+	objectArray.emplace_back(creditsGO);
+	
 
-	// Texto "Press to Play"
-	auto textGO = new GameObject();
-	SDL_Color textColor = { 120, 120, 255, 255 };		// R, G, B, A
-	// todo - colocar ultimo parametro para ser o tempo de pisca pisca
-	auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 60, Text::SOLID, "Press ENTER to play!", textColor/*, 0.7/);
-	textGO->AddComponent(text);
+	///////////////////////////////
+	//		Textos de Art		//
+	///////////////////////////////
+	auto artGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto artText = new Text(*artGO, "./assets/font/hellovetica.ttf", 35, Text::SOLID, "Art", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	artGO->AddComponent(artText);
+	artGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, 200 });
+	objectArray.emplace_back(artGO);
 
-	// Posiciona o texto
-	textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, Game::GetInstance().GetHeight() * 5 / 7.0f });
-	//objectArray.emplace_back(textGO);
+	// Artistas
+	auto camilaGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto camilaText = new Text(*camilaGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+								"Camila Bontempo Sidersky", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	camilaGO->AddComponent(camilaText);
+	camilaGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, artGO->box.y + 75 });
+	objectArray.emplace_back(camilaGO);
 
 
-	// Botao de START
-	auto startButtonGO = new GameObject();
-	auto startButton = new Sprite(*startButtonGO, "./assets/img/Menu/menu_start.png");
-	startButtonGO->AddComponent(startButton);
-	startButtonGO->box.h = startButton->GetHeight();
-	startButtonGO->box.w = startButton->GetWidth();
-	startButtonGO->box.PlaceCenter( {Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 4,
-									 Game::GetInstance().GetHeight() / 2.0f + 3 * startButtonGO->box.h + 11} );
-	objectArray.emplace_back(startButtonGO);
+	auto patyGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto patyText = new Text(*patyGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+							 "Patricia Tayna Pereira Silva", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	patyGO->AddComponent(patyText);
+	patyGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, camilaGO->box.y + 55 });
+	objectArray.emplace_back(patyGO);
 
-	// Botao de CREDITS
-	auto creditsButtonGO = new GameObject();
-	auto creditsButton = new Sprite(*creditsButtonGO, "./assets/img/Menu/credits.png");
-	creditsButtonGO->AddComponent(creditsButton);
-	creditsButtonGO->box.h = creditsButton->GetHeight();
-	creditsButtonGO->box.w = creditsButton->GetWidth();
-	creditsButtonGO->box.PlaceCenter(  {Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
-										Game::GetInstance().GetHeight() / 2.0f + 4 * creditsButtonGO->box.h + 7} );
-	objectArray.emplace_back(creditsButtonGO);
-	*/
+
+	auto ralisonGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto ralisonText = new Text(*ralisonGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+								"Ralison Marcal Resende", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	ralisonGO->AddComponent(ralisonText);
+	ralisonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, patyGO->box.y + 55 });
+	objectArray.emplace_back(ralisonGO);
+	
+
+	///////////////////////////////////////////////
+	//		Texto de Music & Sound Effects		//
+	/////////////////////////////////////////////
+	auto soundGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto soundText = new Text(*soundGO, "./assets/font/hellovetica.ttf", 30, Text::SOLID, "Music & Sound Effects", { 255, 0, 0, 255 }/*textColor/*, 0.79=*/);
+	soundGO->AddComponent(soundText);
+	soundGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, ralisonGO->box.y + 90 });
+	objectArray.emplace_back(soundGO);
+
+	// Musicos
+	auto enzoGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto enzoText = new Text(*enzoGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+		"Enzo Aprile Lopes Velloso", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	enzoGO->AddComponent(enzoText);
+	enzoGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, soundGO->box.y + 75 });
+	objectArray.emplace_back(enzoGO);
+
+
+	auto filipeGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto filipeText = new Text(*filipeGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+		"Filipe Campos Nunes de Souza", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	filipeGO->AddComponent(filipeText);
+	filipeGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, enzoGO->box.y + 55 });
+	objectArray.emplace_back(filipeGO);
+
+	///////////////////////////////////
+	//		Texto de Programing		//
+	/////////////////////////////////
+	auto programingGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto programingText = new Text(*programingGO, "./assets/font/hellovetica.ttf", 30, Text::SOLID, "Programing", { 255, 0, 0, 255 }/*textColor/*, 0.79=*/);
+	programingGO->AddComponent(programingText);
+	programingGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, filipeGO->box.y + 90 });
+	objectArray.emplace_back(programingGO);
+
+	// Programadores
+	auto fernandoGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto fernandoText = new Text(*fernandoGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+		"Fernando Sobral Nobrega", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	fernandoGO->AddComponent(fernandoText);
+	fernandoGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, programingGO->box.y + 75 });
+	objectArray.emplace_back(fernandoGO);
+
+
+	auto negraoGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto negraoText = new Text(*negraoGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+		"Pedro Augusto de Sousa Negrao", { 255, 0, 0, 255 }/*textColor/*, 0.7*/);
+	negraoGO->AddComponent(negraoText);
+	negraoGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f, fernandoGO->box.y + 55 });
+	objectArray.emplace_back(negraoGO);
+
+
+	///////////////////////////////////////
+	//		TEXTO DE BACK TO MENU		//
+	/////////////////////////////////////
+	auto backGO = new GameObject();
+	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
+	auto backText = new Text(*backGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
+		"Press ESC to go back", { 255, 255, 255, 255 }/*textColor/*, 0.7*/);
+	backGO->AddComponent(backText);
+	backGO->box.PlaceCenter({ Game::GetInstance().GetWidth()/7.f, Game::GetInstance().GetHeight() - 60.f });
+	objectArray.emplace_back(backGO);
 
 }
 
@@ -72,6 +149,7 @@ void CreditsState::Render() {
 
 void CreditsState::Start() {
 	LoadAssets();
+	Camera::pos = { 0,0 };
 	StartArray();					// Da Start em cada GameObject no objectArray
 }
 
@@ -80,5 +158,5 @@ void CreditsState::Pause() {
 }
 
 void CreditsState::Resume() {
-	Camera::pos = { 0,0 };
+
 }

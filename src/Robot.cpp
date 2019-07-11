@@ -121,12 +121,14 @@ void Robot::Update(float dt) {
 
 			if (facingR) {
 				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte.png", 21, 0.1, 2.1);
+				//sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte.png", 21, 0.1, 2.1);
+				sprite = new Sprite(associated, "./assets/img/Robot/morte1f.png", 6, 0.2);
 				associated.AddComponent(sprite);
 			}
 			else if (facingL) {
 				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte_inv.png", 21, 0.1, 2.1);
+				//sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte_inv.png", 21, 0.1, 2.1);
+				sprite = new Sprite(associated, "./assets/img/Robot/morte2f.png", 6, 0.2);
 				associated.AddComponent(sprite);
 				associated.box.x -= 80;
 			}
@@ -147,6 +149,21 @@ void Robot::Update(float dt) {
 				associated.AddComponent(robotSFX);
 				robotSFX->Play();
 				deathSound = true;
+			}
+
+			if (DeathTimer.Get() > 1.1 && !deadSpriteSet) {
+				if (facingR) {
+					associated.RemoveComponent(sprite);
+					sprite = new Sprite(associated, "./assets/img/Robot/morto.png");
+					associated.AddComponent(sprite);
+				}
+				else if (facingL) {
+					associated.RemoveComponent(sprite);
+					sprite = new Sprite(associated, "./assets/img/Robot/morto_inv.png");
+					associated.AddComponent(sprite);
+				}
+
+				deadSpriteSet = true;
 			}
 
 
@@ -265,7 +282,7 @@ void Robot::Update(float dt) {
 				shooting = false;
 				alreadyShot = false;
 				patrol = true;
-				cout << "ENTRA AQUI\n";
+				cout << "IA WORKING\n";
 			}
 
 
@@ -274,7 +291,7 @@ void Robot::Update(float dt) {
 				moveEsquerda = true;
 			
 
-			if (associated.box.x < initialX - /*250*/ 5 * ONETILESQUARE) {
+			if (associated.box.x < initialX - /*250*/ 4 * ONETILESQUARE) {
 				if (!idle && !moveDireita) {
 					changeSideTimer.Restart();
 					moveDireita = false;
@@ -283,7 +300,7 @@ void Robot::Update(float dt) {
 				}
 				//cout << "LIMITE A ESQUERDA\n";
 			}
-			else if (associated.box.x > initialX + /*250*/ 5 * ONETILESQUARE) {
+			else if (associated.box.x > initialX + /*250*/ 4 * ONETILESQUARE) {
 				if (!idle && !moveEsquerda) {
 					changeSideTimer.Restart();
 					moveDireita = false;
@@ -426,10 +443,11 @@ void Robot::Update(float dt) {
 
 			if (runningSound) {
 				if (robotSFX->IsPlaying()) {
-					robotSFX->Stop();
+			//		robotSFX->Stop();
 				}
 				runningSound = false;
 			}
+			
 		}
 
 		if ((linearSpeed == 0) && (verticalSpeed == 0)) {
@@ -456,6 +474,8 @@ void Robot::Update(float dt) {
 		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0) && !shooting) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
+			//sprite = new Sprite(associated, "./assets/img/Robot/idle1f.png", 6, 0.09);
+
 
 			facingR = true;
 			facingL = false;
@@ -479,7 +499,8 @@ void Robot::Update(float dt) {
 		/////////////////////////////////////
 		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0) && !shooting) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle_inv.png", 10, 0.09);
+			//sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle_inv.png", 10, 0.09);
+			sprite = new Sprite(associated, "./assets/img/Robot/idle2f.png", 6, 0.2);
 			facingR = false;
 			facingL = true;
 			idle = true;
@@ -500,7 +521,8 @@ void Robot::Update(float dt) {
 		/////////////////////////////////////
 		if ((((Run == 1) && (Ground > 0)) || ((Ground == 1) && (Run > 0) && (inputManager.IsKeyDown(NUMPAD_SIX_KEY)))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Robot/001W1BOM.png", 5, 0.2);
+			//sprite = new Sprite(associated, "./assets/img/Robot/001W1BOM.png", 5, 0.2);
+			sprite = new Sprite(associated, "./assets/img/Robot/w1f.png", 5, 0.2);
 			associated.AddComponent(sprite);
 			facingR = true;
 			facingL = false;
@@ -515,7 +537,8 @@ void Robot::Update(float dt) {
 		/////////////////////////////////////
 		if ((((Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && (inputManager.IsKeyDown(NUMPAD_FOUR_KEY)))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Robot/001W2BOM.png", 5, 0.2);
+			//sprite = new Sprite(associated, "./assets/img/Robot/001W2BOM.png", 5, 0.2);
+			sprite = new Sprite(associated, "./assets/img/Robot/w2f.png", 5, 0.2);
 			associated.AddComponent(sprite);
 			facingR = false;
 			facingL = true;
@@ -528,6 +551,7 @@ void Robot::Update(float dt) {
 		///////////////////////
 		//		QUEDA		//
 		/////////////////////
+		/*
 		if (Ground == 0) {
 			
 			// QUEDA PRA DIREITA
@@ -552,16 +576,24 @@ void Robot::Update(float dt) {
 				idle = false;
 			}
 		}
-		
+		*/
 
 		///////////////////////////////
 		//		TIRO DO ROBO		//
 		/////////////////////////////
-		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
+		/*if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
 		/*	if (facingR)
 				Shoot(GetCenter());
 			else if (facingL)
-				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));*/
+				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));/
+			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
+			ShootCooldownTimer.Restart();
+		}
+		*/
+		/// todo - fazer uma condicao parecida ou ate mesmo igual para tocar o som de corrida apenas quando esta proximo do jogador
+		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 4 * ONETILESQUARE) && ShootCooldownTimer.Get() > 1.8
+			&& (Player::player->GetCenter().y > this->associated.box.y - ONETILESQUARE * 3)
+			&& (Player::player->GetCenter().y < this->associated.box.y + this->associated.box.h + ONETILESQUARE * 3)) {
 			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
 			ShootCooldownTimer.Restart();
 		}
@@ -576,11 +608,13 @@ void Robot::Update(float dt) {
 		/////////////////////////////
 		else if (Setrun && tchfloor) {
 			if (!runningSound) {
+				/*
 				if (robotSFX->IsPlaying()) {
 					robotSFX->Stop();
-				}
+				}*/
 				associated.RemoveComponent(robotSFX);
-				robotSFX = new Sound(associated, "./assets/audio/SFX/CorridaCidade(Assim.)1.wav");
+				//robotSFX = new Sound(associated, "./assets/audio/SFX/CorridaCidade(Assim.)1.wav");
+				robotSFX = new Sound(associated, "./assets/audio/SFX/PassoCidade(Assim.).wav");
 				associated.AddComponent(robotSFX);
 				runningSound = true;
 			}
@@ -739,7 +773,7 @@ void Robot::NotifyCollision(GameObject& other) {
 					wallAUX = 0;
 					WallgrabL = false;
 					if (robotSFX->IsPlaying()) {
-						robotSFX->Stop();
+						//robotSFX->Stop();
 					}
 					wallSlideSound = false;
 				}
@@ -753,7 +787,7 @@ void Robot::NotifyCollision(GameObject& other) {
 					wallAUX = 0;
 					ultrapassou = false;
 					if (robotSFX->IsPlaying()) {
-						robotSFX->Stop();
+						//robotSFX->Stop();
 					}
 					wallSlideSound = false;
 				}
