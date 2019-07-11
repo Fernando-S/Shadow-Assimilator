@@ -18,6 +18,7 @@ CoatGuy::CoatGuy(GameObject& associated) : Component(associated) {
 	angle = 0;
 	oppositeAccel = 0;
 	oppositeSpeed = 0;
+	FinishHimEneable = 0;
 	hp = COATGUY_INITIAL_HP;
 
 	// Carrega o sprite do coatGuy idle
@@ -113,23 +114,66 @@ void CoatGuy::Update(float dt) {
 		DeathTimer.Update(dt);
 
 		if (!dead) {
+			falsehp = 1;
+			FinishHimTimer.Update(dt);
 			DeathTimer.Restart();
 			//Camera::Unfollow();				// Camera para de segui-los
 			/// todo - comentar esse verticalSpeed com o Nego e ver o que ele acha melhor
 			verticalSpeed = 0;
 
-			if (facingR) {
+			if (facingR && !FinishHimEneable && !StartLoop && !kill) {
 				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte.png", 21, 0.1, 2.1);
+				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte1.png", 18, 0.1);
 				associated.AddComponent(sprite);
+				//cout << "MORREU\n";
+				FinishHimEneable = true;
+				StartLoop = false;
+				FinishHimTimer.Restart();
 			}
-			else if (facingL) {
+			else if (facingL && !FinishHimEneable && !StartLoop && !kill) {
 				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_morte_inv.png", 21, 0.1, 2.1);
+				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte1_inv.png", 18, 0.1);
 				associated.AddComponent(sprite);
 				associated.box.x -= 80;
+				//cout << "MORREU\n";
+				FinishHimEneable = true;
+				StartLoop = false;
+				FinishHimTimer.Restart();
 			}
-			dead = true;
+			//dead = true;
+
+			if ((FinishHimTimer.Get() > 1.8) && (FinishHimEneable == true) && (StartLoop == false) && (kill == false)) {// é feito o primeiro ciclo do loop
+				//cout << "PRIMEIRO LOOP\n";
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte2.png", 10, 0.1);
+				associated.AddComponent(sprite);
+				StartLoop = true;
+			}
+
+			if ((FinishHimEneable == true) && (StartLoop == true)) { //
+				FinishHimTimer.Restart();
+				FinishHimEneable = false;
+			}
+
+			if ((FinishHimTimer.Get() > 1) && (kill == false) && (StartLoop == true)){
+				//cout << "LOOP ETERNO\n";
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte2.png", 10, 0.1);
+				associated.AddComponent(sprite);
+				FinishHimTimer.Restart();
+			}
+
+			if (kill == true) {
+				//cout << "MORTO DE VEZ\n";
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte3.png", 1, 0.1);
+				associated.AddComponent(sprite);
+			}
+			//loop
+			//if()protagonista é malzao){
+			//morrendo mexmo MUDAR VARIAVEL NO GAME DATA
+			//
+
 		}
 		else {
 			///////////////////////////////
@@ -164,6 +208,8 @@ void CoatGuy::Update(float dt) {
 		ShootCooldownTimer.Update(dt);
 		DashCooldownTimer.Update(dt);
 		DJTimer.Update(dt);
+		FinishHimTimer.Update(dt);
+		LoopTimer.Update(dt);
 
 
 		//////////////////////////////////////////
@@ -920,12 +966,18 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 	if (laser && laser->playerLaser) {
 		//std::cout << "Vida do CoatGuy: " << hp << std::endl;
 		hp -= laser->GetDamage();
+		falsehp--;
+		
 	}
 	else if (player1 && Player::player->isAtacking) {
 		//cout << "Deu dano no robo\n";
 		hp -= 2;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
+		falsehp--;
 	}
 
+	if (falsehp < 1 && !FinishHimEneable && StartLoop) {
+		kill = true;
+	}
 
 	if (tile) {
 		if (tile->colide) {

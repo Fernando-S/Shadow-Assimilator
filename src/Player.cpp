@@ -735,9 +735,9 @@ void Player::Update(float dt) {
 				}
 				Atk1 = 0;
 			}
-			////////////////////////////////////////////////////////////////////////////////
-			//ATAQUE - 2
-			////////////////////////////////////////////////////////////////////////////////
+		
+			//ATAQUE - 2//////////////////////////////////////////////
+
 			if ((ATK1CooldownTimer.Get() >= 0.45)){
 
 				// PRA DIREITA
@@ -811,12 +811,29 @@ void Player::Update(float dt) {
 		///////////////////////////////////////
 		//		TIRO DA PROTAGONISTA		//
 		/////////////////////////////////////
-		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
-			if (facingR)
+		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.2) {
+			if (facingR) {
 				Shoot(GetCenter());
-			else if (facingL)
+			}
+			else if (facingL) {
 				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
+			}
+				
+			shootaux++;
+
+			if (shootaux == 1) {
+				associated.RemoveComponent(sprite);
+				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_atk4.png", 5, 0.1);
+				associated.AddComponent(sprite);
+			}
+			shootaux++;
 			ShootCooldownTimer.Restart();
+		}
+		if (inputManager.KeyRelease(J_KEY)) {
+			shootaux = 0;
+		}
+		if ((ShootCooldownTimer.Get() > 0.5) && ((ShootCooldownTimer.Get() < 0.55))) {
+			Atk0 = true;
 		}
 
 		///////////////////////
@@ -847,7 +864,7 @@ void Player::Update(float dt) {
 			if (Atk2 < 10) {
 				Atk2++;
 				Atk1 = 0;
-				Atk2delay = 0.37;
+				Atk2delay = 0.5;
 			}
 			isAtacking = true;
 		}
@@ -1122,7 +1139,7 @@ void Player::Shoot(Vec2 target) {
 	laserGO->box = associated.box.Center();
 
 	auto laser = new Laser(*laserGO, target.InclinacaoDaDiferenca(associated.box.Center()), LASER_SPEED,
-		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
+		PLAYER_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Protagonista/prot_tiro.png", 4, 0.1);
 	laser->playerLaser = true;
 	auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
 	laserGO->AddComponent(laserSound);
