@@ -55,7 +55,7 @@
 #define NUMPAD_NINE_KEY     SDLK_KP_9
 
 
-class InputManager{
+class InputManager {
 public:
 	void Update();
 	bool KeyPress(int key);
@@ -71,15 +71,15 @@ public:
 	~InputManager();					// movi para publico para poder acessar no Camera.cpp
 
 private:
-		InputManager();
-		bool mouseState[6];
-		int mouseUpdate[6];
-		std::unordered_map<int, bool> keyState;
-		std::unordered_map<int, int> keyUpdate;
-		bool quitRequested;
-		int updateCounter;
-		int mouseX;
-		int mouseY;
+	InputManager();
+	bool mouseState[6];
+	int mouseUpdate[6];
+	std::unordered_map<int, bool> keyState;
+	std::unordered_map<int, int> keyUpdate;
+	bool quitRequested;
+	int updateCounter;
+	int mouseX;
+	int mouseY;
 
 };
 

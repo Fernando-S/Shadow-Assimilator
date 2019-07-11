@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef GAMESTATE2_H
-#define GAMESTATE2_H
+#ifndef GAMESTATE3_H
+#define GAMESTATE3_H
 
 #include "Sprite.h"
 #include "Music.h"
@@ -15,17 +15,16 @@
 #include "CoatGuy.h"
 #include "Collision.h"
 #include "State.h"
-#include "GameState3.h"
 #include "EndState.h"
 #include "FinalBoss.h"
 
 #define PI 3.14159265
 #define ALIEN_NUMBER 3
 
-class GameState2 : public State{
+class GameState3 : public State{
 public:	
-	GameState2();
-	~GameState2() override;
+	GameState3();
+	~GameState3() override;
 	void LoadAssets() override;
 	void Update(float dt) override;
 	void Render() override;
@@ -54,4 +53,4 @@ private:
 	
 };
 
-#endif	//GAMESTATE2_H
+#endif	//GAMESTATE3_H
