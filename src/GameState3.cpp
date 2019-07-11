@@ -1,15 +1,15 @@
-#include "GameState2.h"
+#include "GameState3.h"
 #include "Game.h"
 #include "GameData.h"
 
 
-GameState2::GameState2() {
+GameState3::GameState3() {
 	playerGO = new GameObject();
 	coatGuyGO = new GameObject();
 	chaoGO = new GameObject();
 }
 
-void GameState2::LoadAssets() {
+void GameState3::LoadAssets() {
 	int i;
 
 	/////////////////////////////////////////////
@@ -173,7 +173,7 @@ void GameState2::LoadAssets() {
 	
 }
 
-void GameState2::Update(float dt){
+void GameState3::Update(float dt){
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
 
@@ -358,36 +358,36 @@ void GameState2::Update(float dt){
 		GameData::playerVictory = true;
 		popRequested = true;
 		Game::GetInstance().Push(new EndState());
-	}
+	}/*
 	else if (inputManager.KeyPress(NUMPAD_NINE_KEY)) {
 		popRequested = true;
-		Game::GetInstance().Push(new GameState3());
+		//Game::GetInstance().Push(new EndState());
 	}
-	
+	*/
 }
 
-GameState2::~GameState2() {
+GameState3::~GameState3() {
 	objectArray.clear();			// Esvazia o vetor de objetos
 }
 
-void GameState2::Render() {
+void GameState3::Render() {
 	RenderArray();					// Renderiza cada GameObject no objectArray
 }
 
-void GameState2::Start() {
+void GameState3::Start() {
 	LoadAssets();					// Carrega os assets a serem usados no jogo
 	StartArray();					// Da Start em cada GameObject no objectArray
 }
 
-void GameState2::Pause() {
+void GameState3::Pause() {
 
 }
 
-void GameState2::Resume() {
+void GameState3::Resume() {
 
 }
 
-void GameState2::LoadLevel() {
+void GameState3::LoadLevel() {
 	
 	///////////////////////////////
 	//		Carrega o Chao		//
@@ -435,7 +435,7 @@ void GameState2::LoadLevel() {
 	
 }
 
-void GameState2::ChangePlayerHP() {
+void GameState3::ChangePlayerHP() {
 	int hp = player->GetHP();
 
 	if (player->damaged) {

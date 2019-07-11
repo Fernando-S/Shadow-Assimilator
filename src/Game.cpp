@@ -84,6 +84,7 @@ Game& Game::GetInstance() {
 		return *instance;		// retorna a instancia se ja existir uma
 	else {
 		instance = new Game("Shadow Assimilator", 1280, 640);		// instancia um novo jogo
+		//instance = new Game("Shadow Assimilator", 1366, 768);		// instancia um novo jogo
 		return *instance;		// retorna a nova instancia instancia
 	}
 }
@@ -134,7 +135,7 @@ Game::Game(const char* title, int width, int height) {
 	}
 	
 	// Cria uma nova janela
-	window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, /*SDL_WINDOW_FULLSCREEN_DESKTOP*/ 0);		// title, pos x, pos y, width, height, fullscreen
+	window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_FULLSCREEN_DESKTOP);		// title, pos x, pos y, width, height, fullscreen
 	if (!window) {
 		std::cerr << "ERROR: impossible to create window" << std::endl;
 		exit(1);

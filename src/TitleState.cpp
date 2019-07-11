@@ -42,18 +42,18 @@ void TitleState::LoadAssets() {
 	startButtonGO->AddComponent(startButton);
 	startButtonGO->box.h = startButton->GetHeight();
 	startButtonGO->box.w = startButton->GetWidth();
-	startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 4,
-										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 7 });
+	//startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 4,
+	//									 bgGO->box.Center().y + 3 * startButtonGO->box.h + 7 });
 	objectArray.emplace_back(startButtonGO);
 
 	// Botao de CREDITS
 	creditsButtonGO = new GameObject();
-	auto creditsButton = new Sprite(*creditsButtonGO, "./assets/img/Menu/credits.png");
+	auto creditsButton = new Sprite(*creditsButtonGO, "./assets/img/Menu/menu_credits.png");
 	creditsButtonGO->AddComponent(creditsButton);
 	creditsButtonGO->box.h = creditsButton->GetHeight();
 	creditsButtonGO->box.w = creditsButton->GetWidth();
-	creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
-											bgGO->box.Center().y + 4 * creditsButtonGO->box.h + 2 });
+	//creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
+		//									bgGO->box.Center().y + 4 * creditsButtonGO->box.h + 2 });
 	objectArray.emplace_back(creditsButtonGO);
 
 	hoverSound = new Sound(*startButtonGO, "./assets/audio/SFX/DashPrincipal(Assim.)1.wav");
@@ -81,8 +81,8 @@ void TitleState::Update(float dt) {
 
 
 	if (startButtonGO->box.Contains(mousePos)) {
-		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 2,
-										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 6});
+		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w * 2/3 + 18,
+										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 12});
 		
 		if(startHoverSound)
 			hoverSound->Play();
@@ -96,13 +96,13 @@ void TitleState::Update(float dt) {
 	}
 	else {
 		startHoverSound = true;
-		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w / 2 - 4,
-										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 7});
+		startButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + startButtonGO->box.w * 2/3 + 17,
+										 bgGO->box.Center().y + 3 * startButtonGO->box.h + 14});
 	}
 
 	if (creditsButtonGO->box.Contains(mousePos)) {
-		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 2,
-											 bgGO->box.Center().y + 4 * creditsButtonGO->box.h + 1});
+		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w *2/3 + 16,
+											 bgGO->box.Center().y + 6 * creditsButtonGO->box.h - 4});
 
 		if (creditsHoverSound)
 			hoverSound->Play();
@@ -115,8 +115,8 @@ void TitleState::Update(float dt) {
 	}
 	else {
 		creditsHoverSound = true;
-		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w / 2 - 4,
-											bgGO->box.Center().y + 4 * creditsButtonGO->box.h + 2});
+		creditsButtonGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + creditsButtonGO->box.w *2/3 + 15,
+											bgGO->box.Center().y + 6 * creditsButtonGO->box.h - 2});
 	}
 
 	UpdateArray(dt);	// executa o update em cada um dos objetos no objectArray
