@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef COATGUY_H
@@ -32,53 +31,6 @@
 #define SPEED_STEP 50
 #define COATGUY_SPEED 400
 #define COATGUY_JUMP 600
-
-
-/*
-class CoatGuy : public Component {
-public:
-	CoatGuy(GameObject& associated);
-	~CoatGuy();
-	void Start() override;
-	void Update(float dt) override;
-	void Render() override;
-	bool Is(std::string type) override;
-	void NotifyCollision(GameObject& other) override;
-	Vec2 GetCenter();			// Funcao para poder pegar a posicao do coatGuy
-	void Shoot(Vec2 target);
-	int GetHP();
-
-	static CoatGuy* coatGuy;
-	Sprite* sprite;
-	bool damaged = false, isAtacking = false, ultrapassou = false;
-	Sound *runSFX, *jumpSFX, *DjumpSFX, *landSFX, *LightAttackSFX, *HeavyAttackSFX, *coatGuySFX;
-
-private:
-	//std::weak_ptr<GameObject> pcannon;
-	Timer WallJumpTimer, DeathTimer;
-	Timer ShootCooldownTimer, DashCooldownTimer;
-	Vec2 speedH, speedV, speedD;
-	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
-	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
-		 tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
-		 SetJump = false, runningSound = false, wallSlideSound = false, dead = false;
-	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0;
-	int contadorW1 = 0, contadorW2 = 0;
-
-};
-*/
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class CoatGuy : public Component {
@@ -115,22 +67,5 @@ private:
 	int contadorW1 = 0, contadorW2 = 0, loopaux = 0, falsehp = 1, Atk1 = 0;
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif	//COATGUY_H
