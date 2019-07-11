@@ -107,7 +107,8 @@ private:
 		SetJump = false, runningSound = false, wallSlideSound = false, deathSound = false, dead = false, notDJ = false,
 		pouso = false, foguete = false, Atk0 = false, Neon = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0, Atk1 = 0, Atk2 = 0;
-	int contadorW1 = 0, contadorW2 = 0, contadorATK = 0, froze = 0, Atk2delay = 0, shootaux = 0;
+	int contadorW1 = 0, contadorW2 = 0, contadorATK = 0,  Atk2delay = 0, shootaux = 0;
+	float froze = 0;
 
 };
 
