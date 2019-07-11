@@ -15,7 +15,8 @@ void GameState0::LoadAssets() {
 	/////////////////////////////////////////////
 	//	  Carrega a Musica e aperta o play	  //
 	///////////////////////////////////////////
-	backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow Assimilator track 1.ogg");
+	//backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow Assimilator track 1.ogg");
+	backgroundMusic = *new Music("./assets/audio/soundtrack/shadowCITY.ogg");
 	backgroundMusic.Play();
 
 	
@@ -177,6 +178,7 @@ void GameState0::LoadAssets() {
 void GameState0::Update(float dt){
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
+	playerHitTimer.Update(dt);
 
 
 	// Faz o update na camera e na box do mapa
@@ -201,7 +203,50 @@ void GameState0::Update(float dt){
 		Game::GetInstance().Push(new GameState1());
 	}
 
+
+	if (player->damaged) {
+		playerHitTimer.Restart();
+		std::cout << "Comeca a contar o tempo\n";
+	}
+
 	ChangePlayerHP();
+
+	std::cout << playerHitTimer.Get() << std::endl;
+
+
+	if (player->gotHit) {
+		if (playerHitTimer.Get() > 1.0) {
+			playerGO->render = true;
+			player->gotHit = false;
+		}
+		else if (playerHitTimer.Get() > 0.9) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.8) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.7) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.6) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.5) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.4) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.3) {
+			playerGO->render = false;
+		}
+		else if (playerHitTimer.Get() > 0.2) {
+			playerGO->render = true;
+		}
+		else if (playerHitTimer.Get() > 0.1) {
+			playerGO->render = false;
+		}
+	}
 
 
 	// KONAMI CODE
@@ -838,6 +883,7 @@ void GameState0::ChangePlayerHP() {
 	int hp = player->GetHP();
 
 	if (player->damaged) {
+
 		switch (hp) {
 		case 0:
 			HPbarGO->RemoveComponent(HPbarSprite);

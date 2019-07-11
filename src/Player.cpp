@@ -1011,6 +1011,7 @@ void Player::NotifyCollision(GameObject& other) {
 	if (laser && laser->robotLaser) {
 		hp -= laser->GetDamage();
 		damaged = true;
+		gotHit = true;
 	}
 
 
