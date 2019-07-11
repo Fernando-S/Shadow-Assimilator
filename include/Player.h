@@ -99,15 +99,15 @@ public:
 private:
 	//std::weak_ptr<GameObject> pcannon;
 	Timer WallJumpTimer, DeathTimer, DJTimer;
-	Timer ShootCooldownTimer, DashCooldownTimer;
+	Timer ShootCooldownTimer, DashCooldownTimer, ATK1CooldownTimer;
 	Vec2 speedH, speedV, speedD;
 	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
 		tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
 		SetJump = false, runningSound = false, wallSlideSound = false, deathSound = false, dead = false, notDJ = false,
-		pouso = false, foguete = false;
-	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0;
-	int contadorW1 = 0, contadorW2 = 0;
+		pouso = false, foguete = false, Atk0 = false, Neon = false;
+	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0, Atk1 = 0, Atk2 = 0;
+	int contadorW1 = 0, contadorW2 = 0, contadorATK = 0, froze = 0, Atk2delay = 0;
 
 };
 
