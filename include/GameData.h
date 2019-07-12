@@ -7,6 +7,7 @@ class GameData {
 public:
 	static bool playerVictory;
 	static bool backToMenuScreen;
+	static bool saiuDoGalpao;
 };
 
 #endif // GAMEDATA_H
