@@ -18,7 +18,7 @@ void GameState1::LoadAssets() {
 	backgroundMusic = *new Music("./assets/audio/soundtrack/shadow miniboss.ogg");
 	backgroundMusic.Play();
 
-	
+
 	/////////////////////////////////
 	//	  Carrega o Background	  //
 	///////////////////////////////
@@ -38,7 +38,8 @@ void GameState1::LoadAssets() {
 	bgGO->AddComponent(bg);
 	objectArray.emplace_back(bgGO);
 
-	// Background de detalhe
+	//Background de detalhe
+	/*
 	auto bgDetalheGO = new GameObject();
 	auto bgDetalhe = new Sprite(*bgDetalheGO, "./assets/img/Level1/objeto_mapa2.png");
 
@@ -54,6 +55,7 @@ void GameState1::LoadAssets() {
 
 	bgDetalheGO->AddComponent(bgDetalhe);
 	objectArray.emplace_back(bgDetalheGO);
+	*/
 
 
 	///////////////////////////////////////////////////
@@ -73,34 +75,14 @@ void GameState1::LoadAssets() {
 
 	predioGO->AddComponent(TileMap_Predio);
 	objectArray.emplace_back(predioGO);
-	
-	
+
+
 	// Teste do novo TileSet
 	chaoGO->box.x = 0;
 	chaoGO->box.y = 800;
 
 	// Carrega os tiles que colidem
 	LoadLevel();
-
-	// Detalhes dos predios
-	/*
-	auto detalhesGO = new GameObject();
-	auto tileSet_Detalhes = new TileSet(64, 64, "./assets/img/Level0/tileENFEITES001.png");
-	auto detalhesBackground = new TileMap(*detalhesGO, "./assets/map/Level0/TileMap_Detalhes.txt", tileSet_Detalhes);
-	//auto detalhesBackground = new TileMap(*detalhesGO, "./assets/img/Level0/TileMap_Detalhes.txt", tileSet_Level0);
-
-	detalhesBackground->colide = false;
-
-	detalhesGO->box.x = 0;
-	detalhesGO->box.y = 800 - 29 * ONETILESQUARE;
-	detalhesGO->box.w = detalhesBackground->GetWidth() * tileSet_Detalhes->GetTileWidth();
-	detalhesGO->box.h = detalhesBackground->GetHeight() * tileSet_Detalhes->GetTileHeight();
-	//detalhesGO->box.w = detalhesBackground->GetWidth() * tileSet_Level0->GetTileWidth();
-	//detalhesGO->box.h = detalhesBackground->GetHeight() * tileSet_Level0->GetTileHeight();
-
-	detalhesGO->AddComponent(detalhesBackground);
-	objectArray.emplace_back(detalhesGO);
-	*/
 
 	////////////////////////////////
 	//	   Carrega o Ricardo	 //
@@ -159,10 +141,10 @@ void GameState1::LoadAssets() {
 	///////////////////////////////////
 	//	  Barra de HP do Coat Guy	//
 	/////////////////////////////////
-	
+
 	HPbarCoatGuyGO = new GameObject();
 	HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_28.png");
-	
+
 	HPbarCoatGuyGO->initialX = Game::GetInstance().GetWidth() - HPbarCoatGuySprite->GetWidth();
 
 	auto HPbarCoatGuyCamFollower = new CameraFollower(*HPbarCoatGuyGO);
@@ -236,7 +218,7 @@ void GameState1::LoadAssets() {
 
 }
 
-void GameState1::Update(float dt){
+void GameState1::Update(float dt) {
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
 
@@ -256,25 +238,29 @@ void GameState1::Update(float dt){
 
 	
 	if (playerGO->box.y + playerGO->box.h > 800) {
-		playerGO->box.y = 800 - playerGO->box.h;
+		playerGO->RequestDelete();
 	}
-
+	
+	/*
 	if (coatGuyGO->box.y + coatGuyGO->box.h > 800) {
 		coatGuyGO->box.y = 800 - coatGuyGO->box.h;
 	}
-
-	if (playerGO->box.x < 10) {
+	*/
+	/*if (playerGO->box.x < 10) {
 		playerGO->box.x = 10;
 	}
-
-	if (playerGO->box.x + playerGO->box.w > 64 * ONETILESQUARE) {
-		playerGO->box.x = 64 * ONETILESQUARE - playerGO->box.w;
+	*/
+	/*
+	if (playerGO->box.x + playerGO->box.w > 71 * ONETILESQUARE) {
+		playerGO->box.x = 71 * ONETILESQUARE - playerGO->box.w;
 	}
+	*/
 	/*
 	if (playerGO->box.y  >  * ONETILESQUARE) {
 		playerGO->box.x = 64 * ONETILESQUARE - playerGO->box.w;
 	}
 	*/
+
 
 	// Reseta o contador para piscar a personagem
 	if (player->damaged) {
@@ -404,7 +390,6 @@ void GameState1::Update(float dt){
 			esquerda2 = false;
 			std::cout << "direita2 = true" << std::endl;
 		}
-
 		if (direita2 && inputManager.KeyPress(Z_KEY)) {
 			mostrando = true;
 			surpriseGO->render = true;
@@ -424,32 +409,32 @@ void GameState1::Update(float dt){
 
 	// PENSADOR CODE
 	if (surpriseGO) {
-		if ( (inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
+		if ((inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
 			dois = true;
 			tres = quatro = cinco = meia = sete = oito = false;
 			//std::cout << "dois = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
+		if ((inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
 			tres = true;
 			dois = quatro = cinco = meia = sete = oito = false;
 			//std::cout << "tres = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
+		if ((inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
 			quatro = true;
 			dois = tres = cinco = meia = sete = oito = false;
 			//std::cout << "quatro = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
+		if ((inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
 			cinco = true;
 			dois = tres = quatro = meia = sete = oito = false;
 			//std::cout << "cinco = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
+		if ((inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
 			meia = true;
 			dois = tres = quatro = cinco = sete = oito = false;
 			//std::cout << "meia = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
+		if ((inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
 			sete = true;
 			dois = tres = quatro = cinco = meia = oito = false;
 			//std::cout << "sete = true" << std::endl;
@@ -520,11 +505,13 @@ void GameState1::Update(float dt){
 		popRequested = true;
 		Game::GetInstance().Push(new EndState());
 	}
-	else if (inputManager.KeyPress(NUMPAD_NINE_KEY) || inputManager.KeyPress(NINE_KEY)) {
+	else if (inputManager.KeyPress(NUMPAD_NINE_KEY) || inputManager.KeyPress(NINE_KEY) ||
+			((playerGO->box.x + playerGO->box.w > 71 * ONETILESQUARE) && (playerGO->box.y < 800 - 6 * ONETILESQUARE) &&
+			 (playerGO->box.y > 800 - 9 * ONETILESQUARE)) ) {
 		popRequested = true;
 		Game::GetInstance().Push(new GameState2());
 	}
-	
+
 }
 
 GameState1::~GameState1() {
@@ -549,7 +536,7 @@ void GameState1::Resume() {
 }
 
 void GameState1::LoadLevel() {
-	
+
 	///////////////////////////////
 	//		Carrega o Chao		//
 	/////////////////////////////
@@ -587,7 +574,7 @@ void GameState1::LoadLevel() {
 	//		MAXIMUM EFFORT		//
 	/////////////////////////////
 	auto telhadoGO = new GameObject();
-	telhadoGO->box.x = (32) * tileSet->GetTileWidth()/* + chaoGO->box.x*/;
+	telhadoGO->box.x = (24) * tileSet->GetTileWidth()/* + chaoGO->box.x*/;
 	telhadoGO->box.y = (-3) * tileSet->GetTileHeight() + chaoGO->box.y;
 
 	auto tileMap_Telhado = new TileMap(*telhadoGO, "./assets/map/Level1/TileMap_Telhado.txt", tileSet);
@@ -603,7 +590,7 @@ void GameState1::LoadLevel() {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 	auto janelaGO = new GameObject();
-	janelaGO->box.x = (27) * tileSet->GetTileWidth()/* + chaoGO->box.x*/;
+	janelaGO->box.x = telhadoGO->box.x + telhadoGO->box.w + (7) * tileSet->GetTileWidth()/* + chaoGO->box.x*/;
 	janelaGO->box.y = (-32) * tileSet->GetTileHeight() + chaoGO->box.y;
 
 	auto tileMap_Janela = new TileMap(*janelaGO, "./assets/map/Level1/TileMap_Janela.txt", tileSet);
@@ -611,14 +598,14 @@ void GameState1::LoadLevel() {
 
 	janelaGO->box.w = tileMap_Janela->GetWidth() * tileSet->GetTileWidth();
 	janelaGO->box.h = tileMap_Janela->GetHeight() * tileSet->GetTileHeight();
-	
+
 	janelaGO->AddComponent(tileMap_Janela);
 	objectArray.emplace_back(janelaGO);
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 	auto tetoGO = new GameObject();
-	tetoGO->box.x = (0) * tileSet->GetTileWidth()/* + chaoGO->box.x*/;
+	tetoGO->box.x = telhadoGO->box.x + telhadoGO->box.w + (7) * tileSet->GetTileWidth()/* + chaoGO->box.x*/;
 	tetoGO->box.y = (-32) * tileSet->GetTileHeight() + chaoGO->box.y;
 
 	auto tileMap_Teto = new TileMap(*tetoGO, "./assets/map/Level1/tileMap_Teto.txt", tileSet);
@@ -971,7 +958,5 @@ void GameState1::ChangePlayerHP() {
 
 		player->damaged = false;
 	}
-	
+
 }
-
-
