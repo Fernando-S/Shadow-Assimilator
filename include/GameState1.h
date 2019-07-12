@@ -21,6 +21,7 @@
 
 #define PI 3.14159265
 #define ALIEN_NUMBER 3
+#define FINALBOSS_INITIAL_HP 2
 
 class GameState1 : public State{
 public:	
@@ -50,7 +51,6 @@ private:
 	GameObject* chaoGO;
 	Player* player;
 	CoatGuy* coatGuy;
-	GameObject* finalBossGo;
 
 	Timer playerHitTimer, coatGuyHitTimer;
 
