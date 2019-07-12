@@ -172,6 +172,69 @@ void GameState0::LoadAssets() {
 	HPbarGO->AddComponent(HPbarSprite);
 	objectArray.emplace_back(HPbarGO);
 	
+	/////////////////////////////////////////////////////////////////////////////////////
+	//ICONES//
+	/////////////////////////////////////////////////////////////////////////////////////
+	///////////////
+	//CURA
+	///////////////
+	CuraGO = new GameObject();
+	CuraSprite = new Sprite(*CuraGO, "./assets/img/Protagonista/icones/icone_cura.png");
+
+	CuraGO->initialX = HPbarGO->box.Center().x + 7.8;
+	CuraGO->initialY = HPbarGO->box.Center().y + 17;
+	auto CuraCamFollower = new CameraFollower(*CuraGO);
+	CuraGO->AddComponent(CuraCamFollower);
+
+	CuraGO->AddComponent(CuraSprite);
+	objectArray.emplace_back(CuraGO);
+	/////////////
+
+	///////////////
+	//ATAQUE FORTE
+	///////////////
+	AtkFortGO = new GameObject();
+
+	if(SetAtkForte == true){
+		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte.png");
+	}
+	else {
+		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte2.png");
+	}
+
+	AtkFortGO->initialX = HPbarGO->box.Center().x + 35.5;
+	AtkFortGO->initialY = HPbarGO->box.Center().y + 17;
+	auto AtkFortCamFollower = new CameraFollower(*AtkFortGO);
+	AtkFortGO->AddComponent(AtkFortCamFollower);
+
+	AtkFortGO->AddComponent(AtkFortSprite);
+	objectArray.emplace_back(AtkFortGO);
+	///////////////
+
+	////////////////////
+	//ATAQUE A DISTANCIA
+	////////////////////
+	AtkDistGO = new GameObject();
+
+	if (SetAtkDist == true) {
+		AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia.png");
+	}
+	else {
+		AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia2.png");
+	}
+
+	AtkDistGO->initialX = HPbarGO->box.Center().x + 63.2;
+	AtkDistGO->initialY = HPbarGO->box.Center().y + 17;
+	auto AtkDistCamFollower = new CameraFollower(*AtkDistGO);
+	AtkDistGO->AddComponent(AtkDistCamFollower);
+
+	AtkDistGO->AddComponent(AtkDistSprite);
+	objectArray.emplace_back(AtkDistGO);
+	//////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+
 }
 
 void GameState0::Update(float dt){
