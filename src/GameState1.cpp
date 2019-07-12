@@ -155,18 +155,21 @@ void GameState1::LoadAssets() {
 	HPbarGO->AddComponent(HPbarSprite);
 	objectArray.emplace_back(HPbarGO);
 
-	//////////////////////////////////
+
+	///////////////////////////////////
 	//	  Barra de HP do Coat Guy	//
-	//////////////////////////////////
+	/////////////////////////////////
 	
-	HPbarGOCoatGuy = new GameObject();
-	HPbarSpriteCG = new Sprite(*HPbarGOCoatGuy, "./assets/img/Protagonista/barra_de_HP/HP_22.png");
+	HPbarCoatGuyGO = new GameObject();
+	HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_28.png");
+	
+	HPbarCoatGuyGO->box.x = 500/* Game::GetInstance().GetWidth() - HPbarCoatGuySprite->GetWidth()*/;
 
-	auto HPbarCamFollower = new CameraFollower(*HPbarGOCoatGuy);
-	HPbarGOCoatGuy->AddComponent(HPbarCamFollower);
+	auto HPbarCoatGuyCamFollower = new CameraFollower(*HPbarCoatGuyGO);
+	HPbarCoatGuyGO->AddComponent(HPbarCoatGuyCamFollower);
 
-	HPbarGOCoatGuy->AddComponent(HPbarSprite);
-	objectArray.emplace_back(HPbarGOCoatGuy);
+	HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
+	objectArray.emplace_back(HPbarCoatGuyGO);
 
 }
 
@@ -218,10 +221,11 @@ void GameState1::Update(float dt){
 	// Reseta o contador para piscar o coatGuy
 	if (coatGuy->damaged) {
 		coatGuyHitTimer.Restart();
-		coatGuy->damaged = false;
+		//coatGuy->damaged = false;
 	}
 
 	ChangePlayerHP();
+	ChangeCoatGuyHP();
 
 	// Pisca o jogador
 	if (player->gotHit) {
@@ -557,144 +561,177 @@ void GameState1::ChangeCoatGuyHP() {
 		switch (hp) {
 		case 0:
 
-			HPbarGOCoatGuy->RemoveComponent(HPbarSpriteCG);
-			HPbarSpriteCG = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_00.png");
-
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_00.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_00.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 1:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_01.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_01.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 2:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_02.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_02.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 3:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_03.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_03.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 4:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_04.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_04.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 5:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_05.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_05.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 6:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_06.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_06.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 7:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_07.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_07.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 8:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_08.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_08.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 9:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_09.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_09.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 10:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_10.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_10.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 11:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_11.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_11.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 12:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_12.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_12.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 13:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_13.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_13.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 14:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_14.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_14.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 15:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_15.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_15.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 16:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_16.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_16.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 17:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_17.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_17.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 18:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_18.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_18.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 19:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_19.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_19.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 20:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_20.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_20.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 21:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_21.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_21.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		case 22:
-			HPbarGO->RemoveComponent(HPbarSprite);
-			HPbarSprite = new Sprite(*HPbarGO, "./assets/img/Protagonista/barra_de_HP/HP_22.png");
-			HPbarGO->AddComponent(HPbarSprite);
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_22.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
+			break;
+
+		case 23:
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_23.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
+			break;
+
+		case 24:
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_24.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
+			break;
+
+		case 25:
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_25.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
+			break;
+
+		case 26:
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_26.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
+			break;
+
+		case 27:
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_27.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
+			break;
+
+		case 28:
+			HPbarCoatGuyGO->RemoveComponent(HPbarCoatGuySprite);
+			HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_28.png");
+			HPbarCoatGuyGO->AddComponent(HPbarCoatGuySprite);
 			break;
 
 		default:

@@ -170,7 +170,7 @@ void Robot::Update(float dt) {
 
 			if (DeathTimer.Get() > 2.1) {
 				/// todo - descobrir o porque disso para melhorar som de morte
-				cout << "Nem entra aqui. O robo esta sendo deletado antes em outro lugar\n";
+				//cout << "Nem entra aqui. O robo esta sendo deletado antes em outro lugar\n";
 				// Deleta a Personagem se o hp dela acabou
 				associated.RequestDelete();
 			}
@@ -270,7 +270,7 @@ void Robot::Update(float dt) {
 			}
 			idle = false;
 			patrol = false;
-			cout << "PATRULHANDO\n";
+			//cout << "PATRULHANDO\n";
 		}
 
 		// Tentativa de IA apenas quando esta no chao
@@ -282,7 +282,7 @@ void Robot::Update(float dt) {
 				shooting = false;
 				alreadyShot = false;
 				patrol = true;
-				cout << "IA WORKING\n";
+				//cout << "IA WORKING\n";
 			}
 
 
@@ -473,8 +473,8 @@ void Robot::Update(float dt) {
 		/////////////////////////////////////
 		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0) && !shooting) {
 			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
-			//sprite = new Sprite(associated, "./assets/img/Robot/idle1f.png", 6, 0.09);
+			//sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
+			sprite = new Sprite(associated, "./assets/img/Robot/idle1f.png", 6, 0.2);
 
 
 			facingR = true;
@@ -547,49 +547,9 @@ void Robot::Update(float dt) {
 
 		}
 
-		
-		///////////////////////
-		//		QUEDA		//
-		/////////////////////
-		/*
-		if (Ground == 0) {
-			
-			// QUEDA PRA DIREITA
-			if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1))) && (wallAUX == 0)) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_queda.png", 6, 0.1);
-				associated.AddComponent(sprite);
-				associated.box.x += 20;
-				facingR = true;
-				facingL = false;
-				idle = false;
-			}
-		
-			// QUEDA PRA ESQUERDA
-			if ((((Fall == 1) && (Run < 0)) || ((Fall > 0) && (Run == -1))) && (wallAUX == 0)) {
-				associated.RemoveComponent(sprite);
-				sprite = new Sprite(associated, "./assets/img/Protagonista/prot_queda_inv.png", 6, 0.1);
-				associated.AddComponent(sprite);
-				associated.box.x += 20;
-				facingR = false;
-				facingL = true;
-				idle = false;
-			}
-		}
-		*/
-
 		///////////////////////////////
 		//		TIRO DO ROBO		//
 		/////////////////////////////
-		/*if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
-		/*	if (facingR)
-				Shoot(GetCenter());
-			else if (facingL)
-				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));/
-			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
-			ShootCooldownTimer.Restart();
-		}
-		*/
 		/// todo - fazer uma condicao parecida ou ate mesmo igual para tocar o som de corrida apenas quando esta proximo do jogador
 		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 4 * ONETILESQUARE) && ShootCooldownTimer.Get() > 1.8
 			&& (Player::player->GetCenter().y > this->associated.box.y - ONETILESQUARE * 3)
@@ -624,23 +584,7 @@ void Robot::Update(float dt) {
 				}
 			}
 		}
-		/*
-		///////////////////////////////
-		//		SFX DE POUSO		//
-		/////////////////////////////
-		else if (pouso && tchfloor && !airbone) {
-			if (robotSFX->IsPlaying()) {
-				robotSFX->Stop();
-			}
-			associated.RemoveComponent(robotSFX);
-			//robotSFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
-			robotSFX = new Sound(associated, "./assets/audio/SFX/Pouso2.1(Assim.).wav");
-			associated.AddComponent(robotSFX);
-			robotSFX->Play();
-			pouso = false;
-		}
-		*/
-	
+
 	}
 
 }

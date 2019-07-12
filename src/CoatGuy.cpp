@@ -1033,6 +1033,7 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 		falsehp--;
 		damaged = true;
 		gotHit = true;
+
 	}
 
 	if (falsehp < 1 && !FinishHimEneable && StartLoop) {

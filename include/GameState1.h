@@ -38,11 +38,12 @@ private:
 	void ChangePlayerHP(), ChangeCoatGuyHP();
 	void LoadLevel();
 
-	Sprite* HPbarSprite, *HPbarSpriteCG;
+	Sprite* HPbarSprite;
+	Sprite *HPbarCoatGuySprite;
 	TileSet* tileSet;
 	Music backgroundMusic;
 	GameObject* HPbarGO;
-	GameObject* HPbarGOCoatGuy;
+	GameObject* HPbarCoatGuyGO;
 	GameObject* surpriseGO;
 	GameObject* playerGO;
 	GameObject* coatGuyGO;

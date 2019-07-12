@@ -88,7 +88,6 @@ int FinalBoss::GetHP() {
 /*
 void FinalBoss::LightShoot(Vec2 target) {
 	LightRecoilTimer.Restart();
-
 	associated.RemoveComponent(sprite);
 	if (Player::player->GetCenter().x > this->associated.box.x) {
 		//sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
@@ -97,12 +96,9 @@ void FinalBoss::LightShoot(Vec2 target) {
 		//	sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
 	}
 	associated.AddComponent(sprite);
-
 }
-
 void FinalBoss::HeavyShoot(Vec2 target) {
 	HeavyRecoilTimer.Restart();
-
 	associated.RemoveComponent(sprite);
 	if (Player::player->GetCenter().x > this->associated.box.x) {
 		//	sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);

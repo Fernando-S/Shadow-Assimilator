@@ -21,7 +21,7 @@
 #define COATGUY_ACCELERATION 1000			// em pixels/s²
 #define COATGUY_ATRICT 150					// em pixels/s²
 #define COATGUY_ANGULAR_SPEED PI			// em rads/s
-#define COATGUY_INITIAL_HP 4				// em hit points
+#define COATGUY_INITIAL_HP 28				// em hit points
 #define ONETILESQUARE 64					// tamanho de 1 tile
 #define COATGUY_LASER_DAMAGE 2				// em hit points
 #define LASER_SPEED 1000					// em pixels/s
