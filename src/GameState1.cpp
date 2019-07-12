@@ -520,7 +520,7 @@ void GameState1::Update(float dt){
 		popRequested = true;
 		Game::GetInstance().Push(new EndState());
 	}
-	else if (inputManager.KeyPress(NUMPAD_NINE_KEY)) {
+	else if (inputManager.KeyPress(NUMPAD_NINE_KEY) || inputManager.KeyPress(NINE_KEY)) {
 		popRequested = true;
 		Game::GetInstance().Push(new GameState2());
 	}
