@@ -12,18 +12,19 @@ GameState2::GameState2() {
 	canhaoVermelho1GO = new GameObject();
 	canhaoVermelho2GO = new GameObject();
 	canhaoVermelho3GO = new GameObject();
+	
 }
 
 void GameState2::LoadAssets() {
 	int i;
-
+	
 	/////////////////////////////////////////////
 	//	  Carrega a Musica e aperta o play	  //
 	///////////////////////////////////////////
 	backgroundMusic = *new Music("./assets/audio/soundtrack/shadowboss.ogg");
 	backgroundMusic.Play();
 
-	
+
 	/////////////////////////////////
 	//	  Carrega o Background	  //
 	///////////////////////////////
@@ -47,28 +48,40 @@ void GameState2::LoadAssets() {
 	///////////////////////////////////////////////////
 	//		Carrega os Predios de Background		//
 	/////////////////////////////////////////////////
-	tileSet = new TileSet(64, 64, "./assets/img/Level0/agora vai/tile003.png");
-	/*
+	auto backGO = new GameObject();
+	tileSet = new TileSet(64, 64, "./assets/img/tile003.png");
 
+	auto background = new TileMap(*backGO, "./assets/map/Level2/Mapa_4.txt", tileSet);
+
+	background->colide = false;
+
+	backGO->box.x = 0;
+	backGO->box.y = -4 * ONETILESQUARE;
+
+	backGO->box.w = background->GetWidth() * tileSet->GetTileWidth();
+	backGO->box.h = background->GetHeight() * tileSet->GetTileHeight();
+
+	backGO->AddComponent(background);
+	objectArray.emplace_back(backGO);
+
+
+	/*
 	auto prediosGO = new GameObject();
 	//auto tileSet_Level0 = new TileSet(64, 64, "./assets/img/Level0/tileLevel0.png");
 	auto tileSet_Background = new TileSet(64, 64, "./assets/img/Level0/tile001.png");
 	auto prediosBackground = new TileMap(*prediosGO, "./assets/map/Level0/TileMap_Predios.txt", tileSet_Background);
 	//auto prediosBackground = new TileMap(*prediosGO, "./assets/img/Level0/TileMap_Predios.txt", tileSet_Level0);
-
 	prediosBackground->colide = false;
-
 	prediosGO->box.x = 0;
 	prediosGO->box.y =  800 - 29 * ONETILESQUARE;
 	prediosGO->box.w = prediosBackground->GetWidth() * tileSet_Background->GetTileWidth();
 	prediosGO->box.h = prediosBackground->GetHeight() * tileSet_Background->GetTileHeight();
 	//prediosGO->box.w = prediosBackground->GetWidth() * tileSet_Level0->GetTileWidth();
 	//prediosGO->box.h = prediosBackground->GetHeight() * tileSet_Level0->GetTileHeight();
-
 	prediosGO->AddComponent(prediosBackground);
 	objectArray.emplace_back(prediosGO);
 	*/
-	
+
 	// Teste do novo TileSet
 	chaoGO->box.x = 0;
 	chaoGO->box.y = 800;
@@ -82,16 +95,13 @@ void GameState2::LoadAssets() {
 	auto tileSet_Detalhes = new TileSet(64, 64, "./assets/img/Level0/tileENFEITES001.png");
 	auto detalhesBackground = new TileMap(*detalhesGO, "./assets/map/Level0/TileMap_Detalhes.txt", tileSet_Detalhes);
 	//auto detalhesBackground = new TileMap(*detalhesGO, "./assets/img/Level0/TileMap_Detalhes.txt", tileSet_Level0);
-
 	detalhesBackground->colide = false;
-
 	detalhesGO->box.x = 0;
 	detalhesGO->box.y = 800 - 29 * ONETILESQUARE;
 	detalhesGO->box.w = detalhesBackground->GetWidth() * tileSet_Detalhes->GetTileWidth();
 	detalhesGO->box.h = detalhesBackground->GetHeight() * tileSet_Detalhes->GetTileHeight();
 	//detalhesGO->box.w = detalhesBackground->GetWidth() * tileSet_Level0->GetTileWidth();
 	//detalhesGO->box.h = detalhesBackground->GetHeight() * tileSet_Level0->GetTileHeight();
-
 	detalhesGO->AddComponent(detalhesBackground);
 	objectArray.emplace_back(detalhesGO);
 	*/
@@ -191,7 +201,7 @@ void GameState2::LoadAssets() {
 	finalBoss = new FinalBoss(*finalBossGO);
 
 	finalBossGO->AddComponent(finalBoss);
-	finalBossGO->box.x = 1200;
+	finalBossGO->box.x = 1160;
 	finalBossGO->box.y = 800 - finalBossGO->box.h;
 	objectArray.emplace_back(finalBossGO);
 
@@ -210,14 +220,16 @@ void GameState2::LoadAssets() {
 	///////////////////////////////////////////////
 	//		Carrega os Canhoes Vermelhos		//
 	/////////////////////////////////////////////
-	
+
+	int baseC = 192 + ONETILESQUARE;
+
 	// Base 1
 	auto baseVermelha1GO = new GameObject();
 	auto baseVermelha1Sprite = new Sprite(*baseVermelha1GO, "./assets/img/Boss Final/torre2/base_torre2.png");
-	
+
 	baseVermelha1GO->AddComponent(baseVermelha1Sprite);
-	baseVermelha1GO->box.x = 500;
-	baseVermelha1GO->box.y = finalBossGO->box.y - 130;
+	baseVermelha1GO->box.x = 350;
+	baseVermelha1GO->box.y = finalBossGO->box.y - baseC;
 
 	objectArray.emplace_back(baseVermelha1GO);
 
@@ -235,8 +247,8 @@ void GameState2::LoadAssets() {
 	auto baseVermelha2Sprite = new Sprite(*baseVermelha2GO, "./assets/img/Boss Final/torre2/base_torre2.png");
 
 	baseVermelha2GO->AddComponent(baseVermelha2Sprite);
-	baseVermelha2GO->box.x = 700;
-	baseVermelha2GO->box.y = finalBossGO->box.y - 130;
+	baseVermelha2GO->box.x = 600;
+	baseVermelha2GO->box.y = finalBossGO->box.y - baseC;
 
 	objectArray.emplace_back(baseVermelha2GO);
 
@@ -255,8 +267,8 @@ void GameState2::LoadAssets() {
 	auto baseVermelha3Sprite = new Sprite(*baseVermelha3GO, "./assets/img/Boss Final/torre2/base_torre2.png");
 
 	baseVermelha3GO->AddComponent(baseVermelha3Sprite);
-	baseVermelha3GO->box.x = 900;
-	baseVermelha3GO->box.y = finalBossGO->box.y - 130;
+	baseVermelha3GO->box.x = 850;
+	baseVermelha3GO->box.y = finalBossGO->box.y - baseC;
 
 	objectArray.emplace_back(baseVermelha3GO);
 
@@ -292,10 +304,12 @@ void GameState2::LoadAssets() {
 
 	objectArray.emplace_back(playerGO);
 	Camera::Follow(playerGO);			// Coloca a camera para seguir o Penguin
-	
+
+	//Camera::Unfollow();
+
 }
 
-void GameState2::Update(float dt){
+void GameState2::Update(float dt) {
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
 
@@ -310,7 +324,7 @@ void GameState2::Update(float dt){
 	//}
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray
 
-	
+
 	if (playerGO->box.y + playerGO->box.h > 800) {
 		playerGO->box.y = 800 - playerGO->box.h;
 	}
@@ -366,7 +380,6 @@ void GameState2::Update(float dt){
 			esquerda2 = false;
 			std::cout << "direita2 = true" << std::endl;
 		}
-
 		if (direita2 && inputManager.KeyPress(Z_KEY)) {
 			mostrando = true;
 			surpriseGO->render = true;
@@ -386,32 +399,32 @@ void GameState2::Update(float dt){
 
 	// PENSADOR CODE
 	if (surpriseGO) {
-		if ( (inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
+		if ((inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
 			dois = true;
 			tres = quatro = cinco = meia = sete = oito = false;
 			//std::cout << "dois = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
+		if ((inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
 			tres = true;
 			dois = quatro = cinco = meia = sete = oito = false;
 			//std::cout << "tres = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
+		if ((inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
 			quatro = true;
 			dois = tres = cinco = meia = sete = oito = false;
 			//std::cout << "quatro = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
+		if ((inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
 			cinco = true;
 			dois = tres = quatro = meia = sete = oito = false;
 			//std::cout << "cinco = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
+		if ((inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
 			meia = true;
 			dois = tres = quatro = cinco = sete = oito = false;
 			//std::cout << "meia = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
+		if ((inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
 			sete = true;
 			dois = tres = quatro = cinco = meia = oito = false;
 			//std::cout << "sete = true" << std::endl;
@@ -487,7 +500,7 @@ void GameState2::Update(float dt){
 		Game::GetInstance().Push(new GameState3());
 	}
 	*/
-	
+
 }
 
 GameState2::~GameState2() {
@@ -512,7 +525,7 @@ void GameState2::Resume() {
 }
 
 void GameState2::LoadLevel() {
-	
+
 	///////////////////////////////
 	//		Carrega o Chao		//
 	/////////////////////////////
@@ -553,12 +566,13 @@ void GameState2::LoadLevel() {
 
 	////////////////////////////////
 
+
 	///////////////////////////////
 	//		MAXIMUM EFFORT		//
 	/////////////////////////////
 	auto Tile00_ColunaGO = new GameObject();
 	Tile00_ColunaGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
-	Tile00_ColunaGO->box.y = (-12) * tileSet->GetTileHeight() + chaoGO->box.y;
+	Tile00_ColunaGO->box.y = (-14) * tileSet->GetTileHeight() + chaoGO->box.y;
 
 	auto tileMap_Tile00_Coluna = new TileMap(*Tile00_ColunaGO, "./assets/map/Level2/Tile00_Coluna.txt", tileSet);
 	tileMap_Tile00_Coluna->colide = true;
@@ -573,8 +587,8 @@ void GameState2::LoadLevel() {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 	auto Tile01_ColunaGO = new GameObject();
-	Tile01_ColunaGO->box.x = (20) * tileSet->GetTileWidth() + chaoGO->box.x;
-	Tile01_ColunaGO->box.y = (-12) * tileSet->GetTileHeight() + chaoGO->box.y;
+	Tile01_ColunaGO->box.x = (21) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile01_ColunaGO->box.y = (-14) * tileSet->GetTileHeight() + chaoGO->box.y;
 
 	auto tileMap_Tile01_Coluna = new TileMap(*Tile01_ColunaGO, "./assets/map/Level2/Tile01_Coluna.txt", tileSet);
 	tileMap_Tile01_Coluna->colide = true;
@@ -587,20 +601,9 @@ void GameState2::LoadLevel() {
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-
-	auto Tile02_LinhaGO = new GameObject();
-	Tile02_LinhaGO->box.x = (1) * tileSet->GetTileWidth() + chaoGO->box.x;
-	Tile02_LinhaGO->box.y = (-9) * tileSet->GetTileHeight() + chaoGO->box.y;
-
-	auto tileMap_Tile02_Linha = new TileMap(*Tile02_LinhaGO, "./assets/map/Level2/Tile02_Linha.txt", tileSet);
-	tileMap_Tile02_Linha->colide = true;
-
-	Tile02_LinhaGO->box.w = tileMap_Tile02_Linha->GetWidth() * tileSet->GetTileWidth();
-	Tile02_LinhaGO->box.h = tileMap_Tile02_Linha->GetHeight() * tileSet->GetTileHeight();
-
-	Tile02_LinhaGO->AddComponent(tileMap_Tile02_Linha);
-	objectArray.emplace_back(Tile02_LinhaGO);
-
+	
+	
+	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
@@ -634,11 +637,29 @@ void GameState2::LoadLevel() {
 	objectArray.emplace_back(Tile04_LinhaGO);
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 
+
+	auto TileAUX = new GameObject();
+	TileAUX->box.x = (18) * tileSet->GetTileWidth() + chaoGO->box.x;
+	TileAUX->box.y = (-11) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_TileAUX = new TileMap(*TileAUX, "./assets/map/Level2/Tile_AUX.txt", tileSet);
+	tileMap_TileAUX->colide = true;
+
+	TileAUX->box.w = tileMap_TileAUX->GetWidth() * tileSet->GetTileWidth();
+	TileAUX->box.h = tileMap_TileAUX->GetHeight() * tileSet->GetTileHeight();
+
+	TileAUX->AddComponent(tileMap_TileAUX);
+	objectArray.emplace_back(TileAUX);
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	auto Tile_TetoGO = new GameObject();
 	Tile_TetoGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
-	Tile_TetoGO->box.y = (-14) * tileSet->GetTileHeight() + chaoGO->box.y;
+	Tile_TetoGO->box.y = (-16) * tileSet->GetTileHeight() + chaoGO->box.y;
 
 	auto tileMap_Teto = new TileMap(*Tile_TetoGO, "./assets/map/Level2/Tile_Teto.txt", tileSet);
 	tileMap_Teto->colide = true;
@@ -648,10 +669,10 @@ void GameState2::LoadLevel() {
 
 	Tile_TetoGO->AddComponent(tileMap_Teto);
 	objectArray.emplace_back(Tile_TetoGO);
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-	
-	
+
+
 }
 
 void GameState2::ChangePlayerHP() {
@@ -803,7 +824,5 @@ void GameState2::ChangePlayerHP() {
 
 		player->damaged = false;
 	}
-	
+
 }
-
-
