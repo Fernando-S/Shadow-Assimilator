@@ -50,6 +50,9 @@ private:
 	GameObject* robot3GO;
 	GameObject* chaoGO;
 	GameObject* finalBossGo;
+	GameObject* detalhesGO3;
+	GameObject* DetalheGO;
+
 	
 	
 	Player* player;
