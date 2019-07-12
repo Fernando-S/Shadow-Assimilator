@@ -11,16 +11,24 @@ EndState::~EndState() {
 }
 
 void EndState::LoadAssets() {
-	auto bgGO = new GameObject();
+	/*auto bgGO = new GameObject();
 	bgGO->box = { 0,0 };
-	Sprite* bg = nullptr;
+	Sprite* bg = nullptr;*/
+
+	///////////////////////////
+	//		Background		//
+	/////////////////////////
+	auto bgGO = new GameObject();
+	auto bg = new Sprite(*bgGO, "./assets/img/fundao.png");
+	bgGO->AddComponent(bg);
+	objectArray.emplace_back(bgGO);
 
 	if (GameData::playerVictory) {
 		backgroundMusic = Music("./assets/audio/soundtrack/shadowWIN.ogg");
 		//backgroundMusic.Play();			// Toca em loop
 		backgroundMusic.Play(1);			// Toca soh uma vez
 
-		bg = new Sprite(*bgGO, "./assets/img/win.jpg");
+		//bg = new Sprite(*bgGO, "./assets/img/win.jpg");
 
 
 		// criacao do texto de "YOU WIN"
@@ -38,7 +46,7 @@ void EndState::LoadAssets() {
 		//backgroundMusic.Play();			// Toca em loop
 		backgroundMusic.Play(1);			// Toca soh uma vez
 
-		bg = new Sprite(*bgGO, "./assets/img/lose.jpg");
+		//bg = new Sprite(*bgGO, "./assets/img/lose.jpg");
 
 		// criacao do texto de "YOU LOSE"
 		auto textGO = new GameObject();
@@ -50,8 +58,6 @@ void EndState::LoadAssets() {
 		objectArray.emplace_back(textGO);
 	}
 
-	bgGO->AddComponent(bg);
-	//objectArray.emplace_back(bgGO);
 
 	// criacao do texto de "press to play"
 	auto textGO = new GameObject();

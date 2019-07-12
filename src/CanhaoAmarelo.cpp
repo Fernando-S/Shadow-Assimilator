@@ -1,39 +1,38 @@
-#include "FinalBoss.h"
+#include "CanhaoAmarelo.h"
 #include "Game.h"
 #include "Sound.h"
 #include <iostream>
 
 using namespace std;
 
-FinalBoss* FinalBoss::finalBoss = nullptr;
+CanhaoAmarelo* CanhaoAmarelo::canhaoAmarelo = nullptr;
 
-FinalBoss::FinalBoss(GameObject& associated) : Component(associated) {
-	finalBoss = this;
+CanhaoAmarelo::CanhaoAmarelo(GameObject& associated) : Component(associated) {
+	canhaoAmarelo = this;
 
 	hp = FINALBOSS_INITIAL_HP;
 
 	// Carrega o sprite do boss final e do escudodele
-	//sprite = new Sprite(associated, "./assets/img/Boss Final/Boss_final.png");
-	sprite = new Sprite(associated, "./assets/img/Boss Final/Boss_final1.png");
+	sprite = new Sprite(associated, "./assets/img/Boss Final/Boss_final.png");
 
 	// Carrega som do boss Final
-	FinalBossSFX = new Sound(associated);
+	CanhaoAmareloSFX = new Sound(associated);
 
-	associated.AddComponent(FinalBossSFX);
+	associated.AddComponent(CanhaoAmareloSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
 	//	associated.angleDeg = angle * 180 / PI;
 }
 
-FinalBoss::~FinalBoss() {
-	finalBoss = nullptr;
+CanhaoAmarelo::~CanhaoAmarelo() {
+	canhaoAmarelo = nullptr;
 }
 
-void FinalBoss::Start() {
+void CanhaoAmarelo::Start() {
 
 }
 
-void FinalBoss::Update(float dt) {
+void CanhaoAmarelo::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
 	double angleVariation = 0;
 
@@ -44,7 +43,7 @@ void FinalBoss::Update(float dt) {
 
 
 	if (hp <= 0) {
-		// Deleta o FinalBoss se o hp dele acabou
+		// Deleta o CanhaoAmarelo se o hp dele acabou
 		associated.RequestDelete();
 
 
@@ -55,18 +54,18 @@ void FinalBoss::Update(float dt) {
 	}
 }
 
-void FinalBoss::Render() {
+void CanhaoAmarelo::Render() {
 
 }
 
-bool FinalBoss::Is(string type) {
-	if (type == "FinalBoss")
+bool CanhaoAmarelo::Is(string type) {
+	if (type == "CanhaoAmarelo")
 		return true;
 	else
 		return false;
 }
 
-void FinalBoss::NotifyCollision(GameObject& other) {
+void CanhaoAmarelo::NotifyCollision(GameObject& other) {
 	auto laser = (Laser*)other.GetComponent("Laser");
 	auto player1 = (Player*)other.GetComponent("Player");
 	auto coatGuy = (CoatGuy*)other.GetComponent("CoatGuy");
@@ -83,12 +82,12 @@ void FinalBoss::NotifyCollision(GameObject& other) {
 
 }
 
-int FinalBoss::GetHP() {
+int CanhaoAmarelo::GetHP() {
 	return hp;
 }
 
 /*
-void FinalBoss::LightShoot(Vec2 target) {
+void CanhaoAmarelo::LightShoot(Vec2 target) {
 	LightRecoilTimer.Restart();
 	associated.RemoveComponent(sprite);
 	if (Player::player->GetCenter().x > this->associated.box.x) {
@@ -99,7 +98,7 @@ void FinalBoss::LightShoot(Vec2 target) {
 	}
 	associated.AddComponent(sprite);
 }
-void FinalBoss::HeavyShoot(Vec2 target) {
+void CanhaoAmarelo::HeavyShoot(Vec2 target) {
 	HeavyRecoilTimer.Restart();
 	associated.RemoveComponent(sprite);
 	if (Player::player->GetCenter().x > this->associated.box.x) {

@@ -9,6 +9,9 @@ GameState2::GameState2() {
 	finalBossGO = new GameObject();
 	escudoGO = new GameObject();
 	chaoGO = new GameObject();
+	canhaoVermelho1GO = new GameObject();
+	canhaoVermelho2GO = new GameObject();
+	canhaoVermelho3GO = new GameObject();
 }
 
 void GameState2::LoadAssets() {
@@ -115,7 +118,7 @@ void GameState2::LoadAssets() {
 	finalBoss = new FinalBoss(*finalBossGO);
 
 	finalBossGO->AddComponent(finalBoss);
-	finalBossGO->box.x = 100;
+	finalBossGO->box.x = 1200;
 	finalBossGO->box.y = 800 - finalBossGO->box.h;
 	objectArray.emplace_back(finalBossGO);
 
@@ -126,9 +129,70 @@ void GameState2::LoadAssets() {
 	escudo = new Escudo(*escudoGO);
 
 	escudoGO->AddComponent(escudo);
-	escudoGO->box.x = 100;
+	escudoGO->box.x = finalBossGO->box.x - finalBoss->sprite->GetWidth() + 78;
 	escudoGO->box.y = 800 - escudoGO->box.h;
 	objectArray.emplace_back(escudoGO);
+
+
+	///////////////////////////////////////////////
+	//		Carrega os Canhoes Vermelhos		//
+	/////////////////////////////////////////////
+	
+	// Base 1
+	auto baseVermelha1GO = new GameObject();
+	auto baseVermelha1Sprite = new Sprite(*baseVermelha1GO, "./assets/img/Boss Final/torre2/base_torre2.png");
+	
+	baseVermelha1GO->AddComponent(baseVermelha1Sprite);
+	baseVermelha1GO->box.x = 500;
+	baseVermelha1GO->box.y = finalBossGO->box.y;
+
+	objectArray.emplace_back(baseVermelha1GO);
+
+	// Canhao 1
+	canhaoVermelho1 = new CanhaoVermelho(*canhaoVermelho1GO);
+	canhaoVermelho1GO->AddComponent(canhaoVermelho1);
+	canhaoVermelho1GO->box.x = baseVermelha1GO->box.x + 5;
+	canhaoVermelho1GO->box.y = baseVermelha1GO->box.y + baseVermelha1Sprite->GetHeight() - 30;
+
+	objectArray.emplace_back(canhaoVermelho1GO);
+
+
+	// Base 2
+	auto baseVermelha2GO = new GameObject();
+	auto baseVermelha2Sprite = new Sprite(*baseVermelha2GO, "./assets/img/Boss Final/torre2/base_torre2.png");
+
+	baseVermelha2GO->AddComponent(baseVermelha2Sprite);
+	baseVermelha2GO->box.x = 700;
+	baseVermelha2GO->box.y = finalBossGO->box.y;
+
+	objectArray.emplace_back(baseVermelha2GO);
+
+	// Canhao 2
+	canhaoVermelho2 = new CanhaoVermelho(*canhaoVermelho2GO);
+	canhaoVermelho2GO->AddComponent(canhaoVermelho2);
+	canhaoVermelho2GO->box.x = baseVermelha2GO->box.x + 5;
+	canhaoVermelho2GO->box.y = baseVermelha2GO->box.y + baseVermelha2Sprite->GetHeight() - 30;
+
+	objectArray.emplace_back(canhaoVermelho2GO);
+
+
+	// Base 3
+	auto baseVermelha3GO = new GameObject();
+	auto baseVermelha3Sprite = new Sprite(*baseVermelha3GO, "./assets/img/Boss Final/torre2/base_torre2.png");
+
+	baseVermelha3GO->AddComponent(baseVermelha3Sprite);
+	baseVermelha3GO->box.x = 900;
+	baseVermelha3GO->box.y = finalBossGO->box.y;
+
+	objectArray.emplace_back(baseVermelha3GO);
+
+	// Canhao 3
+	canhaoVermelho3 = new CanhaoVermelho(*canhaoVermelho3GO);
+	canhaoVermelho3GO->AddComponent(canhaoVermelho3);
+	canhaoVermelho3GO->box.x = baseVermelha3GO->box.x + 5;
+	canhaoVermelho3GO->box.y = baseVermelha3GO->box.y + baseVermelha3Sprite->GetHeight() - 30;
+
+	objectArray.emplace_back(canhaoVermelho3GO);
 
 
 	///////////////////////////////////
