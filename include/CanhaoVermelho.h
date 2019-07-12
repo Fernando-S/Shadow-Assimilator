@@ -33,7 +33,7 @@ public:
 	Sound* CanhaoVermelhoSFX;
 	Timer reloadingRedTimer;
 
-	bool doMeio = false;
+	bool doMeio = false, loaded = false;
 
 private:
 
