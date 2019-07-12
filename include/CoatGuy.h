@@ -56,13 +56,14 @@ private:
 	Timer WallJumpTimer, DeathTimer, DJTimer, ATKTimer;
 	Timer ShootCooldownTimer, DashCooldownTimer, FinishHimTimer, LoopTimer;
 	Vec2 speedH, speedV, speedD;
-	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed;
+	float linearSpeed = 0, verticalSpeed = 0, diagonalSpeed = 0, angle, gravity = 1.0, oppositeAccel, oppositeSpeed, initialX, initialY;;
 	bool Getspeed1 = false, Getspeed2 = false, Setrun = false, Setidle = true, WallgrabL = false, WallgrabR = false,
 		tchfloor, airbone, doubleJump = false, tchCeiling = false, facingR = true, facingL = false, WallJump = false,
 		SetJump = false, runningSound = false, wallSlideSound = false, deathSound = false, dead = false, notDJ = false, pouso = false, foguete = false,
 		spriteAlreadyIdleR = false, spriteAlreadyIdleL = false, spriteAlreadyRunR = false, spriteAlreadyRunL = false,
 		spriteAlreadyJumpR = false, spriteAlreadyJumpL = false, spriteAlreadyDJL = false, spriteAlreadyDJR = false,
-		jumped = false, gforce = false, FinishHimEneable = false, StartLoop = false, kill = false, Atk0 = false;
+		jumped = false, gforce = false, FinishHimEneable = false, StartLoop = false, kill = false, Atk0 = false,
+		moveDireita = false, moveEsquerda = false;
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, wallAUX = 0, wallX = 0, Ground = 0, DJ = 0, BuzzL = 0;
 	int contadorW1 = 0, contadorW2 = 0, loopaux = 0, falsehp = 1, Atk1 = 0;
 
