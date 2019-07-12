@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef FINALBOSS_H
-#define FINALBOSS_H
+#ifndef ESCUDO_H
+#define ESCUDO_H
 
 #include "Component.h"
 #include "Vec2.h"
@@ -17,24 +17,20 @@
 
 #define FINALBOSS_INITIAL_HP 4
 
-class FinalBoss : public Component {
+class Escudo : public Component {
 public:
-	FinalBoss(GameObject& associated);
-	~FinalBoss();
+	Escudo(GameObject& associated);
+	~Escudo();
 	void Start() override;
 	void Update(float dt) override;
 	void Render() override;
 	bool Is(std::string type) override;
 	void NotifyCollision(GameObject& other) override;
-	/*
-	void LightShoot(Vec2 target);
-	void HeavyShoot(Vec2 target);
-	*/
 	int GetHP();
 
-	static FinalBoss* finalBoss;
+	static Escudo* escudo;
 	Sprite* sprite;
-	Sound* FinalBossSFX;
+	Sound* EscudoSFX;
 
 private:
 
@@ -43,4 +39,4 @@ private:
 	Timer LightRecoilTimer, HeavyRecoilTimer;
 };
 
-#endif	//FINALBOSS_H
+#endif	//FINALBOSS

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef FINALBOSS_H
-#define FINALBOSS_H
+#ifndef CANHAOAMARELO_H
+#define CANHAOAMARELO_H
 
 #include "Component.h"
 #include "Vec2.h"
@@ -15,12 +15,12 @@
 #include "Camera.h"
 #include "InputManager.h"
 
-#define FINALBOSS_INITIAL_HP 4
+#define CANHAOAMARELO_INITIAL_HP 4
 
-class FinalBoss : public Component {
+class CanhaoAmarelo : public Component {
 public:
-	FinalBoss(GameObject& associated);
-	~FinalBoss();
+	CanhaoAmarelo(GameObject& associated);
+	~CanhaoAmarelo();
 	void Start() override;
 	void Update(float dt) override;
 	void Render() override;
@@ -32,9 +32,9 @@ public:
 	*/
 	int GetHP();
 
-	static FinalBoss* finalBoss;
+	static CanhaoAmarelo* canhaoAmarelo;
 	Sprite* sprite;
-	Sound* FinalBossSFX;
+	Sound* CanhaoAmareloSFX;
 
 private:
 
@@ -43,4 +43,4 @@ private:
 	Timer LightRecoilTimer, HeavyRecoilTimer;
 };
 
-#endif	//FINALBOSS_H
+#endif	//CANHAOAMARELO_H

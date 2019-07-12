@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef FINALBOSS_H
-#define FINALBOSS_H
+#ifndef CANHAOVERMELHO_H
+#define CANHAOVERMELHO_H
 
 #include "Component.h"
 #include "Vec2.h"
@@ -15,26 +15,22 @@
 #include "Camera.h"
 #include "InputManager.h"
 
-#define FINALBOSS_INITIAL_HP 4
+#define CANHAOVERMELHO_INITIAL_HP 4
 
-class FinalBoss : public Component {
+class CanhaoVermelho : public Component {
 public:
-	FinalBoss(GameObject& associated);
-	~FinalBoss();
+	CanhaoVermelho(GameObject& associated);
+	~CanhaoVermelho();
 	void Start() override;
 	void Update(float dt) override;
 	void Render() override;
 	bool Is(std::string type) override;
 	void NotifyCollision(GameObject& other) override;
-	/*
-	void LightShoot(Vec2 target);
-	void HeavyShoot(Vec2 target);
-	*/
 	int GetHP();
 
-	static FinalBoss* finalBoss;
+	static CanhaoVermelho* canhaoVermelho;
 	Sprite* sprite;
-	Sound* FinalBossSFX;
+	Sound* CanhaoVermelhoSFX;
 
 private:
 
@@ -43,4 +39,4 @@ private:
 	Timer LightRecoilTimer, HeavyRecoilTimer;
 };
 
-#endif	//FINALBOSS_H
+#endif	//CANHAOVERMELHO_H
