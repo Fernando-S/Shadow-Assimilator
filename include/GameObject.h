@@ -26,6 +26,7 @@ public:
 	void Start();
 	double angleDeg;
 	bool render = true;
+	int initialX = 0, initialY = 0;
 
 private:
 	std::vector<std::shared_ptr<Component>> components;
