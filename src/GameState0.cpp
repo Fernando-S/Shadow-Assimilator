@@ -644,6 +644,35 @@ void GameState0::LoadLevel() {
 	chaoGO->AddComponent(Chao);
 	objectArray.emplace_back(chaoGO);
 	
+	///////////////////////////////
+	//			LIXO			//
+	/////////////////////////////
+	auto LixoGO = new GameObject();
+
+	if (SetAtkForte == true) {
+		LixoSprite = new Sprite(*LixoGO, "./assets/img/Level0/lixo2.png");
+	}
+	else {
+		LixoSprite = new Sprite(*LixoGO, "./assets/img/Level0/lixo1.png");
+	}
+
+	LixoGO->box.x = (1) * tileSet->GetTileWidth() + chaoGO->box.x;
+	LixoGO->box.y = (-11.605) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	LixoGO->AddComponent(LixoSprite);
+	objectArray.emplace_back(LixoGO);
+
+	/*
+	AtkFortGO->initialX = HPbarGO->box.Center().x + 35.5;
+	AtkFortGO->initialY = HPbarGO->box.Center().y + 17;
+	auto AtkFortCamFollower = new CameraFollower(*AtkFortGO);
+	AtkFortGO->AddComponent(AtkFortCamFollower);
+
+	AtkFortGO->AddComponent(AtkFortSprite);
+	objectArray.emplace_back(AtkFortGO);
+	*/
+
+	///////////////////////////////
 
 	///////////////////////////////
 	//		MAXIMUM EFFORT		//
