@@ -64,6 +64,12 @@ private:
 	bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
 	bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false, direita1 = false, direita2 = false;
 	
+	Sprite  *CuraSprite, *AtkDistSprite, *AtkFortSprite;
+	GameObject* CuraGO;
+	GameObject* AtkDistGO;
+	GameObject* AtkFortGO;
+	bool SetCura = false, SetAtkForte = false, SetAtkDist = false;
+
 };
 
 #endif	//GAMESTATE2_H
