@@ -21,7 +21,7 @@ void GameState0::LoadAssets() {
 	backgroundMusic = *new Music("./assets/audio/soundtrack/shadowCITY.ogg");
 	backgroundMusic.Play();
 
-	
+
 	/////////////////////////////////
 	//	  Carrega o Background	  //
 	///////////////////////////////
@@ -54,7 +54,7 @@ void GameState0::LoadAssets() {
 	prediosBackground->colide = false;
 
 	prediosGO->box.x = 0;
-	prediosGO->box.y =  800 - 29 * ONETILESQUARE;
+	prediosGO->box.y = 800 - 29 * ONETILESQUARE;
 
 	prediosGO->box.w = prediosBackground->GetWidth() * tileSet->GetTileWidth();
 	prediosGO->box.h = prediosBackground->GetHeight() * tileSet->GetTileHeight();
@@ -85,7 +85,7 @@ void GameState0::LoadAssets() {
 	detalhesGO->AddComponent(detalhesBackground);
 	objectArray.emplace_back(detalhesGO);
 	///////////////////////////////////////////////
-	
+
 	// Detalhes dos predios 2 
 	auto detalhesGO1 = new GameObject();
 	auto detalhesBackground1 = new TileMap(*detalhesGO, "./assets/map/Level0/final/Mapa_1.4.txt", tileSet);
@@ -119,7 +119,7 @@ void GameState0::LoadAssets() {
 	detalhesGO2->AddComponent(detalhesBackground2);
 	objectArray.emplace_back(detalhesGO2);
 	///////////////////////////////////////////////
-	
+
 	// Detalhes dos predios 3 OPCIONAL 
 
 	detalhesGO3 = new GameObject();
@@ -137,8 +137,8 @@ void GameState0::LoadAssets() {
 
 	detalhesGO3->AddComponent(detalhesBackground3);
 	objectArray.emplace_back(detalhesGO3);
-	
-	
+
+
 	///////////////////////////////////////////////
 
 	//////////////////////////////////////
@@ -186,7 +186,7 @@ void GameState0::LoadAssets() {
 	///////////////////////////////////
 	//		Carrega os Robos		//
 	/////////////////////////////////
-	
+
 	// Primeiro Robo
 	robot1 = new Robot(*robot1GO);
 
@@ -241,7 +241,7 @@ void GameState0::LoadAssets() {
 
 	HPbarGO->AddComponent(HPbarSprite);
 	objectArray.emplace_back(HPbarGO);
-	
+
 	/////////////////////////////////////////////////////////////////////////////////////
 	//ICONES//
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -265,7 +265,7 @@ void GameState0::LoadAssets() {
 	///////////////
 	AtkFortGO = new GameObject();
 
-	if(SetAtkForte == true){
+	if (SetAtkForte == true) {
 		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte.png");
 	}
 	else {
@@ -307,7 +307,7 @@ void GameState0::LoadAssets() {
 
 }
 
-void GameState0::Update(float dt){
+void GameState0::Update(float dt) {
 	unsigned i, j;
 	auto inputManager = InputManager::GetInstance();
 	playerHitTimer.Update(dt);
@@ -323,7 +323,7 @@ void GameState0::Update(float dt){
 
 	UpdateArray(dt);										// Faz o update de cada GameObject no objectArray
 
-	
+
 	if (playerGO->box.y + playerGO->box.h > 800) {
 		playerGO->box.y = 800 - playerGO->box.h;
 	}
@@ -340,7 +340,7 @@ void GameState0::Update(float dt){
 
 
 
-	if (playerGO->box.x > 16 * ONETILESQUARE) {
+	if (playerGO->box.x > 20 * ONETILESQUARE) {
 		GameData::saiuDoGalpao = true;
 	}
 	else {
@@ -356,7 +356,7 @@ void GameState0::Update(float dt){
 		DetalheGO->render = false;
 	}
 
-	
+
 
 	if (inputManager.IsKeyDown(R_KEY)) {
 		GameData::saiuDoGalpao = true;
@@ -574,7 +574,6 @@ void GameState0::Update(float dt){
 			esquerda2 = false;
 			std::cout << "direita2 = true" << std::endl;
 		}
-
 		if (direita2 && inputManager.KeyPress(Z_KEY)) {
 			mostrando = true;
 			surpriseGO->render = true;
@@ -594,32 +593,32 @@ void GameState0::Update(float dt){
 
 	// PENSADOR CODE
 	if (surpriseGO) {
-		if ( (inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
+		if ((inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
 			dois = true;
 			tres = quatro = cinco = meia = sete = oito = false;
 			//std::cout << "dois = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
+		if ((inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
 			tres = true;
 			dois = quatro = cinco = meia = sete = oito = false;
 			//std::cout << "tres = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
+		if ((inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
 			quatro = true;
 			dois = tres = cinco = meia = sete = oito = false;
 			//std::cout << "quatro = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
+		if ((inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
 			cinco = true;
 			dois = tres = quatro = meia = sete = oito = false;
 			//std::cout << "cinco = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
+		if ((inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
 			meia = true;
 			dois = tres = quatro = cinco = sete = oito = false;
 			//std::cout << "meia = true" << std::endl;
 		}
-		if ( (inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
+		if ((inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
 			sete = true;
 			dois = tres = quatro = cinco = meia = oito = false;
 			//std::cout << "sete = true" << std::endl;
@@ -682,7 +681,7 @@ void GameState0::Update(float dt){
 		GameData::playerVictory = false;
 		popRequested = true;
 		Game::GetInstance().Push(new EndState());
-	}	
+	}
 	// Tela de WIN
 	/// todo - colocar uma condicao de vitoria
 	else if (inputManager.KeyPress(BACKSPACE_KEY)) {
@@ -694,7 +693,7 @@ void GameState0::Update(float dt){
 		popRequested = true;		/// todo - comentar se for poder voltar nas telas
 		Game::GetInstance().Push(new GameState1());
 	}
-	
+
 }
 
 GameState0::~GameState0() {
@@ -719,7 +718,7 @@ void GameState0::Resume() {
 }
 
 void GameState0::LoadLevel() {
-	
+
 	///////////////////////////////
 	//		Carrega o Chao		//
 	/////////////////////////////
@@ -762,7 +761,6 @@ void GameState0::LoadLevel() {
 	AtkFortGO->initialY = HPbarGO->box.Center().y + 17;
 	auto AtkFortCamFollower = new CameraFollower(*AtkFortGO);
 	AtkFortGO->AddComponent(AtkFortCamFollower);
-
 	AtkFortGO->AddComponent(AtkFortSprite);
 	objectArray.emplace_back(AtkFortGO);
 	*/
@@ -1340,7 +1338,5 @@ void GameState0::ChangePlayerHP() {
 
 		player->damaged = false;
 	}
-	
+
 }
-
-
