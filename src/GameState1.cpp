@@ -565,7 +565,23 @@ void GameState1::LoadLevel() {
 
 	chaoGO->AddComponent(Chao);
 	//objectArray.emplace_back(chaoGO);
-	
+
+	////////////////////////////
+	///////DETALHES		//
+	/////////////////////////////
+
+	auto DetalheGO = new GameObject();
+
+	DetalheSprite = new Sprite(*DetalheGO, "./assets/img/Level1/objeto_mapa2.png");
+
+	DetalheGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
+	DetalheGO->box.y = (-32) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	DetalheGO->AddComponent(DetalheSprite);
+	objectArray.emplace_back(DetalheGO);
+
+	/////////////////////////
+
 
 	///////////////////////////////
 	//		MAXIMUM EFFORT		//

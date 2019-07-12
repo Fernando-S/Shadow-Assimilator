@@ -645,6 +645,21 @@ void GameState0::LoadLevel() {
 	objectArray.emplace_back(chaoGO);
 	
 	///////////////////////////////
+	//			DETALHES		//
+	/////////////////////////////
+	auto DetalheGo = new GameObject();
+
+	DetalheSprite = new Sprite(*DetalheGo, "./assets/img/Level0/objeto_mapa1.png");	
+
+	DetalheGo->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
+	DetalheGo->box.y = (-29) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	DetalheGo->AddComponent(DetalheSprite);
+	objectArray.emplace_back(DetalheGo);
+	////////////////////////////////
+
+
+	///////////////////////////////
 	//			LIXO			//
 	/////////////////////////////
 	auto LixoGO = new GameObject();

@@ -144,7 +144,7 @@ void GameState2::LoadAssets() {
 	
 	baseVermelha1GO->AddComponent(baseVermelha1Sprite);
 	baseVermelha1GO->box.x = 500;
-	baseVermelha1GO->box.y = finalBossGO->box.y;
+	baseVermelha1GO->box.y = finalBossGO->box.y - 130;
 
 	objectArray.emplace_back(baseVermelha1GO);
 
@@ -163,7 +163,7 @@ void GameState2::LoadAssets() {
 
 	baseVermelha2GO->AddComponent(baseVermelha2Sprite);
 	baseVermelha2GO->box.x = 700;
-	baseVermelha2GO->box.y = finalBossGO->box.y;
+	baseVermelha2GO->box.y = finalBossGO->box.y - 130;
 
 	objectArray.emplace_back(baseVermelha2GO);
 
@@ -182,7 +182,7 @@ void GameState2::LoadAssets() {
 
 	baseVermelha3GO->AddComponent(baseVermelha3Sprite);
 	baseVermelha3GO->box.x = 900;
-	baseVermelha3GO->box.y = finalBossGO->box.y;
+	baseVermelha3GO->box.y = finalBossGO->box.y - 130;
 
 	objectArray.emplace_back(baseVermelha3GO);
 
@@ -461,7 +461,7 @@ void GameState2::LoadLevel() {
 	//auto Chao = new TileMap(*chaoGO, "./assets/map/Level0/TileMap_Chao.txt", tileSet);
 
 	//auto tileSet = new TileSet(64, 64, "./assets/img/Level0/agora vai/tile003.png");
-	auto Chao = new TileMap(*chaoGO, "./assets/map/Level0/TileMap_Chao1.txt", tileSet);
+	auto Chao = new TileMap(*chaoGO, "./assets/map/Level2/Tile_Chao.txt", tileSet);
 
 	Chao->colide = true;
 
@@ -473,16 +473,32 @@ void GameState2::LoadLevel() {
 
 	chaoGO->AddComponent(Chao);
 	objectArray.emplace_back(chaoGO);
-	
+	///////////////////////////////////////////////////////////////
+
+	///////////////////////////////
+	//			FUNDO			//
+	/////////////////////////////
+
+	auto BackGroundGO = new GameObject();
+
+	BackGroundSprite = new Sprite(*BackGroundGO, "./assets/img/Level1/objeto_mapa2.png");
+
+	BackGroundGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
+	BackGroundGO->box.y = (-32) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	BackGroundGO->AddComponent(BackGroundSprite);
+	objectArray.emplace_back(BackGroundGO);
+
+	////////////////////////////////
+
 	///////////////////////////////
 	//		MAXIMUM EFFORT		//
 	/////////////////////////////
-	/*
 	auto Tile00_ColunaGO = new GameObject();
 	Tile00_ColunaGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
-	Tile00_ColunaGO->box.y = (-21) * tileSet->GetTileHeight() + chaoGO->box.y;
+	Tile00_ColunaGO->box.y = (-12) * tileSet->GetTileHeight() + chaoGO->box.y;
 
-	auto tileMap_Tile00_Coluna = new TileMap(*Tile00_ColunaGO, "./assets/map/Level0/Tile00_Coluna.txt", tileSet);
+	auto tileMap_Tile00_Coluna = new TileMap(*Tile00_ColunaGO, "./assets/map/Level2/Tile00_Coluna.txt", tileSet);
 	tileMap_Tile00_Coluna->colide = true;
 
 	Tile00_ColunaGO->box.w = tileMap_Tile00_Coluna->GetWidth() * tileSet->GetTileWidth();
@@ -493,7 +509,86 @@ void GameState2::LoadLevel() {
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-	*/
+
+	auto Tile01_ColunaGO = new GameObject();
+	Tile01_ColunaGO->box.x = (20) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile01_ColunaGO->box.y = (-12) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile01_Coluna = new TileMap(*Tile01_ColunaGO, "./assets/map/Level2/Tile01_Coluna.txt", tileSet);
+	tileMap_Tile01_Coluna->colide = true;
+
+	Tile01_ColunaGO->box.w = tileMap_Tile01_Coluna->GetWidth() * tileSet->GetTileWidth();
+	Tile01_ColunaGO->box.h = tileMap_Tile01_Coluna->GetHeight() * tileSet->GetTileHeight();
+
+	Tile01_ColunaGO->AddComponent(tileMap_Tile01_Coluna);
+	objectArray.emplace_back(Tile01_ColunaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile02_LinhaGO = new GameObject();
+	Tile02_LinhaGO->box.x = (1) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile02_LinhaGO->box.y = (-9) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile02_Linha = new TileMap(*Tile02_LinhaGO, "./assets/map/Level2/Tile02_Linha.txt", tileSet);
+	tileMap_Tile02_Linha->colide = true;
+
+	Tile02_LinhaGO->box.w = tileMap_Tile02_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile02_LinhaGO->box.h = tileMap_Tile02_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile02_LinhaGO->AddComponent(tileMap_Tile02_Linha);
+	objectArray.emplace_back(Tile02_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile03_LinhaGO = new GameObject();
+	Tile03_LinhaGO->box.x = (4) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile03_LinhaGO->box.y = (-4) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile03_Linha = new TileMap(*Tile03_LinhaGO, "./assets/map/Level2/Tile03_Linha.txt", tileSet);
+	tileMap_Tile03_Linha->colide = true;
+
+	Tile03_LinhaGO->box.w = tileMap_Tile03_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile03_LinhaGO->box.h = tileMap_Tile03_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile03_LinhaGO->AddComponent(tileMap_Tile03_Linha);
+	objectArray.emplace_back(Tile03_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+	auto Tile04_LinhaGO = new GameObject();
+	Tile04_LinhaGO->box.x = (12) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile04_LinhaGO->box.y = (-4) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Tile04_Linha = new TileMap(*Tile04_LinhaGO, "./assets/map/Level2/Tile04_Linha.txt", tileSet);
+	tileMap_Tile04_Linha->colide = true;
+
+	Tile04_LinhaGO->box.w = tileMap_Tile04_Linha->GetWidth() * tileSet->GetTileWidth();
+	Tile04_LinhaGO->box.h = tileMap_Tile04_Linha->GetHeight() * tileSet->GetTileHeight();
+
+	Tile04_LinhaGO->AddComponent(tileMap_Tile04_Linha);
+	objectArray.emplace_back(Tile04_LinhaGO);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+	
+	auto Tile_TetoGO = new GameObject();
+	Tile_TetoGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
+	Tile_TetoGO->box.y = (-14) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	auto tileMap_Teto = new TileMap(*Tile_TetoGO, "./assets/map/Level2/Tile_Teto.txt", tileSet);
+	tileMap_Teto->colide = true;
+
+	Tile_TetoGO->box.w = tileMap_Teto->GetWidth() * tileSet->GetTileWidth();
+	Tile_TetoGO->box.h = tileMap_Teto->GetHeight() * tileSet->GetTileHeight();
+
+	Tile_TetoGO->AddComponent(tileMap_Teto);
+	objectArray.emplace_back(Tile_TetoGO);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+	
 	
 }
 

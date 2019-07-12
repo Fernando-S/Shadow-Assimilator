@@ -1,6 +1,7 @@
 #include "CanhaoVermelho.h"
 #include "Game.h"
 #include "Sound.h"
+#include "FinalBoss.h"
 #include <iostream>
 
 using namespace std;
