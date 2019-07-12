@@ -6,6 +6,7 @@
 GameState2::GameState2() {
 	playerGO = new GameObject();
 	coatGuyGO = new GameObject();
+	finalBossGO = new GameObject();
 	chaoGO = new GameObject();
 }
 
@@ -15,9 +16,8 @@ void GameState2::LoadAssets() {
 	/////////////////////////////////////////////
 	//	  Carrega a Musica e aperta o play	  //
 	///////////////////////////////////////////
-	//backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow_Assimilator_-_Theme_1.mp3");
-	//backgroundMusic = *new Music("./assets/audio/soundtrack/Shadow Assimilator track 1.ogg");
-	//backgroundMusic.Play();
+	backgroundMusic = *new Music("./assets/audio/soundtrack/shadowboss.ogg");
+	backgroundMusic.Play();
 
 	
 	/////////////////////////////////
@@ -111,38 +111,22 @@ void GameState2::LoadAssets() {
 	///////////////////////////////////
 	//		Carrega Final BOSS		//
 	/////////////////////////////////
-	/*
-	auto finalBossGO = new GameObject();
-	auto finalBoss = new FinalBoss(*finalBossGO);
+	finalBoss = new FinalBoss(*finalBossGO);
+
 	finalBossGO->AddComponent(finalBoss);
-	finalBossGO->box.x = 800;
+	finalBossGO->box.x = 100;
 	finalBossGO->box.y = 800 - finalBossGO->box.h;
 	objectArray.emplace_back(finalBossGO);
-	*/
 
-	///////////////////////////////////
-	//		Carrega um Robo			//
-	/////////////////////////////////
-	/*
-	auto robotGO = new GameObject();
-	auto robot = new Robot(*robotGO);
-
-	robotGO->AddComponent(robot);
-	robotGO->box.x = 800;
-	robotGO->box.y = 800 - robotGO->box.h;
-
-	objectArray.emplace_back(robotGO);
-	*/
 
 	///////////////////////////////////
 	//		Carrega o CoatGuy		//
 	/////////////////////////////////
-	//auto coatGuyGO = new GameObject();
-	auto coatGuy = new CoatGuy(*coatGuyGO);
+	coatGuy = new CoatGuy(*coatGuyGO);
 
 	coatGuyGO->AddComponent(coatGuy);
-	coatGuyGO->box.x = 1200;
-	coatGuyGO->box.y = 800 - coatGuyGO->box.h;
+	coatGuyGO->box.x = 60 * ONETILESQUARE;
+	coatGuyGO->box.y = 800 - coatGuyGO->box.h - 100;
 
 	objectArray.emplace_back(coatGuyGO);
 
@@ -354,15 +338,17 @@ void GameState2::Update(float dt){
 		Game::GetInstance().Push(new EndState());
 	}	// Tela de WIN
 	/// todo - colocar uma condicao de vitoria
-	else if (inputManager.KeyPress(BACKSPACE_KEY)) {
+	else if (inputManager.KeyPress(BACKSPACE_KEY) || !FinalBoss::finalBoss) {
 		GameData::playerVictory = true;
 		popRequested = true;
 		Game::GetInstance().Push(new EndState());
 	}
+	/*
 	else if (inputManager.KeyPress(NUMPAD_NINE_KEY)) {
 		popRequested = true;
 		Game::GetInstance().Push(new GameState3());
 	}
+	*/
 	
 }
 
