@@ -26,7 +26,7 @@ void GameState1::LoadAssets() {
 	auto bg = new Sprite(*bgGO, "./assets/img/background.png");
 
 	// Seta a escala e posiciona no centro da tela
-	bg->SetScale(1.3333, 1.42);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
+	bg->SetScale(1.3333, 1.3333);	// (resolution width / image width) * escala que queremos, (resolution height / image height) * escala que queremos
 
 	auto bgCamFollower = new CameraFollower(*bgGO);
 	bgGO->AddComponent(bgCamFollower);
