@@ -172,6 +172,7 @@ void GameState2::LoadAssets() {
 	canhaoVermelho2GO->AddComponent(canhaoVermelho2);
 	canhaoVermelho2GO->box.x = baseVermelha2GO->box.x + 5;
 	canhaoVermelho2GO->box.y = baseVermelha2GO->box.y + baseVermelha2Sprite->GetHeight() - 30;
+	canhaoVermelho2->doMeio = true;
 
 	objectArray.emplace_back(canhaoVermelho2GO);
 
