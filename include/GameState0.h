@@ -23,8 +23,8 @@
 #define PI 3.14159265
 #define ALIEN_NUMBER 3
 
-class GameState0 : public State{
-public:	
+class GameState0 : public State {
+public:
 	GameState0();
 	~GameState0() override;
 	void LoadAssets() override;
@@ -33,7 +33,7 @@ public:
 	void Start() override;
 	void Pause() override;
 	void Resume() override;
-	
+
 
 private:
 	void ChangePlayerHP();
@@ -53,8 +53,8 @@ private:
 	GameObject* detalhesGO3;
 	GameObject* DetalheGO;
 
-	
-	
+
+
 	Player* player;
 	Robot* robot1;
 	Robot* robot2;
@@ -71,7 +71,7 @@ private:
 	GameObject* AtkDistGO;
 	GameObject* AtkFortGO;
 	bool SetCura = false, SetAtkForte = false, SetAtkDist = false;
-	
+
 };
 
 #endif	//GAMESTATE0_H

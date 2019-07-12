@@ -14,6 +14,7 @@
 #include "TileMap.h"
 #include "Camera.h"
 #include "InputManager.h"
+#include "Player.h"
 
 #define CANHAOAMARELO_INITIAL_HP 4
 
@@ -35,12 +36,16 @@ public:
 	static CanhaoAmarelo* canhaoAmarelo;
 	Sprite* sprite;
 	Sound* CanhaoAmareloSFX;
+	Timer reloadingYellowTimer;
+
+	bool loaded = false;
 
 private:
-
+	float angle;
 	int hp;
 	bool damaged;
-	Timer LightRecoilTimer, HeavyRecoilTimer;
+	Timer cooldownTimer;
+	GameObject* playerGO;
 };
 
 #endif	//CANHAOAMARELO_H
