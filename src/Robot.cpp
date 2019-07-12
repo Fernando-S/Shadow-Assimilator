@@ -318,19 +318,26 @@ void Robot::Update(float dt) {
 			if (facingL) {
 				laserGO->box.y = associated.box.y + 28;		// faz o tiro sair da altura do braco
 				laserGO->box.x = associated.box.x - 4;		// faz o tiro sair do final do braco
+				auto laser = new Laser(*laserGO, Vec2(Player::player->GetCenter().x, this->GetCenter().y).InclinacaoDaDiferenca(associated.box.Center()),
+					LASER_SPEED, ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Robot/inim_tiro_inv.png", 1, 1);
+				laser->robotLaser = true;
+				laserGO->AddComponent(laser);
+
 			}
 			else if (facingR) {
 				laserGO->box.y = associated.box.y + 37;		// faz o tiro sair da altura do braco
 				laserGO->box.x = associated.box.x + associated.box.w;		// faz o tiro sair do final do braco
+				auto laser = new Laser(*laserGO, Vec2(Player::player->GetCenter().x, this->GetCenter().y).InclinacaoDaDiferenca(associated.box.Center()),
+					LASER_SPEED, ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/Robot/inim_tiro_inv.png", 1, 1);
+				laser->robotLaser = true;
+				laserGO->AddComponent(laser);
+
 			}
 
-			auto laser = new Laser(*laserGO, Vec2(Player::player->GetCenter().x, this->GetCenter().y).InclinacaoDaDiferenca(associated.box.Center()),
-				LASER_SPEED, ROBOT_LASER_DAMAGE, LASER_MAX_DISTANCE, "./assets/img/minionBullet2.png", 3, 0.1);
-			laser->robotLaser = true;
+
 			auto laserSound = new Sound(*laserGO, "./assets/audio/SFX/LaserInimigo(Assim.)1.wav");
 			laserGO->AddComponent(laserSound);
 			laserSound->Play();
-			laserGO->AddComponent(laser);
 
 			Game::GetInstance().GetCurrentState().AddObject(laserGO);
 
@@ -551,7 +558,7 @@ void Robot::Update(float dt) {
 		//		TIRO DO ROBO		//
 		/////////////////////////////
 		/// todo - fazer uma condicao parecida ou ate mesmo igual para tocar o som de corrida apenas quando esta proximo do jogador
-		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 4 * ONETILESQUARE) && ShootCooldownTimer.Get() > 1.8
+		if (Player::player && (Player::player->GetCenter().Distancia(this->GetCenter()) < 5 * ONETILESQUARE) && ShootCooldownTimer.Get() > 1.8
 			&& (Player::player->GetCenter().y > this->associated.box.y - ONETILESQUARE * 3)
 			&& (Player::player->GetCenter().y < this->associated.box.y + this->associated.box.h + ONETILESQUARE * 3)) {
 			Shoot(Vec2(Player::player->GetCenter().x, this->GetCenter().y));
