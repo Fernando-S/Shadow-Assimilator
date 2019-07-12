@@ -47,8 +47,9 @@ void GameState0::LoadAssets() {
 	/////////////////////////////////////////////////
 	auto prediosGO = new GameObject();
 
-	tileSet = new TileSet(64, 64, "./assets/img/Level0/agora vai/tile003.png");
-	auto prediosBackground = new TileMap(*prediosGO, "./assets/map/Level0/TileMap_Predios1.txt", tileSet);
+	tileSet = new TileSet(64, 64, "./assets/img/tile003.png");
+	//auto prediosBackground = new TileMap(*prediosGO, "./assets/map/Level0/TileMap_Predios1.txt", tileSet);
+	auto prediosBackground = new TileMap(*prediosGO, "./assets/map/Level0/final/Mapa_1.1.txt", tileSet);
 
 	prediosBackground->colide = false;
 
@@ -68,9 +69,9 @@ void GameState0::LoadAssets() {
 	// Carrega os tiles que colidem
 	LoadLevel();
 
-	// Detalhes dos predios
+	// Detalhes dos predios 1 
 	auto detalhesGO = new GameObject();
-	auto detalhesBackground = new TileMap(*detalhesGO, "./assets/map/Level0/TileMap_Detalhes1.txt", tileSet);
+	auto detalhesBackground = new TileMap(*detalhesGO, "./assets/map/Level0/final/Mapa_1.3.txt", tileSet);
 
 	detalhesBackground->colide = false;
 
@@ -83,7 +84,76 @@ void GameState0::LoadAssets() {
 
 	detalhesGO->AddComponent(detalhesBackground);
 	objectArray.emplace_back(detalhesGO);
+	///////////////////////////////////////////////
 	
+	// Detalhes dos predios 2 
+	auto detalhesGO1 = new GameObject();
+	auto detalhesBackground1 = new TileMap(*detalhesGO, "./assets/map/Level0/final/Mapa_1.4.txt", tileSet);
+
+	detalhesBackground1->colide = false;
+
+	detalhesGO1->box.x = 0;
+	detalhesGO1->box.y = 800 - 29 * ONETILESQUARE;
+
+
+	detalhesGO1->box.w = detalhesBackground1->GetWidth() * tileSet->GetTileWidth();
+	detalhesGO1->box.h = detalhesBackground1->GetHeight() * tileSet->GetTileHeight();
+
+	detalhesGO1->AddComponent(detalhesBackground1);
+	objectArray.emplace_back(detalhesGO1);
+	///////////////////////////////////////////////
+
+	// Detalhes dos predios 2 
+	auto detalhesGO2 = new GameObject();
+	auto detalhesBackground2 = new TileMap(*detalhesGO, "./assets/map/Level0/final/Mapa_1.5.txt", tileSet);
+
+	detalhesBackground2->colide = false;
+
+	detalhesGO2->box.x = 0;
+	detalhesGO2->box.y = 800 - 29 * ONETILESQUARE;
+
+
+	detalhesGO2->box.w = detalhesBackground2->GetWidth() * tileSet->GetTileWidth();
+	detalhesGO2->box.h = detalhesBackground2->GetHeight() * tileSet->GetTileHeight();
+
+	detalhesGO2->AddComponent(detalhesBackground2);
+	objectArray.emplace_back(detalhesGO2);
+	///////////////////////////////////////////////
+	
+	// Detalhes dos predios 3 OPCIONAL 
+
+	detalhesGO3 = new GameObject();
+	auto detalhesBackground3 = new TileMap(*detalhesGO, "./assets/map/Level0/final/Mapa_1.2.txt", tileSet);
+	detalhesGO3->render = false;
+
+	detalhesBackground3->colide = false;
+
+	detalhesGO3->box.x = 0;
+	detalhesGO3->box.y = 800 - 29 * ONETILESQUARE;
+
+
+	detalhesGO3->box.w = detalhesBackground3->GetWidth() * tileSet->GetTileWidth();
+	detalhesGO3->box.h = detalhesBackground3->GetHeight() * tileSet->GetTileHeight();
+
+	detalhesGO3->AddComponent(detalhesBackground3);
+	objectArray.emplace_back(detalhesGO3);
+	
+	
+	///////////////////////////////////////////////
+
+	//////////////////////////////////////
+	//			DETALHES RALISON		//
+	//////////////////////////////////////
+	DetalheGO = new GameObject();
+	DetalheSprite = new Sprite(*DetalheGO, "./assets/img/Level0/objeto_mapa1.png");
+	DetalheGO->render = false;
+
+	DetalheGO->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
+	DetalheGO->box.y = (-29) * tileSet->GetTileHeight() + chaoGO->box.y;
+
+	DetalheGO->AddComponent(DetalheSprite);
+	objectArray.emplace_back(DetalheGO);
+	////////////////////////////////
 
 	////////////////////////////////
 	//	   Carrega o Ricardo	 //
@@ -268,11 +338,28 @@ void GameState0::Update(float dt){
 		Game::GetInstance().Push(new GameState1());
 	}
 
-	if (playerGO->box.x > 13 * ONETILESQUARE) {
+
+
+	if (playerGO->box.x > 16 * ONETILESQUARE) {
 		GameData::saiuDoGalpao = true;
 	}
 	else {
 		GameData::saiuDoGalpao = false;
+	}
+
+	if (GameData::saiuDoGalpao == true) {
+		detalhesGO3->render = true;
+		DetalheGO->render = true;
+	}
+	else {
+		detalhesGO3->render = false;
+		DetalheGO->render = false;
+	}
+
+	
+
+	if (inputManager.IsKeyDown(R_KEY)) {
+		GameData::saiuDoGalpao = true;
 	}
 
 	// Reseta o contador para piscar a personagem
@@ -650,20 +737,6 @@ void GameState0::LoadLevel() {
 
 	chaoGO->AddComponent(Chao);
 	objectArray.emplace_back(chaoGO);
-	
-	///////////////////////////////
-	//			DETALHES		//
-	/////////////////////////////
-	auto DetalheGo = new GameObject();
-
-	DetalheSprite = new Sprite(*DetalheGo, "./assets/img/Level0/objeto_mapa1.png");	
-
-	DetalheGo->box.x = (0) * tileSet->GetTileWidth() + chaoGO->box.x;
-	DetalheGo->box.y = (-29) * tileSet->GetTileHeight() + chaoGO->box.y;
-
-	DetalheGo->AddComponent(DetalheSprite);
-	objectArray.emplace_back(DetalheGo);
-	////////////////////////////////
 
 
 	///////////////////////////////
