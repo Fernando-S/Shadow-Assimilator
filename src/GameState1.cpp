@@ -59,15 +59,15 @@ void GameState1::LoadAssets() {
 	///////////////////////////////////////////////////
 	//		Carrega os Predios de Background		//
 	/////////////////////////////////////////////////
-	tileSet = new TileSet(64, 64, "./assets/img/Level0/agora vai/tile003.png");
+	tileSet = new TileSet(64, 64, "./assets/img/tile003.png");
 
 	auto predioGO = new GameObject();
-	auto TileMap_Predio = new TileMap(*predioGO, "./assets/map/Level1/TileMap_Predio.txt", tileSet);
+	auto TileMap_Predio = new TileMap(*predioGO, "./assets/map/Level1/Mapa_2.txt", tileSet);
 
 	TileMap_Predio->colide = false;
 
-	predioGO->box.x = 0;
-	predioGO->box.y =  800 - 31 * ONETILESQUARE;
+	predioGO->box.x = 35 * ONETILESQUARE;
+	predioGO->box.y = 800 - 32 * ONETILESQUARE;
 	predioGO->box.w = TileMap_Predio->GetWidth() * tileSet->GetTileWidth();
 	predioGO->box.h = TileMap_Predio->GetHeight() * tileSet->GetTileHeight();
 
