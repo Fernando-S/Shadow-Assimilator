@@ -24,8 +24,8 @@
 #define PI 3.14159265
 #define ALIEN_NUMBER 3
 
-class GameState2 : public State{
-public:	
+class GameState2 : public State {
+public:
 	GameState2();
 	~GameState2() override;
 	void LoadAssets() override;
@@ -34,7 +34,7 @@ public:
 	void Start() override;
 	void Pause() override;
 	void Resume() override;
-	
+
 
 private:
 	void ChangePlayerHP();
@@ -63,7 +63,7 @@ private:
 
 	bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
 	bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false, direita1 = false, direita2 = false;
-	
+
 	Sprite  *CuraSprite, *AtkDistSprite, *AtkFortSprite;
 	GameObject* CuraGO;
 	GameObject* AtkDistGO;
