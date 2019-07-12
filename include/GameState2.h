@@ -18,6 +18,7 @@
 #include "GameState3.h"
 #include "EndState.h"
 #include "FinalBoss.h"
+#include "Escudo.h"
 
 #define PI 3.14159265
 #define ALIEN_NUMBER 3
@@ -46,10 +47,12 @@ private:
 	GameObject* playerGO;
 	GameObject* coatGuyGO;
 	GameObject* finalBossGO;
+	GameObject* escudoGO;
 	GameObject* chaoGO;
 	Player* player;
 	CoatGuy* coatGuy;
 	FinalBoss* finalBoss;
+	Escudo* escudo;
 
 	bool dois = false, tres = false, quatro = false, cinco = false, meia = false, sete = false, oito = false, mostrando = false;
 	bool cima1 = false, cima2 = false, baixo1 = false, baixo2 = false, esquerda1 = false, esquerda2 = false, direita1 = false, direita2 = false;
