@@ -163,7 +163,7 @@ void GameState1::LoadAssets() {
 	HPbarCoatGuyGO = new GameObject();
 	HPbarCoatGuySprite = new Sprite(*HPbarCoatGuyGO, "./assets/img/Vilao/barra_de_HP/HP_vilao_28.png");
 	
-	HPbarCoatGuyGO->box.x = 500/* Game::GetInstance().GetWidth() - HPbarCoatGuySprite->GetWidth()*/;
+	HPbarCoatGuyGO->initialX = Game::GetInstance().GetWidth() - HPbarCoatGuySprite->GetWidth();
 
 	auto HPbarCoatGuyCamFollower = new CameraFollower(*HPbarCoatGuyGO);
 	HPbarCoatGuyGO->AddComponent(HPbarCoatGuyCamFollower);
