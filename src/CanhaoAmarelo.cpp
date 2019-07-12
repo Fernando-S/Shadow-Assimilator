@@ -14,7 +14,7 @@ CanhaoAmarelo::CanhaoAmarelo(GameObject& associated) : Component(associated) {
 	hp = FINALBOSS_INITIAL_HP;
 
 	// Carrega o sprite do boss final e do escudodele
-	sprite = new Sprite(associated, "./assets/img/Boss Final/Boss_final.png");
+	sprite = new Sprite(associated, "./assets/img/Boss Final/torre1/torre1_00.png");
 
 	// Carrega som do boss Final
 	CanhaoAmareloSFX = new Sound(associated);
@@ -94,8 +94,8 @@ void CanhaoAmarelo::Update(float dt) {
 
 		// Calculo do angulo para o canhao seguir o mouse
 		//associated.box.PlaceCenter(Player::player->GetCenter());
-		angle = Vec2(Player::player->GetCenter().x/*inputManager.GetMouseX()*/ + Camera::pos.x, Player::player->GetCenter().y/*inputManager.GetMouseY()*/ + Camera::pos.y).InclinacaoDaDiferenca(associated.box.Center());
-		associated.angleDeg = angle * 180 / PI;
+		angle = Vec2(Player::player->GetCenter().x, Player::player->GetCenter().y).InclinacaoDaDiferenca(Vec2(associated.box.Center().x - associated.box.w/2, associated.box.Center().y));
+		associated.angleDeg = angle * 360 / PI;
 		cooldownTimer.Update(dt);
 	}
 }

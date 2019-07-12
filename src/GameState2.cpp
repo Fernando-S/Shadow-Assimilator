@@ -12,6 +12,7 @@ GameState2::GameState2() {
 	canhaoVermelho1GO = new GameObject();
 	canhaoVermelho2GO = new GameObject();
 	canhaoVermelho3GO = new GameObject();
+	canhaoAmareloGO = new GameObject();
 
 }
 
@@ -281,6 +282,30 @@ void GameState2::LoadAssets() {
 	objectArray.emplace_back(canhaoVermelho3GO);
 
 
+
+	///////////////////////////////////////////
+	//		Carrega os Canhoao Amarelo		//
+	/////////////////////////////////////////
+
+	// Base
+	auto baseAmarelaGO = new GameObject();
+	auto baseAmarelaSprite = new Sprite(*baseAmarelaGO, "./assets/img/Boss Final/torre1/base_torre1.png");
+
+	baseAmarelaGO->AddComponent(baseAmarelaSprite);
+	baseAmarelaGO->box.x = finalBossGO->box.x + finalBoss->sprite->GetWidth() - baseAmarelaSprite->GetWidth();
+	baseAmarelaGO->box.y = finalBossGO->box.y + 3 * ONETILESQUARE;
+
+	objectArray.emplace_back(baseAmarelaGO);
+	
+	// Canhao
+	canhaoAmarelo = new CanhaoAmarelo(*canhaoAmareloGO);
+	canhaoAmareloGO->AddComponent(canhaoAmarelo);
+	canhaoAmareloGO->box.x = baseAmarelaGO->box.x + 5;
+	canhaoAmareloGO->box.y = baseAmarelaGO->box.y + baseVermelha3Sprite->GetHeight() - 30;
+	
+	objectArray.emplace_back(canhaoAmareloGO);
+	
+
 	///////////////////////////////////
 	//		Carrega o CoatGuy		//
 	/////////////////////////////////
@@ -290,7 +315,7 @@ void GameState2::LoadAssets() {
 	coatGuyGO->box.x = 60 * ONETILESQUARE;
 	coatGuyGO->box.y = 800 - coatGuyGO->box.h - 100;
 
-	objectArray.emplace_back(coatGuyGO);
+	//objectArray.emplace_back(coatGuyGO);
 
 
 	///////////////////////////////////

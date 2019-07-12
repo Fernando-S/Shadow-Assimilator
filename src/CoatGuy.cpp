@@ -38,6 +38,8 @@ CoatGuy::~CoatGuy() {
 }
 
 void CoatGuy::Start() {
+	initialX = associated.box.x;
+	initialY = associated.box.y;
 }
 
 
@@ -210,6 +212,30 @@ void CoatGuy::Update(float dt) {
 		FinishHimTimer.Update(dt);
 		LoopTimer.Update(dt);
 		ATKTimer.Update(dt);
+
+		if (Player::player->GetCenter().Distancia(this->GetCenter()) < 10 * ONETILESQUARE) {
+			if (Player::player->GetCenter().x > this->GetCenter().x) {
+
+				moveEsquerda = false;
+				moveDireita = true;
+			}
+			else {
+				moveDireita = false;
+				moveEsquerda = true;
+			}
+		}
+
+		if (associated.box.x < initialX - 35 * ONETILESQUARE) {
+
+				moveDireita = true;
+				moveEsquerda = false;
+
+			//cout << "LIMITE A ESQUERDA\n";
+		}
+		else if (associated.box.x > initialX +  2 * ONETILESQUARE) {
+			moveDireita = false;
+			moveEsquerda = true;
+		}
 
 
 		//////////////////////////////////////////
@@ -424,7 +450,7 @@ void CoatGuy::Update(float dt) {
 				///////////////////////////////////////////
 				//		CORRIDA PARA A ESQUERDA			//
 				/////////////////////////////////////////
-				if (inputManager.IsKeyDown(LEFT_ARROW_KEY)) {
+				if (inputManager.IsKeyDown(LEFT_ARROW_KEY) || moveEsquerda) {
 
 					WallgrabR = false;
 
@@ -458,7 +484,7 @@ void CoatGuy::Update(float dt) {
 			///////////////////////////////////////
 			//		CORRIDA PARA A DIREITA		//
 			/////////////////////////////////////
-				else if (inputManager.IsKeyDown(RIGHT_ARROW_KEY)) {
+				else if (inputManager.IsKeyDown(RIGHT_ARROW_KEY) || moveDireita) {
 					speedH = { 1, 0 };
 
 					if (Getspeed2 == false) {
@@ -491,13 +517,13 @@ void CoatGuy::Update(float dt) {
 		}
 		double atrictSpeedLoss = COATGUY_ATRICT * dt;
 
-		if (!inputManager.IsKeyDown(LEFT_ARROW_KEY))
+		if (!inputManager.IsKeyDown(LEFT_ARROW_KEY) && !moveEsquerda)
 			Getspeed1 = false;
 
-		if (!inputManager.IsKeyDown(RIGHT_ARROW_KEY))
+		if (!inputManager.IsKeyDown(RIGHT_ARROW_KEY) && !moveDireita)
 			Getspeed2 = false;
 
-		if (!inputManager.IsKeyDown(LEFT_ARROW_KEY) && !inputManager.IsKeyDown(RIGHT_ARROW_KEY)) {
+		if (!inputManager.IsKeyDown(LEFT_ARROW_KEY) && !inputManager.IsKeyDown(RIGHT_ARROW_KEY) && !moveEsquerda && !moveDireita) {
 
 			if (linearSpeed > 40)
 				linearSpeed -= accelSpeedGain * 1.5;
@@ -591,7 +617,7 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Corrida para a direita		//
 		/////////////////////////////////////
-		if ((((Run == 1) && (Ground > 0)) || ((Ground == 1) && (Run > 0) && (inputManager.IsKeyDown(RIGHT_ARROW_KEY)))) && (Fall <= 1) && (Jump == 0)) {
+		if ((((Run == 1) && (Ground > 0)) || ((Ground == 1) && (Run > 0) && (inputManager.IsKeyDown(RIGHT_ARROW_KEY) || moveDireita))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_corrida.png", 10, 0.09);
 			associated.AddComponent(sprite);
@@ -607,7 +633,7 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Corrida para a esquerda		//
 		/////////////////////////////////////
-		if ((((Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && (inputManager.IsKeyDown(LEFT_ARROW_KEY)))) && (Fall <= 1) && (Jump == 0)) {
+		if ((((Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && (inputManager.IsKeyDown(LEFT_ARROW_KEY) || moveEsquerda))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_corrida_inv.png", 10, 0.09);
 			associated.AddComponent(sprite);
@@ -1029,7 +1055,7 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 	}
 	else if (player1 && Player::player->isAtacking) {
 		//cout << "Deu dano no robo\n";
-		hp -= 2;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
+		hp -= 6;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
 		falsehp--;
 		damaged = true;
 		gotHit = true;
