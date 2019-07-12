@@ -40,7 +40,7 @@ private:
 	void ChangePlayerHP();
 	void LoadLevel();
 
-	Sprite* HPbarSprite;
+	Sprite* HPbarSprite, *BackGroundSprite;
 	TileSet* tileSet;
 	Music backgroundMusic;
 	GameObject* HPbarGO;

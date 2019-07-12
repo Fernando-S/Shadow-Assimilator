@@ -39,7 +39,7 @@ private:
 	void ChangePlayerHP(), ChangeCoatGuyHP();
 	void LoadLevel();
 
-	Sprite* HPbarSprite;
+	Sprite* HPbarSprite, *DetalheSprite;
 	Sprite *HPbarCoatGuySprite;
 	TileSet* tileSet;
 	Music backgroundMusic;
