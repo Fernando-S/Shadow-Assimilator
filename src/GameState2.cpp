@@ -7,6 +7,7 @@ GameState2::GameState2() {
 	playerGO = new GameObject();
 	coatGuyGO = new GameObject();
 	finalBossGO = new GameObject();
+	escudoGO = new GameObject();
 	chaoGO = new GameObject();
 }
 
@@ -109,7 +110,7 @@ void GameState2::LoadAssets() {
 
 
 	///////////////////////////////////
-	//		Carrega Final BOSS		//
+	//		Carrega o Final BOSS	//
 	/////////////////////////////////
 	finalBoss = new FinalBoss(*finalBossGO);
 
@@ -117,6 +118,17 @@ void GameState2::LoadAssets() {
 	finalBossGO->box.x = 100;
 	finalBossGO->box.y = 800 - finalBossGO->box.h;
 	objectArray.emplace_back(finalBossGO);
+
+
+	///////////////////////////////////////////////
+	//		Carrega o escudo do Final BOSS		//
+	/////////////////////////////////////////////
+	escudo = new Escudo(*escudoGO);
+
+	escudoGO->AddComponent(escudo);
+	escudoGO->box.x = 100;
+	escudoGO->box.y = 800 - escudoGO->box.h;
+	objectArray.emplace_back(escudoGO);
 
 
 	///////////////////////////////////
