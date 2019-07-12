@@ -268,6 +268,13 @@ void GameState0::Update(float dt){
 		Game::GetInstance().Push(new GameState1());
 	}
 
+	if (playerGO->box.x > 13 * ONETILESQUARE) {
+		GameData::saiuDoGalpao = true;
+	}
+	else {
+		GameData::saiuDoGalpao = false;
+	}
+
 	// Reseta o contador para piscar a personagem
 	if (player->damaged) {
 		playerHitTimer.Restart();
