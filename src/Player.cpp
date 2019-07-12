@@ -54,13 +54,13 @@ void Player::Update(float dt) {
 	}
 
 	HPRegenTimer.Update(dt);
-	cout << HPRegenTimer.Get() << endl;
+	//cout << HPRegenTimer.Get() << endl;
 	if (hp < PLAYER_INITIAL_HP) {
 		regen = HPRegenTimer.Get();
 		if ((regen % 5 == 0) && (regen != 0)) { // o hp regenera de 5 em 5 segundos
 			hp++;
 			damaged = true;
-			cout << "RECUPERA\n";
+			//cout << "RECUPERA\n";
 			HPRegenTimer.Restart();
 		}
 	}

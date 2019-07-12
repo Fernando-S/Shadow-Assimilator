@@ -1,7 +1,6 @@
 #include "CanhaoVermelho.h"
 #include "Game.h"
 #include "Sound.h"
-#include "FinalBoss.h"
 #include <iostream>
 
 using namespace std;
@@ -11,7 +10,7 @@ CanhaoVermelho* CanhaoVermelho::canhaoVermelho = nullptr;
 CanhaoVermelho::CanhaoVermelho(GameObject& associated) : Component(associated) {
 	canhaoVermelho = this;
 
-	hp = FINALBOSS_INITIAL_HP;
+	//hp = FINALBOSS_INITIAL_HP;
 
 	// Carrega o sprite do boss final e do escudodele
 	sprite = new Sprite(associated, "./assets/img/Boss Final/torre2/torre2_00.png");
@@ -34,25 +33,38 @@ void CanhaoVermelho::Start() {
 }
 
 void CanhaoVermelho::Update(float dt) {
-	auto inputManager = InputManager::GetInstance();
-	double angleVariation = 0;
+	// todo - englobar tudo num if de se a o canhao ainda pode ser utilizado (variavel da GameData)
 
-	if (0) {
-		hp = 0;
-		damaged = true;
-	}
-
-
-	if (hp <= 0) {
-		// Deleta o CanhaoVermelho se o hp dele acabou
-		associated.RequestDelete();
-
-
+	reloadingRedTimer.Update(dt);
+	/*
+	if (!doMeio) {
+		if (reloadingRedTimer.Get() > 1.0) {
+		}
+		else if (reloadRedTimer.Get() > 0.9) {
+		}
+		else if (reloadRedTimer.Get() > 0.8) {
+		}
+		else if (reloadRedTimer.Get() > 0.7) {
+		}
+		else if (reloadRedTimer.Get() > 0.6) {
+		}
+		else if (reloadRedTimer.Get() > 0.5) {
+		}
+		else if (reloadRedTimer.Get() > 0.4) {
+		}
+		else if (reloadRedTimer.Get() > 0.3) {
+		}
+		else if (reloadRedTimer.Get() > 0.2) {
+		}
+		else if (reloadRedTimer.Get() > 0.1) {
+		}
 	}
 	else {
-		//LightRecoilTimer.Update(dt);
-		//HeavyRecoilTimer.Update(dt);
+
 	}
+	*/
+
+
 }
 
 void CanhaoVermelho::Render() {
@@ -67,6 +79,7 @@ bool CanhaoVermelho::Is(string type) {
 }
 
 void CanhaoVermelho::NotifyCollision(GameObject& other) {
+	/*
 	auto laser = (Laser*)other.GetComponent("Laser");
 	auto player1 = (Player*)other.GetComponent("Player");
 	auto coatGuy = (CoatGuy*)other.GetComponent("CoatGuy");
@@ -80,9 +93,11 @@ void CanhaoVermelho::NotifyCollision(GameObject& other) {
 		//cout << "Deu dano no boss\n";
 		hp -= 2;		// Prosfere dano ao boss se ele sofrer um ataque melee do jogador
 	}
-
+	*/
 }
 
+/*
 int CanhaoVermelho::GetHP() {
 	return hp;
 }
+*/
