@@ -1043,7 +1043,7 @@ bool Player::Is(std::string type) {
 void Player::NotifyCollision(GameObject& other) {
 	auto laser = (Laser*)other.GetComponent("Laser");
 	auto tile = (TileMap*)other.GetComponent("TileMap");
-	auto coatGuy1 = (CoatGuy*)other.GetComponent("coatGuy");
+	auto coatGuy1 = (CoatGuy*)other.GetComponent("CoatGuy");
 
 	// Prosfere dano ao jogador se o tiro for inimigo
 	if (laser && (laser->robotLaser || laser->coatGuyLaser)) {
@@ -1051,8 +1051,8 @@ void Player::NotifyCollision(GameObject& other) {
 		damaged = true;
 		gotHit = true;
 	}
-	if (coatGuy1 && CoatGuy::coatGuy->isAtacking) {
-		hp -= 2;
+	if (coatGuy1 /*&& CoatGuy::coatGuy->isAtacking* && coatGuy1->isAtacking*/) {
+		hp -= 0.1;
 		damaged = true;
 		gotHit = true;
 	}

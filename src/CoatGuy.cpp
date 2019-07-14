@@ -223,7 +223,10 @@ void CoatGuy::Update(float dt) {
 				moveDireita = false;
 				moveEsquerda = true;
 			}
+
+
 		}
+
 
 		if (associated.box.x < initialX - 35 * ONETILESQUARE) {
 
@@ -826,8 +829,9 @@ void CoatGuy::Update(float dt) {
 
 
 		///////////////////////////////////////
-		//		TIRO DA PROTAGONISTA		//
+		//		TIRO DA COAT GUY		//
 		/////////////////////////////////////
+		/*
 		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
 			if (facingR)
 				Shoot(GetCenter());
@@ -835,6 +839,7 @@ void CoatGuy::Update(float dt) {
 				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
 			ShootCooldownTimer.Restart();
 		}
+		*/
 
 		///////////////////////
 		//		DASH		//
@@ -862,8 +867,10 @@ void CoatGuy::Update(float dt) {
 		//        ATAQUE BASICO			//
 		/////////////////////////////////
 		//cout << "ATKTimer: " << ATKTimer.Get() << endl;
-		if (inputManager.KeyPress(K_KEY) && (ATKTimer.Get() > 1.0)) {
+		if ((/*inputManager.KeyPress(K_KEY) ||*/ (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)) && (ATKTimer.Get() > 1.0)) {
 			isAtacking = true;
+			moveDireita = false;
+			moveEsquerda = false;
 			cout << "Atk1: " << Atk1 << endl;
 			cout << "Atk0: " << Atk0 << endl;
 			Atk1 = 0;

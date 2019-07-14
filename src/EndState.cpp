@@ -63,7 +63,7 @@ void EndState::LoadAssets() {
 	auto textGO = new GameObject();
 	//	auto textColor = Text::GetSDLColor(255, 150, 0, 255);
 	//auto text = new Text(*textGO, "./assets/font/Call me maybe.ttf", 40, Text::SOLID, "Press ENTER to play again, or ESC to exit", { 255, 150, 0, 255 }/*textColor/*, 0.7*/);
-	auto text = new Text(*textGO, "./assets/font/hellovetica.ttf", 30, Text::SOLID, "Press ENTER to play again, or ESC to exit", { 255, 150, 0, 255 }/*textColor/*, 0.7*/);
+	auto text = new Text(*textGO, "./assets/font/hellovetica.ttf", 30, Text::SOLID, "Press ENTER to play again, or ESC to exit", { 255, 40, 40, 255 }/*textColor/*, 0.7*/);
 	textGO->AddComponent(text);
 	textGO->box.PlaceCenter({ Game::GetInstance().GetWidth() / 2.0f + 25, Game::GetInstance().GetHeight() * 2/3.0f/*/ 2.0f*/ });
 	objectArray.emplace_back(textGO);

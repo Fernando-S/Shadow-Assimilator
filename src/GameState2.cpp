@@ -160,7 +160,7 @@ void GameState2::LoadAssets() {
 		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte.png");
 	}
 	else {
-		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte2.png");
+		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte.png");
 	}
 
 	AtkFortGO->initialX = HPbarGO->box.Center().x + 35.5;
@@ -181,7 +181,7 @@ void GameState2::LoadAssets() {
 		AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia.png");
 	}
 	else {
-		AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia2.png");
+		AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia.png");
 	}
 
 	AtkDistGO->initialX = HPbarGO->box.Center().x + 63.2;

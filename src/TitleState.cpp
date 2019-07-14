@@ -58,7 +58,7 @@ void TitleState::LoadAssets() {
 	objectArray.emplace_back(creditsButtonGO);
 
 	hoverSound = new Sound(*startButtonGO, "./assets/audio/SFX/DashPrincipal(Assim.)1.wav");
-	clickSound = new Sound(*startButtonGO, "./assets/audio/SFX/Hit_Fraco.wav");
+	clickSound = new Sound(*startButtonGO, "./assets/audio/SFX/LASER.CHEFE3(Assim.).wav");
 	
 	startButtonGO->AddComponent(hoverSound);
 	startButtonGO->AddComponent(clickSound);

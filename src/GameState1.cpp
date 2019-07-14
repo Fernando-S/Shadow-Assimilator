@@ -176,12 +176,12 @@ void GameState1::LoadAssets() {
 	///////////////
 	AtkFortGO = new GameObject();
 
-	if (SetAtkForte == true) {
+	//if (SetAtkForte == true) {
 		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte.png");
-	}
-	else {
-		AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte2.png");
-	}
+	//}
+	//else {
+		//AtkFortSprite = new Sprite(*AtkFortGO, "./assets/img/Protagonista/icones/icone_ark_forte2.png");
+	//}
 
 	AtkFortGO->initialX = HPbarGO->box.Center().x + 35.5;
 	AtkFortGO->initialY = HPbarGO->box.Center().y + 17;
@@ -197,12 +197,12 @@ void GameState1::LoadAssets() {
 	////////////////////
 	AtkDistGO = new GameObject();
 
-	if (SetAtkDist == true) {
+	//if (SetAtkDist == true) {
 		AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia.png");
-	}
-	else {
-		AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia2.png");
-	}
+	//}
+	//else {
+		//AtkDistSprite = new Sprite(*AtkDistGO, "./assets/img/Protagonista/icones/icone_atk_distancia2.png");
+	//}
 
 	AtkDistGO->initialX = HPbarGO->box.Center().x + 63.2;
 	AtkDistGO->initialY = HPbarGO->box.Center().y + 17;

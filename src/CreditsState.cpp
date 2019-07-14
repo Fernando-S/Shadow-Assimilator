@@ -134,7 +134,7 @@ void CreditsState::LoadAssets() {
 	auto backText = new Text(*backGO, "./assets/font/hellovetica.ttf", 20, Text::SOLID,
 		"Press ESC to go back", { 255, 255, 255, 255 }/*textColor/*, 40.7*/);
 	backGO->AddComponent(backText);
-	backGO->box.PlaceCenter({ Game::GetInstance().GetWidth()/7.f, Game::GetInstance().GetHeight() - 60.f });
+	backGO->box.PlaceCenter({ Game::GetInstance().GetWidth()/7.f + 20, Game::GetInstance().GetHeight() - 60.f });
 	objectArray.emplace_back(backGO);
 
 }
