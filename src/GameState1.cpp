@@ -412,48 +412,39 @@ void GameState1::Update(float dt) {
 		if ((inputManager.KeyRelease(TWO_KEY) || inputManager.KeyRelease(NUMPAD_TWO_KEY)) && !dois) {
 			dois = true;
 			tres = quatro = cinco = meia = sete = oito = false;
-			//std::cout << "dois = true" << std::endl;
 		}
 		if ((inputManager.KeyRelease(THREE_KEY) || inputManager.KeyRelease(NUMPAD_THREE_KEY)) && dois) {
 			tres = true;
 			dois = quatro = cinco = meia = sete = oito = false;
-			//std::cout << "tres = true" << std::endl;
 		}
 		if ((inputManager.KeyRelease(FOUR_KEY) || inputManager.KeyRelease(NUMPAD_FOUR_KEY)) && tres) {
 			quatro = true;
 			dois = tres = cinco = meia = sete = oito = false;
-			//std::cout << "quatro = true" << std::endl;
 		}
 		if ((inputManager.KeyRelease(FIVE_KEY) || inputManager.KeyRelease(NUMPAD_FIVE_KEY)) && quatro) {
 			cinco = true;
 			dois = tres = quatro = meia = sete = oito = false;
-			//std::cout << "cinco = true" << std::endl;
 		}
 		if ((inputManager.KeyRelease(SIX_KEY) || inputManager.KeyRelease(NUMPAD_SIX_KEY)) && cinco) {
 			meia = true;
 			dois = tres = quatro = cinco = sete = oito = false;
-			//std::cout << "meia = true" << std::endl;
 		}
 		if ((inputManager.KeyRelease(SEVEN_KEY) || inputManager.KeyRelease(NUMPAD_SEVEN_KEY)) && meia) {
 			sete = true;
 			dois = tres = quatro = cinco = meia = oito = false;
-			//std::cout << "sete = true" << std::endl;
 		}
 		if ((inputManager.KeyRelease(EIGHT_KEY) || inputManager.KeyRelease(NUMPAD_EIGHT_KEY)) && sete) {
 			oito = true;
 			dois = tres = quatro = cinco = meia = sete = false;
-			//std::cout << "oito = true" << std::endl;
 		}
 
 		if (oito && inputManager.KeyPress(Z_KEY)) {
 			mostrando = true;
 			surpriseGO->render = true;
-			//std::cout << "mostrando = true" << std::endl;
 		}
 		else if (mostrando && inputManager.KeyPress(X_KEY)) {
 			mostrando = false;
 			surpriseGO->render = false;
-			//std::cout << "mostrando = false" << std::endl;
 		}
 	}
 
@@ -499,7 +490,6 @@ void GameState1::Update(float dt) {
 		Game::GetInstance().Push(new EndState());
 	}
 	// Tela de WIN
-	/// todo - colocar uma condicao de vitoria
 	else if (inputManager.KeyPress(BACKSPACE_KEY)) {
 		GameData::playerVictory = true;
 		popRequested = true;

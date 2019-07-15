@@ -11,17 +11,12 @@ Robot* Robot::robot = nullptr;
 Robot::Robot(GameObject& associated) : Component(associated) {
 	robot = this;
 	speedH = { 1, 0 };
-	speedV = { 0, -1 };
-	speedD = { 1, -1 };
 	linearSpeed = 0;
-	angle = 0;
-	oppositeAccel = 0;
 	oppositeSpeed = 0;
 	hp = ROBOT_INITIAL_HP;
 
 	// Carrega o sprite do robot idle
-	sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
-	//sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
+	sprite = new Sprite(associated, "./assets/img/Robot/idle2f.png", 6, 0.2);
 
 	// Carrega som nulo para o robot
 	robotSFX = new Sound(associated);
@@ -29,7 +24,6 @@ Robot::Robot(GameObject& associated) : Component(associated) {
 	associated.AddComponent(robotSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-	//	associated.angleDeg = angle * 180 / PI;
 }
 
 Robot::~Robot() {
@@ -44,7 +38,6 @@ void Robot::Start() {
 
 void Robot::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
-	double angleVariation = 0;
 	double accelSpeedGain = ROBOT_ACCELERATION * dt;
 
 	if (inputManager.KeyPress(NUMPAD_ZERO_KEY)) {
@@ -66,7 +59,6 @@ void Robot::Update(float dt) {
 
 		if (verticalSpeed < -800) {
 			verticalSpeed = -800;
-			gforce = true;
 		}
 
 		if ((BuzzL >= 2) && (verticalSpeed > -800)) {
@@ -108,14 +100,10 @@ void Robot::Update(float dt) {
 		}
 
 
-		associated.box += speedV * verticalSpeed*dt;
-
-
 		DeathTimer.Update(dt);
 
 		if (!dead) {
 			DeathTimer.Restart();
-			//Camera::Unfollow();				// Camera para de segui-los
 			/// todo - comentar esse verticalSpeed com o Nego e ver o que ele acha melhor
 			verticalSpeed = 0;
 
@@ -178,26 +166,10 @@ void Robot::Update(float dt) {
 	}
 	else {
 		double accelSpeedGain = ROBOT_ACCELERATION * dt;
-		WallJumpTimer.Update(dt);
 		ShootCooldownTimer.Update(dt);
-		DashCooldownTimer.Update(dt);
-		DJTimer.Update(dt);
 		changeSideTimer.Update(dt);
 		recoilTimer.Update(dt);
 
-
-		//////////////////////////////////////////
-		//		TERMINO DO WALL JUMP
-		//////////////////////////////////////////
-		//if (WallJump && (WallJumpTimer.Get() > 0.3)) {
-		//	WallJump = false;
-			//linearSpeed = 0;
-			//verticalSpeed = 0;
-		//}
-		/*
-		else if (WallJump && (WallJumpTimer.Get() < 0.3)) {
-			doubleJump = false;
-		}*/
 
 		/////////////////////////////////////////
 		//		GRAVIDADE
@@ -371,7 +343,6 @@ void Robot::Update(float dt) {
 			if (Getspeed1 == false) {
 				oppositeSpeed = linearSpeed;
 				Getspeed1 = true;
-				Setidle = false;
 				Setrun = true;
 				Run = 0;
 				Stop = 0;
@@ -404,7 +375,6 @@ void Robot::Update(float dt) {
 
 				Run = 0;
 				Stop = 0;
-				Setidle = false;
 				Setrun = true;
 				facingL = false;
 				facingR = true;
@@ -445,8 +415,6 @@ void Robot::Update(float dt) {
 			if ((linearSpeed <= 40) && (linearSpeed >= -40))
 				linearSpeed = 0;
 			Setrun = false;
-			if (tchfloor && !airbone)
-				Setidle = true;
 
 			if (runningSound) {
 				if (robotSFX->IsPlaying()) {
@@ -467,7 +435,6 @@ void Robot::Update(float dt) {
 		/////////////////////VELOCIDADE///////////////////////////////
 
 		associated.box += speedH * linearSpeed*dt;
-		associated.box += speedV * verticalSpeed*dt;
 
 
 		///////////////////////////////////////////////////////////////////////////////
@@ -478,7 +445,7 @@ void Robot::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a direita			//
 		/////////////////////////////////////
-		if ((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0) && !shooting) {
+		if ((Stop == 1) && (Run >= 0) && (Ground > 0) && !shooting) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
 			sprite = new Sprite(associated, "./assets/img/Robot/idle1f.png", 6, 0.2);
@@ -504,7 +471,7 @@ void Robot::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a esquerda		//
 		/////////////////////////////////////
-		if ((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0) && !shooting) {
+		if ((Stop == 1) && (Run < 0) && (Ground > 0) && !shooting) {
 			associated.RemoveComponent(sprite);
 			//sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle_inv.png", 10, 0.09);
 			sprite = new Sprite(associated, "./assets/img/Robot/idle2f.png", 6, 0.2);
@@ -635,30 +602,20 @@ void Robot::NotifyCollision(GameObject& other) {
 			// Colisao com chaos
 			if ( (this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
 				|| (this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2)	) {
-				if (this->associated.box.y + this->associated.box.h > tile->GetY()) {
-					ultrapassou = true;
-				}
-				if (!airbone && tchfloor && !SetJump) {
+
+				if (!airbone && tchfloor) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
-					ultrapassou = false;
 				}
 				WallgrabL = false;
 				WallgrabR = false;
 				tchfloor = true;
 				airbone = false;
-				doubleJump = false;
 				tchCeiling = false;
-				jumped = false;
 				if (Ground < 10) {
 					Ground++;
 				}
 
-				if (Ground <= 2)
-					pouso = true;
-
-				DJ = 0;
-				wallAUX = 0;
 				Jump = 0;
 				Fall = 0;
 
@@ -666,10 +623,7 @@ void Robot::NotifyCollision(GameObject& other) {
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
 					airbone = true;
 					tchfloor = false;
-					doubleJump = true;
 					Stop = 0;
-					wallAUX = 0;
-					ultrapassou = false;
 				}
 			}
 			// Colisao com tetos
@@ -679,7 +633,6 @@ void Robot::NotifyCollision(GameObject& other) {
 				/// todo - comentar o vertical speed = 0 e mostrar pro nego o q acontece
 				verticalSpeed = 0;
 				tchCeiling = true;
-				ultrapassou = false;
 
 			}
 			// Colisao com uma parede A DIREITA
@@ -692,18 +645,15 @@ void Robot::NotifyCollision(GameObject& other) {
 				WallgrabL = false;
 				tchCeiling = false;
 				WallgrabR = true;
-				ultrapassou = false;
 
 				if (airbone && !tchfloor && WallgrabR) {
-					wallX = tile->GetX();
 					WallgrabR = true;
 				}
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
 				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)	/// todo - talvez mudar essa condicao
-				&& !tchCeiling
-				) {
+				&& !tchCeiling) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
@@ -711,7 +661,6 @@ void Robot::NotifyCollision(GameObject& other) {
 				WallgrabR = false;
 				tchCeiling = false;
 				WallgrabL = true;
-				ultrapassou = false;
 
 			}
 			else {
@@ -720,17 +669,13 @@ void Robot::NotifyCollision(GameObject& other) {
 				tchfloor = false;
 				tchCeiling = false;
 				airbone = true;
-				wallAUX = 0;
-				ultrapassou = false;
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
-					wallAUX = 0;
 					WallgrabL = false;
 					if (robotSFX->IsPlaying()) {
 						//robotSFX->Stop();
 					}
-					wallSlideSound = false;
 				}
 
 				// Checa se esta desencostando da parede A DIREITA
@@ -739,18 +684,14 @@ void Robot::NotifyCollision(GameObject& other) {
 					if (airbone) {
 						associated.box.x -= 15;
 					}
-					wallAUX = 0;
-					ultrapassou = false;
 					if (robotSFX->IsPlaying()) {
 						//robotSFX->Stop();
 					}
-					wallSlideSound = false;
 				}
 
 				// Checa se esta desencostando do teto
 				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
 					tchCeiling = false;
-					ultrapassou = false;
 				}
 			}
 		}

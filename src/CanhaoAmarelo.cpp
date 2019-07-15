@@ -1,7 +1,6 @@
 #include "CanhaoAmarelo.h"
 #include "Game.h"
 #include "Sound.h"
-#include "FinalBoss.h"
 #include <iostream>
 
 using namespace std;
@@ -11,7 +10,7 @@ CanhaoAmarelo* CanhaoAmarelo::canhaoAmarelo = nullptr;
 CanhaoAmarelo::CanhaoAmarelo(GameObject& associated) : Component(associated) {
 	canhaoAmarelo = this;
 
-	hp = FINALBOSS_INITIAL_HP;
+	hp = CANHAOAMARELO_INITIAL_HP;
 
 	// Carrega o sprite do boss final e do escudodele
 	sprite = new Sprite(associated, "./assets/img/Boss Final/torre1/torre1_00.png");
@@ -22,7 +21,7 @@ CanhaoAmarelo::CanhaoAmarelo(GameObject& associated) : Component(associated) {
 	associated.AddComponent(CanhaoAmareloSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-	//	associated.angleDeg = angle * 180 / PI;
+		associated.angleDeg = angle * 180 / PI;
 }
 
 CanhaoAmarelo::~CanhaoAmarelo() {
@@ -35,7 +34,6 @@ void CanhaoAmarelo::Start() {
 
 void CanhaoAmarelo::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
-	double angleVariation = 0;
 
 	if (hp <= 0) {
 		// Deleta o CanhaoAmarelo se o hp dele acabou
@@ -94,7 +92,7 @@ void CanhaoAmarelo::Update(float dt) {
 
 		// Calculo do angulo para o canhao seguir o mouse
 		//associated.box.PlaceCenter(Player::player->GetCenter());
-		angle = Vec2(Player::player->GetCenter().x, Player::player->GetCenter().y).InclinacaoDaDiferenca(Vec2(associated.box.Center().x - associated.box.w/2, associated.box.Center().y));
+		angle = Vec2(Player::player->GetCenter().x, Player::player->GetCenter().y).InclinacaoDaDiferenca(Vec2(associated.box.Center().x + associated.box.w/2, associated.box.Center().y + 20));
 		associated.angleDeg = angle * 360 / PI;
 		cooldownTimer.Update(dt);
 	}
@@ -114,15 +112,12 @@ bool CanhaoAmarelo::Is(string type) {
 void CanhaoAmarelo::NotifyCollision(GameObject& other) {
 	auto laser = (Laser*)other.GetComponent("Laser");
 	auto player1 = (Player*)other.GetComponent("Player");
-	//auto coatGuy = (CoatGuy*)other.GetComponent("CoatGuy");
 
 	// Prosfere dano ao canhao se o tiro for do jogador
 	if (laser && (laser->playerLaser /*|| laser->coatGuyLaser*/)) {
-		//std::cout << "Vida do Boss: " << hp << std::endl;
 		hp -= laser->GetDamage();
 	}
-	else if (player1 && (Player::player->isAtacking /*|| CoatGuy::coatGuy->isAtacking*/)) {
-		//cout << "Deu dano no boss\n";
+	else if (player1 && Player::player->isAtacking) {
 		hp -= 2;		// Prosfere dano ao boss se ele sofrer um ataque melee do jogador
 	}
 

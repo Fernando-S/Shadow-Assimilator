@@ -22,7 +22,6 @@ FinalBoss::FinalBoss(GameObject& associated) : Component(associated) {
 	associated.AddComponent(FinalBossSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-	//	associated.angleDeg = angle * 180 / PI;
 }
 
 FinalBoss::~FinalBoss() {
@@ -35,7 +34,6 @@ void FinalBoss::Start() {
 
 void FinalBoss::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
-	double angleVariation = 0;
 
 	if (inputManager.KeyPress(NUMPAD_ZERO_KEY)) {
 		hp = 0;
@@ -86,28 +84,3 @@ void FinalBoss::NotifyCollision(GameObject& other) {
 int FinalBoss::GetHP() {
 	return hp;
 }
-
-/*
-void FinalBoss::LightShoot(Vec2 target) {
-	LightRecoilTimer.Restart();
-	associated.RemoveComponent(sprite);
-	if (Player::player->GetCenter().x > this->associated.box.x) {
-		//sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
-	}
-	else if (Player::player->GetCenter().x < this->associated.box.x) {
-		//	sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
-	}
-	associated.AddComponent(sprite);
-}
-void FinalBoss::HeavyShoot(Vec2 target) {
-	HeavyRecoilTimer.Restart();
-	associated.RemoveComponent(sprite);
-	if (Player::player->GetCenter().x > this->associated.box.x) {
-		//	sprite = new Sprite(associated, "./assets/img/Robot/001A1BOM.png", 6, 0.2);
-	}
-	else if (Player::player->GetCenter().x < this->associated.box.x) {
-		//	sprite = new Sprite(associated, "./assets/img/Robot/001A2BOM.png", 6, 0.2);
-	}
-	associated.AddComponent(sprite);
-}
-*/

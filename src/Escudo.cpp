@@ -22,7 +22,6 @@ Escudo::Escudo(GameObject& associated) : Component(associated) {
 	associated.AddComponent(EscudoSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-	//	associated.angleDeg = angle * 180 / PI;
 }
 
 Escudo::~Escudo() {
@@ -35,7 +34,6 @@ void Escudo::Start() {
 
 void Escudo::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
-	double angleVariation = 0;
 
 	if (0) {
 		hp = 0;

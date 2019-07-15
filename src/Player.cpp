@@ -2,8 +2,6 @@
 #include "Game.h"
 #include "Sound.h"
 
-#define MAX_SPEED 400
-#define SPEED_STEP 50
 #define PLAYER_SPEED 400
 #define PLAYER_JUMP 600
 
@@ -16,10 +14,7 @@ Player::Player(GameObject& associated) : Component(associated) {
 	player = this;
 	speedH = { 1, 0 };
 	speedV = { 0, -1 };
-	speedD = { 1, -1 };
 	linearSpeed = 0;
-	angle = 0;
-	oppositeAccel = 0;
 	oppositeSpeed = 0;
 	hp = PLAYER_INITIAL_HP;
 
@@ -32,7 +27,6 @@ Player::Player(GameObject& associated) : Component(associated) {
 	associated.AddComponent(playerSFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-	//	associated.angleDeg = angle * 180 / PI;
 }
 
 Player::~Player() {
@@ -45,7 +39,6 @@ void Player::Start() {
 
 void Player::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
-	double angleVariation = 0;
 	double accelSpeedGain = PLAYER_ACCELERATION * dt;
 
 	if (inputManager.KeyPress(ZERO_KEY)) {
@@ -54,13 +47,11 @@ void Player::Update(float dt) {
 	}
 
 	HPRegenTimer.Update(dt);
-	//cout << HPRegenTimer.Get() << endl;
 	if (hp < PLAYER_INITIAL_HP) {
 		regen = HPRegenTimer.Get();
 		if ((regen % 5 == 0) && (regen != 0)) { // o hp regenera de 5 em 5 segundos
 			hp++;
 			damaged = true;
-			//cout << "RECUPERA\n";
 			HPRegenTimer.Restart();
 		}
 	}
@@ -408,7 +399,6 @@ void Player::Update(float dt) {
 					if (Getspeed1 == false) {
 						oppositeSpeed = linearSpeed;
 						Getspeed1 = true;
-						Setidle = false;
 						Setrun = true;
 						Run = 0;
 						Stop = 0;
@@ -439,7 +429,6 @@ void Player::Update(float dt) {
 
 						Run = 0;
 						Stop = 0;
-						Setidle = false;
 						Setrun = true;
 
 					}
@@ -487,7 +476,6 @@ void Player::Update(float dt) {
 			if ((linearSpeed <= 40) && (linearSpeed >= -40))
 				linearSpeed = 0;
 			Setrun = false;
-			Setidle = true;
 
 			if (runningSound) {
 				if (playerSFX->IsPlaying()) {
@@ -563,7 +551,7 @@ void Player::Update(float dt) {
 			}
 			else if ((Ground > 2) && (Atk0 == false)) {
 				associated.box.x += associated.box.w / 2;
-				cout << "AJUSTE\n";
+				//cout << "AJUSTE\n";
 			}
 			if (Atk0 == true) {
 				Atk0 = false;
@@ -1065,15 +1053,10 @@ void Player::NotifyCollision(GameObject& other) {
 			if ((this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
 				|| (this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2)) {
 
-				if (this->associated.box.y + this->associated.box.h > tile->GetY()) {
-					ultrapassou = true;
-				}
 				if (!airbone && tchfloor && !SetJump) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
-					ultrapassou = false;
-					if (Ground <= 2)
-						pouso = true;
+
 				}
 				WallgrabL = false;
 				WallgrabR = false;
@@ -1096,7 +1079,6 @@ void Player::NotifyCollision(GameObject& other) {
 					doubleJump = true;
 					Stop = 0;
 					wallAUX = 0;
-					ultrapassou = false;
 				}
 			}
 			// Colisao com tetos
@@ -1106,7 +1088,6 @@ void Player::NotifyCollision(GameObject& other) {
 				/// todo - comentar o verticalspeed = 0 e mostrar pro nego o q acontece
 				verticalSpeed = 0;
 				tchCeiling = true;
-				ultrapassou = false;
 
 			}
 			// Colisao com uma parede A DIREITA
@@ -1119,7 +1100,6 @@ void Player::NotifyCollision(GameObject& other) {
 				WallgrabL = false;
 				tchCeiling = false;
 				WallgrabR = true;
-				ultrapassou = false;
 
 				if (airbone && !tchfloor && WallgrabR) {
 					wallX = tile->GetX();
@@ -1129,8 +1109,7 @@ void Player::NotifyCollision(GameObject& other) {
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
 				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)	/// todo - talvez mudar essa condicao
-				&& !tchCeiling
-				) {
+				&& !tchCeiling) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
@@ -1138,7 +1117,6 @@ void Player::NotifyCollision(GameObject& other) {
 				WallgrabR = false;
 				tchCeiling = false;
 				WallgrabL = true;
-				ultrapassou = false;
 
 			}
 			else {
@@ -1148,7 +1126,6 @@ void Player::NotifyCollision(GameObject& other) {
 				tchCeiling = false;
 				airbone = true;
 				wallAUX = 0;
-				ultrapassou = false;
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
@@ -1167,7 +1144,6 @@ void Player::NotifyCollision(GameObject& other) {
 						associated.box.x -= 15;
 					}
 					wallAUX = 0;
-					ultrapassou = false;
 					if (playerSFX->IsPlaying()) {
 						playerSFX->Stop();
 					}
@@ -1177,7 +1153,6 @@ void Player::NotifyCollision(GameObject& other) {
 				// Checa se esta desencostando do teto
 				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
 					tchCeiling = false;
-					ultrapassou = false;
 				}
 			}
 		}

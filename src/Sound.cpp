@@ -71,13 +71,3 @@ bool Sound::IsPlaying() {
 	else
 		return false;
 }
-
-
-
-
-
-
-
-
-
-

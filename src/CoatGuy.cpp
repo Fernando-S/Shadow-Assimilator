@@ -12,17 +12,13 @@ CoatGuy::CoatGuy(GameObject& associated) : Component(associated) {
 	coatGuy = this;
 	speedH = { 1, 0 };
 	speedV = { 0, -1 };
-	speedD = { 1, -1 };
 	linearSpeed = 0;
-	angle = 0;
-	oppositeAccel = 0;
 	oppositeSpeed = 0;
 	FinishHimEneable = 0;
 	hp = COATGUY_INITIAL_HP;
 
 	// Carrega o sprite do coatGuy idle
 	sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
-	spriteAlreadyIdleR = true;
 
 	// Carrega som nulo para o coatGuy
 	coatGuySFX = new Sound(associated);
@@ -30,7 +26,6 @@ CoatGuy::CoatGuy(GameObject& associated) : Component(associated) {
 	associated.AddComponent(coatGuySFX);
 	associated.AddComponent(sprite);
 	associated.AddComponent(new Collider(associated));
-	//	associated.angleDeg = angle * 180 / PI;
 }
 
 CoatGuy::~CoatGuy() {
@@ -45,7 +40,6 @@ void CoatGuy::Start() {
 
 void CoatGuy::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
-	double angleVariation = 0;
 	double accelSpeedGain = COATGUY_ACCELERATION * dt;
 
 	if (inputManager.KeyPress(NUMPAD_ZERO_KEY)) {
@@ -67,7 +61,6 @@ void CoatGuy::Update(float dt) {
 
 		if (verticalSpeed < -800) {
 			verticalSpeed = -800;
-			gforce = true;
 		}
 
 		if ((BuzzL >= 2) && (verticalSpeed > -800)) {
@@ -118,7 +111,6 @@ void CoatGuy::Update(float dt) {
 			falsehp = 1;
 			FinishHimTimer.Update(dt);
 			DeathTimer.Restart();
-			//Camera::Unfollow();				// Camera para de segui-los
 			/// todo - comentar esse verticalSpeed com o Nego e ver o que ele acha melhor
 			verticalSpeed = 0;
 
@@ -126,7 +118,6 @@ void CoatGuy::Update(float dt) {
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte1.png", 18, 0.1);
 				associated.AddComponent(sprite);
-				//cout << "MORREU\n";
 				FinishHimEneable = true;
 				StartLoop = false;
 				FinishHimTimer.Restart();
@@ -136,15 +127,13 @@ void CoatGuy::Update(float dt) {
 				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte1_inv.png", 18, 0.1);
 				associated.AddComponent(sprite);
 				associated.box.x -= 80;
-				//cout << "MORREU\n";
 				FinishHimEneable = true;
 				StartLoop = false;
 				FinishHimTimer.Restart();
 			}
 			//dead = true;
 
-			if ((FinishHimTimer.Get() > 1.8) && (FinishHimEneable == true) && (StartLoop == false) && (kill == false)) {// é feito o primeiro ciclo do loop
-				//cout << "PRIMEIRO LOOP\n";
+			if ((FinishHimTimer.Get() > 1.8) && (FinishHimEneable == true) && (StartLoop == false) && (kill == false)) {// eh feito o primeiro ciclo do loop
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte2.png", 10, 0.1);
 				associated.AddComponent(sprite);
@@ -157,7 +146,6 @@ void CoatGuy::Update(float dt) {
 			}
 
 			if ((FinishHimTimer.Get() > 1) && (kill == false) && (StartLoop == true)) {
-				//cout << "LOOP ETERNO\n";
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte2.png", 10, 0.1);
 				associated.AddComponent(sprite);
@@ -165,15 +153,11 @@ void CoatGuy::Update(float dt) {
 			}
 
 			if (kill == true) {
-				//cout << "MORTO DE VEZ\n";
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_morte3.png", 1, 0.1);
 				associated.AddComponent(sprite);
 			}
-			//loop
-			//if()protagonista é malzao){
-			//morrendo mexmo MUDAR VARIAVEL NO GAME DATA
-			//
+			
 
 		}
 		else {
@@ -205,12 +189,7 @@ void CoatGuy::Update(float dt) {
 	}
 	else {
 		double accelSpeedGain = COATGUY_ACCELERATION * dt;
-		WallJumpTimer.Update(dt);
-		ShootCooldownTimer.Update(dt);
-		DashCooldownTimer.Update(dt);
-		DJTimer.Update(dt);
 		FinishHimTimer.Update(dt);
-		LoopTimer.Update(dt);
 		ATKTimer.Update(dt);
 
 		if (Player::player->GetCenter().Distancia(this->GetCenter()) < 10 * ONETILESQUARE) {
@@ -233,7 +212,6 @@ void CoatGuy::Update(float dt) {
 				moveDireita = true;
 				moveEsquerda = false;
 
-			//cout << "LIMITE A ESQUERDA\n";
 		}
 		else if (associated.box.x > initialX +  2 * ONETILESQUARE) {
 			moveDireita = false;
@@ -241,22 +219,6 @@ void CoatGuy::Update(float dt) {
 		}
 
 
-		//////////////////////////////////////////
-		//		TERMINO DO WALL JUMP
-		//////////////////////////////////////////
-		//if (WallJump && (WallJumpTimer.Get() > 0.3)) {
-		//	WallJump = false;
-			//linearSpeed = 0;
-			//verticalSpeed = 0;
-		//}
-		/*
-		else if (WallJump && (WallJumpTimer.Get() < 0.3)) {
-			doubleJump = false;
-		}*/
-
-		/////////////////////////////////////////
-		//		GRAVIDADE
-		////////////////////////////////////////
 		if (airbone) {
 			Ground = 0;
 		}
@@ -318,136 +280,21 @@ void CoatGuy::Update(float dt) {
 		}
 
 
-		///////////////////////////
-		//		DOUBLE JUMP		//
-		/////////////////////////
-		/*
-		if (airbone && !inputManager.IsKeyDown(UP_ARROW_KEY) && jumped/*&& (Ground == 0) && (DJ == 1) && (wallAUX == 0)/) {
-			doubleJump = true; // setar para 0 quando encostar no chão
-		}
-		if (doubleJump && airbone && inputManager.IsKeyDown(UP_ARROW_KEY) /*&& (wallAUX == 0)/ && DJTimer.Get() > 0.3) {
-			Fall = 0;
-			Ground = 0;
-			verticalSpeed = COATGUY_JUMP * 0.7;
-			doubleJump = false;
-			Setidle = false;
-			foguete = true;
-			jumped = false;
-			DJ++;
-		}
-		/*
-		if (airbone && !inputManager.IsKeyDown(UP_ARROW_KEY) && (Ground == 0) && (DJ == 1) && (wallAUX == 0)) {
-			doubleJump = true; // setar para 0 quando encostar no chão
-		}
-		if (doubleJump && airbone && inputManager.IsKeyDown(UP_ARROW_KEY) && (wallAUX == 0) && DJTimer.Get() > 0.3) {
-			Fall = 0;
-			Ground = 0;
-			verticalSpeed = COATGUY_JUMP * 0.7;
-			doubleJump = false;
-			Setidle = false;
-			foguete = true;
-			DJ++;
-		}
-		*/
-
-		///////////////////////////
-		//		WALL SLIDE		//
-		/////////////////////////
-		/*
-		// Wall Slide A DIREITA
-		if (airbone && !tchfloor && WallgrabR) {
-			if (wallAUX < 0) {
-				wallAUX = 0;
-			}
-			if (wallAUX < 10) {
-				wallAUX++;
-			}
-			if (inputManager.IsKeyDown(RIGHT_ARROW_KEY) && (linearSpeed != 0)) {
-				WallgrabR = false;		// QUEDA
-				wallAUX = 0;
-			}
-			if (inputManager.IsKeyDown(RIGHT_ARROW_KEY) && (wallAUX > 0)) {
-				verticalSpeed = -30;		// QUEDA
-			}
-			Fall = 0;
-			Ground = 0;
-			Jump = 0;
-			Setidle = false;
-		}
-		// Wall Slide A ESQUERDA
-		else if (airbone && !tchfloor && WallgrabL) {
-			if (wallAUX > 0) {
-				wallAUX = 0;
-			}
-			if (wallAUX > -10) {
-				wallAUX--;
-			}
-			if (inputManager.IsKeyDown(LEFT_ARROW_KEY) && ((linearSpeed != 0) || (linearSpeed != (-0)))) {
-				WallgrabL = false;		// QUEDA
-				wallAUX = 0;
-			}
-			if (inputManager.IsKeyDown(LEFT_ARROW_KEY) && (wallAUX < 0)) {
-				verticalSpeed = -30;		// QUEDA
-				linearSpeed -= accelSpeedGain;
-			}
-			Fall = 0;
-			Ground = 0;
-			Jump = 0;
-			Setidle = false;
-		}
-		*/
-
-		///////////////////////////
-		//		WALL JUMP		//
-		/////////////////////////
-		/*
-		//NA PAREDE DA DIREITA
-		if (WallgrabR && inputManager.IsKeyDown(RIGHT_ARROW_KEY) && inputManager.IsKeyDown(UP_ARROW_KEY) && (wallAUX > 0) && (WallJumpTimer.Get() > 0.18)) {
-			DJTimer.Restart();
-			verticalSpeed += 500;
-			speedH = { 1, 0 };
-			oppositeSpeed += 250;
-			wallAUX = 0;
-			Jump++;
-			Setidle = false;
-		}
-		//NA PAREDE DA ESQUERDA
-		if (WallgrabL && inputManager.IsKeyDown(LEFT_ARROW_KEY) && inputManager.IsKeyDown(UP_ARROW_KEY) && (wallAUX < 0) && (WallJumpTimer.Get() > 0.18)) {
-			DJTimer.Restart();
-			verticalSpeed += 500;
-			speedH = { -1, 0 };
-			oppositeSpeed += 250;
-			associated.box += speedH * linearSpeed*dt;
-			wallAUX = 0;
-			Jump++;
-			Setidle = false;
-		}
-		if (Jump == 2) {
-			WallJumpTimer.Restart();
-		}
-		*/
-
 		///////////////////////
 		//		JUMP		//
 		/////////////////////
 		if (airbone) {
 			Ground = 0;
 			SetJump = false;
-			Setidle = false;
 		}
 		if (ATKTimer.Get() > 1 + dt) {
 			if (inputManager.IsKeyDown(UP_ARROW_KEY) && tchfloor && !airbone && (Jump == 0)) {
-				//this->associated.box.y -= 10;
 				verticalSpeed = COATGUY_JUMP;
 				tchfloor = false;
 				SetJump = true;
 				airbone = true;
 				Jump++;
 				Ground = 0;
-				DJTimer.Restart();
-				Setidle = false;
-				jumped = true;
-				doubleJump = false;
 			}
 			else
 				///////////////////////////////////////////
@@ -463,7 +310,6 @@ void CoatGuy::Update(float dt) {
 					if (Getspeed1 == false) {
 						oppositeSpeed = linearSpeed;
 						Getspeed1 = true;
-						Setidle = false;
 						Setrun = true;
 						Run = 0;
 						Stop = 0;
@@ -484,9 +330,9 @@ void CoatGuy::Update(float dt) {
 					else
 						linearSpeed = -oppositeSpeed;
 				}
-			///////////////////////////////////////
-			//		CORRIDA PARA A DIREITA		//
-			/////////////////////////////////////
+				///////////////////////////////////////
+				//		CORRIDA PARA A DIREITA		//
+				/////////////////////////////////////
 				else if (inputManager.IsKeyDown(RIGHT_ARROW_KEY) || moveDireita) {
 					speedH = { 1, 0 };
 
@@ -496,7 +342,6 @@ void CoatGuy::Update(float dt) {
 
 						Run = 0;
 						Stop = 0;
-						Setidle = false;
 						Setrun = true;
 						facingL = false;
 						facingR = true;
@@ -537,8 +382,6 @@ void CoatGuy::Update(float dt) {
 			if ((linearSpeed <= 40) && (linearSpeed >= -40))
 				linearSpeed = 0;
 			Setrun = false;
-			if (tchfloor && !airbone)
-				Setidle = true;
 
 			if (runningSound) {
 				if (coatGuySFX->IsPlaying()) {
@@ -570,7 +413,7 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a direita			//
 		/////////////////////////////////////
-		if (((Stop == 1) && (Run >= 0) && (wallAUX == 0) && (Ground > 0)) || ((Run >= 0) && (Atk0 == true))) {
+		if (((Stop == 1) && (Run >= 0) && (Ground > 0)) || ((Run >= 0) && (Atk0 == true))) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle.png", 10, 0.09);
 
@@ -585,9 +428,6 @@ void CoatGuy::Update(float dt) {
 				Atk0 = false;
 			}
 
-			/// todo - isso arruma a posicao quando colide com algo a direita, mas andar a direita fica estranho
-			// arruma a posicao para o sprite do coatGuy idle aparecer do pe mais a frente apos a corrida
-			//associated.box.x += associated.box.w;//121;
 
 			associated.AddComponent(sprite);
 		}
@@ -596,12 +436,11 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Idle para a esquerda		//
 		/////////////////////////////////////
-		if (((Stop == 1) && (Run < 0) && (wallAUX == 0) && (Ground > 0)) || ((Run < 0) && (Atk0 == true))) {
+		if (((Stop == 1) && (Run < 0) && (Ground > 0)) || ((Run < 0) && (Atk0 == true))) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_idle_inv.png", 10, 0.09);
 			facingR = false;
 			facingL = true;
-			spriteAlreadyIdleR = false;
 
 
 			associated.AddComponent(sprite);
@@ -627,8 +466,6 @@ void CoatGuy::Update(float dt) {
 			facingR = true;
 			facingL = false;
 			Run++;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
 
 		}
 
@@ -636,17 +473,13 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Corrida para a esquerda		//
 		/////////////////////////////////////
-		if ((((Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && (inputManager.IsKeyDown(LEFT_ARROW_KEY) || moveEsquerda))) && (Fall <= 1) && (Jump == 0)) {
+		if ( ( ( (Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && inputManager.IsKeyDown(LEFT_ARROW_KEY || moveEsquerda))) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_corrida_inv.png", 10, 0.09);
 			associated.AddComponent(sprite);
 			facingR = false;
 			facingL = true;
 			Run--;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
-			spriteAlreadyRunL = true;
-			spriteAlreadyRunR = false;
 
 		}
 
@@ -654,25 +487,15 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////
 		//		Pulo para a direita		//
 		/////////////////////////////////
-		if ((((Run >= 0) && (Jump == 1)) || ((Jump > 1) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
+		if ((((Run >= 0) && (Jump == 1)) || ((Jump > 1) && (Run == 1))) && (Fall == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_pulo.png", 4, 0.15);
 			associated.AddComponent(sprite);
 			associated.box.x -= 10;
 			facingR = true;
 			facingL = false;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
-			spriteAlreadyRunL = false;
-			spriteAlreadyRunR = false;
-			spriteAlreadyJumpL = false;
-			spriteAlreadyJumpR = false;
-
 
 			if (Jump == 1) {
-				if ((DJ == 0) && (wallAUX == 0)) {
-					DJ++;
-				}
 				Jump++;
 			}
 
@@ -682,106 +505,18 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Pulo para a esquerda		//
 		/////////////////////////////////////
-		if ((((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
+		if ((((Run < 0) && (Jump == 1)) || ((Jump > 1) && (Run == -1))) && (Fall == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_pulo_inv.png", 4, 0.15);
 			associated.AddComponent(sprite);
 			associated.box.x -= 10;
 			facingR = false;
 			facingL = true;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
-			spriteAlreadyRunL = false;
-			spriteAlreadyRunR = false;
-			spriteAlreadyJumpL = false;
-			spriteAlreadyJumpR = false;
 
 		}
 		if (Jump == 1) {
-			if ((DJ == 0) && (wallAUX == 0)) {
-				DJ++;
-			}
 			Jump++;
 		}
-
-		/*
-		///////////////////////////////////////////
-		//		Pulo Duplo para a direita		//
-		/////////////////////////////////////////
-		if ((((Run >= 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == 1))) && (Fall == 0) && (wallAUX == 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo.png", 4, 0.1);
-			associated.AddComponent(sprite);
-			facingR = true;
-			facingL = false;
-			DJ++;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
-			spriteAlreadyRunL = false;
-			spriteAlreadyRunR = false;
-			spriteAlreadyJumpL = false;
-			spriteAlreadyJumpR = false;
-		}
-
-		///////////////////////////////////////////
-		//		Pulo Duplo para a esquerda		//
-		/////////////////////////////////////////
-		if ((((Run < 0) && (DJ == 2)) || ((Jump > 1) && (DJ >= 2) && (Run == -1))) && (Fall == 0) && (wallAUX == 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_puloduplo_inv.png", 4, 0.1);
-			associated.AddComponent(sprite);
-			//associated.box.x -= 10;
-			facingR = false;
-			facingL = true;
-			DJ++;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
-			spriteAlreadyRunL = false;
-			spriteAlreadyRunR = false;
-			spriteAlreadyJumpL = false;
-			spriteAlreadyJumpR = false;
-			spriteAlreadyDJL = false;
-			spriteAlreadyDJR = false;
-		}
-
-		///////////////////////////////////
-		//		WallSlide A DIREITA		//
-		/////////////////////////////////
-		if ((wallAUX == 1) && (Ground == 0) && (Run > 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_desliza_inv.png", 8, 0.1);
-			associated.AddComponent(sprite);
-			associated.box.x += 70;
-			facingR = false;
-			facingL = true;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
-			spriteAlreadyRunL = false;
-			spriteAlreadyRunR = false;
-			spriteAlreadyJumpL = false;
-			spriteAlreadyJumpR = false;
-			spriteAlreadyDJL = false;
-			spriteAlreadyDJR = false;
-		}
-		///////////////////////////////////////
-		//		WallSlide A ESQUERDA		//
-		/////////////////////////////////////
-		if ((wallAUX == -1) && (Ground == 0) && (Run < 0)) {
-			associated.RemoveComponent(sprite);
-			sprite = new Sprite(associated, "./assets/img/Protagonista/prot_desliza.png", 8, 0.1);
-			associated.AddComponent(sprite);
-			facingR = true;
-			facingL = false;
-			spriteAlreadyIdleR = false;
-			spriteAlreadyIdleL = false;
-			spriteAlreadyRunL = false;
-			spriteAlreadyRunR = false;
-			spriteAlreadyJumpL = false;
-			spriteAlreadyJumpR = false;
-			spriteAlreadyDJL = false;
-			spriteAlreadyDJR = false;
-		}
-		*/
 
 		///////////////////////
 		//		QUEDA		//
@@ -789,159 +524,83 @@ void CoatGuy::Update(float dt) {
 		if (Ground == 0) {
 
 			// QUEDA PRA DIREITA
-			if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1))) && (wallAUX == 0)) {
+			if ((((Fall == 1) && (Run >= 0)) || ((Fall > 0) && (Run == 1)))) {
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_queda.png", 4, 0.15);
 				associated.AddComponent(sprite);
 				associated.box.x += 20;
 				facingR = true;
 				facingL = false;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = false;
-				spriteAlreadyJumpR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
 
 			}
 
 			// QUEDA PRA ESQUERDA
-			if ((((Fall == 1) && (Run < 0)) || ((Fall > 0) && (Run == -1))) && (wallAUX == 0)) {
+			if ((((Fall == 1) && (Run < 0)) || ((Fall > 0) && (Run == -1)))) {
 				associated.RemoveComponent(sprite);
 				sprite = new Sprite(associated, "./assets/img/Vilao/vilao_queda_inv.png", 4, 0.15);
 				associated.AddComponent(sprite);
 				associated.box.x += 20;
 				facingR = false;
 				facingL = true;
-				spriteAlreadyIdleR = false;
-				spriteAlreadyIdleL = false;
-				spriteAlreadyRunL = false;
-				spriteAlreadyRunR = false;
-				spriteAlreadyJumpL = false;
-				spriteAlreadyJumpR = false;
-				spriteAlreadyDJL = false;
-				spriteAlreadyDJR = false;
 
 			}
 		}
 
 
-		///////////////////////////////////////
-		//		TIRO DA COAT GUY		//
-		/////////////////////////////////////
-		/*
-		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.8) {
-			if (facingR)
-				Shoot(GetCenter());
-			else if (facingL)
-				Shoot(Vec2(-1 * GetCenter().x, GetCenter().y));
-			ShootCooldownTimer.Restart();
-		}
-		*/
-
-		///////////////////////
-		//		DASH		//
-		/////////////////////
-		/*
-		// DIREITA
-		if (inputManager.IsKeyDown(E_KEY) && DashCooldownTimer.Get() > 1.8) {
-			speedH = { 1, 0 };
-			linearSpeed += 1000;
-			associated.box += speedH * linearSpeed*dt;
-			DashCooldownTimer.Restart();
-		}
-
-		// ESQUERDA
-		if (inputManager.IsKeyDown(Q_KEY) && DashCooldownTimer.Get() > 1.8) {
-			speedH = { -1, 0 };
-			linearSpeed += 1000;
-			associated.box += speedH * linearSpeed*dt;
-			DashCooldownTimer.Restart();
-		}
-		*/
-
-
 		///////////////////////////////////
 		//        ATAQUE BASICO			//
 		/////////////////////////////////
-		//cout << "ATKTimer: " << ATKTimer.Get() << endl;
 		if ((/*inputManager.KeyPress(K_KEY) ||*/ (Player::player->GetCenter().Distancia(this->GetCenter()) < 3 * ONETILESQUARE)) && (ATKTimer.Get() > 1.0)) {
 			isAtacking = true;
 			moveDireita = false;
 			moveEsquerda = false;
-			cout << "Atk1: " << Atk1 << endl;
-			cout << "Atk0: " << Atk0 << endl;
 			Atk1 = 0;
 			Atk0 = false;
 			Atk1++;
 			ATKTimer.Restart();
 		}
 		if ((Atk1 == 1) && (Run >= 0)) {
-			cout << "PRIMEIRO ATAQUE\n";
-			//Camera::Unfollow();
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk1.png", 5, 0.1);
 			associated.AddComponent(sprite);
 			associated.box.x -= 20;
 			Atk1++;
 			Atk0 = false;
-			//cout << "Atk1: " << Atk1 << endl;
-			//cout << "Atk0: " << Atk0 << endl;
 		}
 
 		if ((Atk1 == 1) && (Run < 0)) {
-			cout << "PRIMEIRO ATAQUE\n";
-			//Camera::Unfollow();
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk1_inv.png", 5, 0.1);
 			associated.AddComponent(sprite);
 			associated.box.x -= 20;
 			Atk1++;
 			Atk0 = false;
-			//cout << "Atk1: " << Atk1 << endl;
-			//cout << "Atk0: " << Atk0 << endl;
 		}
 
 		if ((ATKTimer.Get() > 0.5) && (ATKTimer.Get() < 0.5 + dt) && (Atk1 == 2)) {
-			cout << "incrementa Atk1\n";
 			Atk1++;
-			//cout << "Atk1: " << Atk1 << endl;
-			//cout << "Atk0: " << Atk0 << endl;
 		}
 		if ((Atk1 == 3) && (Run >= 0)) {
-			cout << "SEGUNDO ATAQUE\n";
-			//Camera::Unfollow();
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk2.png", 5, 0.1);
 			associated.AddComponent(sprite);
 			associated.box.x -= 20;
 			Atk1++;
-			//cout << "Atk1: " << Atk1 << endl;
-			//cout << "Atk0: " << Atk0 << endl;
 		}
 
 		if ((Atk1 == 3) && (Run < 0)) {
-			cout << "SEGUNDO ATAQUE\n";
-			//Camera::Unfollow();
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_atk2_inv.png", 5, 0.1);
 			associated.AddComponent(sprite);
 			associated.box.x -= 20;
 			Atk1++;
-			//cout << "Atk1: " << Atk1 << endl;
-			//cout << "Atk0: " << Atk0 << endl;
 		}
 
 		if ((ATKTimer.Get() > 1.0) && (Atk1 == 4)) {
 			Atk1 = 0;
 			Atk0 = true;
-			//cout << "Atk1: " << Atk1 << endl;
-			//cout << "Atk0: " << Atk0 << endl;
 		}
 		else {
-			//Atk1 = 0;
 			isAtacking = false;
 		}
 
@@ -1001,22 +660,7 @@ void CoatGuy::Update(float dt) {
 				}
 			}
 		}
-		/*
-		///////////////////////////////
-		//		SFX DE POUSO		//
-		/////////////////////////////
-		else if (pouso && tchfloor && !airbone) {
-			if (coatGuySFX->IsPlaying()) {
-				coatGuySFX->Stop();
-			}
-			associated.RemoveComponent(coatGuySFX);
-			//coatGuySFX = new Sound(associated, "./assets/audio/SFX/PousoPrincipal(Assim.)1.wav");
-			coatGuySFX = new Sound(associated, "./assets/audio/SFX/Pouso2.1(Assim.).wav");
-			associated.AddComponent(coatGuySFX);
-			coatGuySFX->Play();
-			pouso = false;
-		}
-		*/
+
 		///////////////////////////////////
 		//		SFX DE PULO DUPLO		//
 		/////////////////////////////////
@@ -1054,14 +698,12 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 
 	// Prosfere dano ao CoatGuy se o tiro for do jogador
 	if (laser && laser->playerLaser) {
-		//std::cout << "Vida do CoatGuy: " << hp << std::endl;
 		hp -= laser->GetDamage();
 		falsehp--;
 		damaged = true;
 		gotHit = true;
 	}
 	else if (player1 && Player::player->isAtacking) {
-		//cout << "Deu dano no robo\n";
 		hp -= 6;		// Prosfere dano ao robo se ele sofrer um ataque melee do jogador
 		falsehp--;
 		damaged = true;
@@ -1079,30 +721,21 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 			// Colisao com chaos
 			if ((this->associated.box.y + this->associated.box.h <= tile->GetY() /*+ 149*//* + 90*/ /* + 120*/)
 				|| (this->GetCenter().Distancia(Vec2(this->GetCenter().x, tile->GetY())) <= this->associated.box.h / 2)) {
-				if (this->associated.box.y + this->associated.box.h > tile->GetY()) {
-					ultrapassou = true;
-				}
+
 				if (!airbone && tchfloor && !SetJump) {
 					verticalSpeed = 0;
 					this->associated.box.y = tile->GetY() - this->associated.box.h;
-					ultrapassou = false;
 				}
 				WallgrabL = false;
 				WallgrabR = false;
 				tchfloor = true;
 				airbone = false;
-				doubleJump = false;
 				tchCeiling = false;
-				jumped = false;
 				if (Ground < 10) {
 					Ground++;
 				}
 
-				if (Ground <= 2)
-					pouso = true;
 
-				DJ = 0;
-				wallAUX = 0;
 				Jump = 0;
 				Fall = 0;
 
@@ -1110,20 +743,15 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 				if ((this->associated.box.x + this->associated.box.w < tile->GetX()) || (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x)) {
 					airbone = true;
 					tchfloor = false;
-					doubleJump = true;
 					Stop = 0;
-					wallAUX = 0;
-					ultrapassou = false;
 				}
 			}
 			// Colisao com tetos
 			else if ((this->associated.box.y < tile->GetY() + tile->GetHeight() * ONETILESQUARE)
 				&& this->associated.box.y + this->associated.box.h / 4 > tile->GetY() + tile->GetHeight() * ONETILESQUARE) {
 				this->associated.box.y = tile->GetY() + tile->GetHeight() * ONETILESQUARE + 1;
-				/// todo - comentar o verticalspeed = 0 e mostrar pro nego o q acontece
 				verticalSpeed = 0;
 				tchCeiling = true;
-				ultrapassou = false;
 
 			}
 			// Colisao com uma parede A DIREITA
@@ -1136,18 +764,15 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 				WallgrabL = false;
 				tchCeiling = false;
 				WallgrabR = true;
-				ultrapassou = false;
 
 				if (airbone && !tchfloor && WallgrabR) {
-					wallX = tile->GetX();
 					WallgrabR = true;
 				}
 			}
 			// Coliscao com uma parede A ESQUERDA
 			else if ((associated.box.x <= tile->GetX() + tile->GetWidth() * ONETILESQUARE)
-				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)	/// todo - talvez mudar essa condicao
-				&& !tchCeiling
-				) {
+				&& (tile->GetX() + tile->GetWidth() * ONETILESQUARE - ONETILESQUARE <= associated.box.x)
+				&& !tchCeiling) {
 				this->associated.box.x = tile->GetX() + tile->GetWidth() * ONETILESQUARE;
 				linearSpeed = 0;
 				oppositeSpeed = 0;
@@ -1155,7 +780,6 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 				WallgrabR = false;
 				tchCeiling = false;
 				WallgrabL = true;
-				ultrapassou = false;
 
 			}
 			else {
@@ -1164,12 +788,9 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 				tchfloor = false;
 				tchCeiling = false;
 				airbone = true;
-				wallAUX = 0;
-				ultrapassou = false;
 
 				// Checa se esta desencostando da parede A ESQUERDA
 				if (tile->GetX() + tile->GetWidth() * ONETILESQUARE < this->associated.box.x) {
-					wallAUX = 0;
 					WallgrabL = false;
 					if (coatGuySFX->IsPlaying()) {
 						coatGuySFX->Stop();
@@ -1183,8 +804,6 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 					if (airbone) {
 						associated.box.x -= 15;
 					}
-					wallAUX = 0;
-					ultrapassou = false;
 					if (coatGuySFX->IsPlaying()) {
 						coatGuySFX->Stop();
 					}
@@ -1194,7 +813,6 @@ void CoatGuy::NotifyCollision(GameObject& other) {
 				// Checa se esta desencostando do teto
 				if (this->associated.box.y > tile->GetY() + ONETILESQUARE) {
 					tchCeiling = false;
-					ultrapassou = false;
 				}
 			}
 		}
