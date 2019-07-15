@@ -41,7 +41,7 @@ void Player::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
 	double accelSpeedGain = PLAYER_ACCELERATION * dt;
 
-	if (inputManager.KeyPress(ZERO_KEY)) {
+	if (inputManager.KeyPress(ZERO_KEY) || inputManager.KeyPress(NUMPAD_ZERO_KEY)) {
 		hp = 0;
 		damaged = true;
 	}

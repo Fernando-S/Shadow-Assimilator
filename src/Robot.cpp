@@ -40,7 +40,7 @@ void Robot::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
 	double accelSpeedGain = ROBOT_ACCELERATION * dt;
 
-	if (inputManager.KeyPress(NUMPAD_ZERO_KEY)) {
+	if (inputManager.KeyPress(NUMPAD_EIGHT_KEY) || inputManager.KeyPress(EIGHT_KEY)) {
 		hp = 0;
 		damaged = true;
 	}

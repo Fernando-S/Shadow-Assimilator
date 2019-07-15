@@ -35,7 +35,7 @@ void FinalBoss::Start() {
 void FinalBoss::Update(float dt) {
 	auto inputManager = InputManager::GetInstance();
 
-	if (inputManager.KeyPress(NUMPAD_ZERO_KEY)) {
+	if (inputManager.KeyPress(NUMPAD_EIGHT_KEY) || inputManager.KeyPress(EIGHT_KEY)) {
 		hp = 0;
 		damaged = true;
 	}
