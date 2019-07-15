@@ -8,6 +8,7 @@ public:
 	static bool playerVictory;
 	static bool backToMenuScreen;
 	static bool saiuDoGalpao;
+	static bool shotAssimilated;
 };
 
 #endif // GAMEDATA_H

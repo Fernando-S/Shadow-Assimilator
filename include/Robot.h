@@ -15,6 +15,7 @@
 #include "TileMap.h"
 #include "Camera.h"
 #include "InputManager.h"
+#include "GameData.h"
 
 
 #define ROBOT_ACCELERATION 1000		// em pixels/s²
