@@ -3,9 +3,9 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-//#define INCLUDE_SDL_MIXER
-//#include "SDL_include.h"
-#include "SDL_mixer.h"							// Comentar e usar SDL_include.h para enviar
+#define INCLUDE_SDL_MIXER
+#include "SDL_include.h"
+//#include "SDL_mixer.h"							// Comentar e usar SDL_include.h para enviar
 #include "GameObject.h"
 #include "Resources.h"
 #include <iostream>

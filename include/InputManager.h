@@ -4,9 +4,9 @@
 #define INPUTMANAGER_H
 
 #include <unordered_map>
-//#define INCLUDE_SDL
-//#include "SDL_include.h"
-#include "SDL.h"							// Comentar e usar SDL_include.h para enviar
+#define INCLUDE_SDL
+#include "SDL_include.h"
+//#include "SDL.h"							// Comentar e usar SDL_include.h para enviar
 
 #define LEFT_ARROW_KEY      SDLK_LEFT
 #define RIGHT_ARROW_KEY     SDLK_RIGHT

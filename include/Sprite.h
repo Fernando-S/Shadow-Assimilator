@@ -4,10 +4,10 @@
 #define SPRITE_H
 
 
-//#define INCLUDE_SDL_IMAGE
-//#include "SDL_include.h"
+#define INCLUDE_SDL_IMAGE
+#include "SDL_include.h"
 #include <iostream>
-#include "SDL_image.h"							// Comentar e usar SDL_include.h para enviar
+//#include "SDL_image.h"							// Comentar e usar SDL_include.h para enviar
 #include "Component.h"
 #include "GameObject.h"
 #include "Resources.h"

@@ -3,9 +3,9 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
-//#define INCLUDE_SDL_MIXER
-//#include "SDL_include.h"
-#include "SDL_mixer.h"							// Comentar e usar SDL_include.h para enviar
+#define INCLUDE_SDL_MIXER
+#include "SDL_include.h"
+//#include "SDL_mixer.h"							// Comentar e usar SDL_include.h para enviar
 #include "Resources.h"
 #include <string>
 

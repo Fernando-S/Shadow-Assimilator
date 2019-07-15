@@ -3,10 +3,10 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-//#define INCLUDE_SDL
-//#define INCLUDE_SDL_TTF
-//#include "SDL_include.h"
-#include "SDL_ttf.h"					// Comentar e usar SDL_include.h para enviar
+#define INCLUDE_SDL
+#define INCLUDE_SDL_TTF
+#include "SDL_include.h"
+//#include "SDL_ttf.h"					// Comentar e usar SDL_include.h para enviar
 #include "Component.h"
 #include "Timer.h"
 #include "Camera.h"
