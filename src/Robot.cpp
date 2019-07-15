@@ -121,6 +121,7 @@ void Robot::Update(float dt) {
 				associated.box.x -= 80;
 			}
 			dead = true;
+			GameData::shotAssimilated = true;
 		}
 		else {
 			///////////////////////////////

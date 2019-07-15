@@ -833,7 +833,7 @@ void Player::Update(float dt) {
 		///////////////////////////////////////
 		//		TIRO DA PROTAGONISTA		//
 		/////////////////////////////////////
-		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.2) {
+		if (inputManager.IsKeyDown(J_KEY) && ShootCooldownTimer.Get() > 1.2 && GameData::shotAssimilated) {
 
 			if (Run >= 0) {
 				Shoot(GetCenter());
