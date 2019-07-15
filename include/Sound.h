@@ -30,22 +30,4 @@ private:
 	int channel;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif	//SOUND_H

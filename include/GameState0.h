@@ -20,7 +20,7 @@
 #include "FinalBoss.h"
 #include "InputManager.h"
 
-#define PI 3.14159265
+//#define PI 3.14159265
 #define ALIEN_NUMBER 3
 
 class GameState0 : public State {
@@ -52,9 +52,6 @@ private:
 	GameObject* finalBossGo;
 	GameObject* detalhesGO3;
 	GameObject* DetalheGO;
-
-
-
 	Player* player;
 	Robot* robot1;
 	Robot* robot2;

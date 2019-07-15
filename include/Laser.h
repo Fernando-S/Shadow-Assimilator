@@ -23,7 +23,7 @@ public:
 	void NotifyCollision(GameObject& other) override;
 	int GetDamage();
 
-	bool /*targetsPlayer,*/ playerLaser = false, coatGuyLaser = false, robotLaser = false;
+	bool playerLaser = false, coatGuyLaser = false, robotLaser = false;
 		
 private:
 	Vec2 speed;

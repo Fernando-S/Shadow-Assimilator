@@ -26,10 +26,6 @@ public:
 	void Render() override;
 	bool Is(std::string type) override;
 	void NotifyCollision(GameObject& other) override;
-	/*
-	void LightShoot(Vec2 target);
-	void HeavyShoot(Vec2 target);
-	*/
 	int GetHP();
 
 	static FinalBoss* finalBoss;

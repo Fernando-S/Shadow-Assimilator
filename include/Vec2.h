@@ -16,7 +16,6 @@ public:
 	Vec2 operator+(Vec2 vector2);
 	Vec2 operator-(Vec2 vector2);
 	Vec2 operator*(float c);
-	Vec2 operator*(const float rhs) const;
 	float Modulo();
 	Vec2 Normal();
 	float Distancia(Vec2 vector2);

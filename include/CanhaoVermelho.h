@@ -26,7 +26,6 @@ public:
 	void Render() override;
 	bool Is(std::string type) override;
 	void NotifyCollision(GameObject& other) override;
-	//int GetHP();
 
 	static CanhaoVermelho* canhaoVermelho;
 	Sprite* sprite;
@@ -37,8 +36,6 @@ public:
 
 private:
 
-	//int hp;
-	//bool damaged;
 	Timer LightRecoilTimer, HeavyRecoilTimer;
 };
 
