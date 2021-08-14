@@ -27,7 +27,8 @@ void TileMap::Load(std::string file) {
 	}
 
 	tileMapFile >> linha;
-	sscanf_s(linha.c_str(), "%d,%d,%d,", &mapHeight, &mapWidth, &mapDepth);						//.c_str() pois const char* nao funciona
+	// sscanf_s(linha.c_str(), "%d,%d,%d,", &mapHeight, &mapWidth, &mapDepth);						//.c_str() pois const char* nao funciona
+	sscanf(linha.c_str(), "%d,%d,%d,", &mapHeight, &mapWidth, &mapDepth);						//.c_str() pois const char* nao funciona
 
 	// se o mapa nao tem dimensoes, exibe uma msg de erro e sai do programa
 	if ( (mapWidth < 0) || (mapHeight < 0) || (mapDepth < 0)) {

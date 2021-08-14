@@ -11,13 +11,15 @@
 #include "InputManager.h"
 #include "Resources.h"
 #include "State.h"
-//#include "SDL.h"							// Comentar e usar SDL_include.h para enviar
-//#include "SDL_ttf.h"						// Comentar e usar SDL_include.h para enviar
-#define INDLUDE_SDL
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#define INCLUDE_SDL_TTF
-#include "SDL_include.h"
+#include "SDL.h"							// Comentar e usar SDL_include.h para enviar
+#include "SDL_ttf.h"						// Comentar e usar SDL_include.h para enviar
+#include "SDL_mixer.h"						// Comentar e usar SDL_include.h para enviar
+#include "SDL_image.h"						// Comentar e usar SDL_include.h para enviar
+// #define INDLUDE_SDL
+// #define INCLUDE_SDL_IMAGE
+// #define INCLUDE_SDL_MIXER
+// #define INCLUDE_SDL_TTF
+// #include "SDL_include.h"
 
 
 class Game {

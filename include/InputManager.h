@@ -4,6 +4,7 @@
 #define INPUTMANAGER_H
 
 #include <unordered_map>
+#include <string.h>
 #define INCLUDE_SDL
 #include "SDL_include.h"
 

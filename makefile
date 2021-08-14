@@ -35,7 +35,7 @@ DEP_FILES = $(addprefix $(DEP_PATH)/,$(addsuffix .d,$(FILE_NAMES)))
 OBJ_FILES = $(addprefix $(BIN_PATH)/,$(notdir $(CPP_FILES:.cpp=.o)))
 
 # Nome do executável
-EXEC = JOGO
+EXEC = Shadow
 
 #---------------------------------------------------------------------
 # Caso o sistema seja windows
@@ -49,7 +49,7 @@ RMDIR = rd /s /q
 RM = del /q
 
 # Possiveis Paths para SDL
-SDL_PATHS = C:/SDL2/x86_64-w64-mingw32 C:/Tools/msys64/mingw64
+SDL_PATHS = C:\Users\nando\Documents\SDL2-2.0.16\i686-w64-mingw32 C:/Tools/msys64/mingw64
 
 SDL_INC_PATH += $(addsuffix /include,$(SDL_PATHS))
 LINK_PATH = $(addprefix -L,$(addsuffix /lib,$(SDL_PATHS)))

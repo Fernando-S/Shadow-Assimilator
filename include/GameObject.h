@@ -4,6 +4,7 @@
 #define	GAMEOBJECT_H
 
 #include <vector>
+#include <tr1/memory>
 #include "Component.h"
 #include "Rect.h"
 
