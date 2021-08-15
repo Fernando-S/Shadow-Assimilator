@@ -134,9 +134,6 @@ dep/TileSet.d bin/TileSet.o: src/TileSet.cpp include/TileSet.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_vector.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_bvector.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/vector.tcc \
- include/Rect.h include/Vec2.h \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/cmath \
- C:/TDM-GCC-32/include/math.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/memory \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/memory \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_tempbuf.h \
@@ -161,7 +158,10 @@ dep/TileSet.d bin/TileSet.o: src/TileSet.cpp include/TileSet.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/backward/auto_ptr.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/type_traits \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/shared_ptr.h \
- include/Resources.h include/SDL_ttf.h include/SDL.h \
+ include/Rect.h include/Vec2.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/cmath \
+ C:/TDM-GCC-32/include/math.h include/Resources.h include/SDL_ttf.h \
+ include/SDL.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/unordered_map \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/hashtable.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/hashtable_policy.h \
@@ -169,7 +169,7 @@ dep/TileSet.d bin/TileSet.o: src/TileSet.cpp include/TileSet.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/unordered_map.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/erase_if.h \
  include/SDL_mixer.h include/Timer.h include/Camera.h \
- include/InputManager.h
+ include/InputManager.h C:/TDM-GCC-32/include/string.h
 include/TileSet.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/iostream:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/mingw32/bits/c++config.h:
@@ -350,10 +350,6 @@ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_uninitialized.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_vector.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_bvector.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/vector.tcc:
-include/Rect.h:
-include/Vec2.h:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/cmath:
-C:/TDM-GCC-32/include/math.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/memory:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/memory:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_tempbuf.h:
@@ -378,6 +374,10 @@ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/atomic_lockfree_defines.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/backward/auto_ptr.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/type_traits:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/shared_ptr.h:
+include/Rect.h:
+include/Vec2.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/cmath:
+C:/TDM-GCC-32/include/math.h:
 include/Resources.h:
 include/SDL_ttf.h:
 include/SDL.h:
@@ -391,3 +391,4 @@ include/SDL_mixer.h:
 include/Timer.h:
 include/Camera.h:
 include/InputManager.h:
+C:/TDM-GCC-32/include/string.h:
