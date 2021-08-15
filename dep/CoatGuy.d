@@ -118,6 +118,30 @@ dep/CoatGuy.d bin/CoatGuy.o: src/CoatGuy.cpp include/CoatGuy.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_vector.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_bvector.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/vector.tcc \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/memory \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/memory \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_tempbuf.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_raw_storage_iter.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/ranges_uninitialized.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/ext/concurrence.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/uses_allocator.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/unique_ptr.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/utility \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_relops.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tuple \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/array \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/invoke.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/shared_ptr.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/shared_ptr_base.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/allocated_ptr.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/refwrap.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/ext/aligned_buffer.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/shared_ptr_atomic.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/atomic_base.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/atomic_lockfree_defines.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/backward/auto_ptr.h \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/type_traits \
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/shared_ptr.h \
  include/Rect.h include/Sprite.h include/SDL_include.h include/SDL.h \
  include/SDL_main.h include/SDL_stdinc.h include/SDL_config.h \
  include/SDL_platform.h include/begin_code.h include/close_code.h \
@@ -138,19 +162,13 @@ dep/CoatGuy.d bin/CoatGuy.o: src/CoatGuy.cpp include/CoatGuy.h \
  include/SDL_locale.h include/SDL_misc.h include/Resources.h \
  include/SDL_ttf.h include/SDL.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/unordered_map \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/ext/aligned_buffer.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/hashtable.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/hashtable_policy.h \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tuple \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/utility \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_relops.h \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/array \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/uses_allocator.h \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/invoke.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/limits \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/unordered_map.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/erase_if.h \
- include/Timer.h include/Camera.h include/InputManager.h include/Music.h \
+ include/SDL_mixer.h include/Timer.h include/Camera.h \
+ include/InputManager.h C:/TDM-GCC-32/include/string.h include/Music.h \
  include/Sound.h include/Collider.h include/Laser.h include/Player.h \
  include/TileMap.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/fstream \
@@ -164,7 +182,7 @@ dep/CoatGuy.d bin/CoatGuy.o: src/CoatGuy.cpp include/CoatGuy.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h \
- include/State.h
+ include/State.h include/SDL_ttf.h include/SDL_image.h
 include/CoatGuy.h:
 include/Component.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/string:
@@ -297,6 +315,30 @@ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_uninitialized.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_vector.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_bvector.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/vector.tcc:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/memory:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/memory:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_tempbuf.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_raw_storage_iter.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/ranges_uninitialized.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/ext/concurrence.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/uses_allocator.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/unique_ptr.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/utility:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_relops.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tuple:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/array:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/invoke.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/shared_ptr.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/shared_ptr_base.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/allocated_ptr.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/refwrap.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/ext/aligned_buffer.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/shared_ptr_atomic.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/atomic_base.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/atomic_lockfree_defines.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/backward/auto_ptr.h:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/type_traits:
+C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tr1/shared_ptr.h:
 include/Rect.h:
 include/Sprite.h:
 include/SDL_include.h:
@@ -353,21 +395,16 @@ include/Resources.h:
 include/SDL_ttf.h:
 include/SDL.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/unordered_map:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/ext/aligned_buffer.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/hashtable.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/hashtable_policy.h:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/tuple:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/utility:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_relops.h:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/array:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/uses_allocator.h:
-C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/invoke.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/limits:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/unordered_map.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/erase_if.h:
+include/SDL_mixer.h:
 include/Timer.h:
 include/Camera.h:
 include/InputManager.h:
+C:/TDM-GCC-32/include/string.h:
 include/Music.h:
 include/Sound.h:
 include/Collider.h:
@@ -389,3 +426,5 @@ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h:
 include/State.h:
+include/SDL_ttf.h:
+include/SDL_image.h:

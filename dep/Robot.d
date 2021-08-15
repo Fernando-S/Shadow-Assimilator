@@ -182,7 +182,7 @@ dep/Robot.d bin/Robot.o: src/Robot.cpp include/Robot.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h \
- include/State.h
+ include/State.h include/SDL_ttf.h include/SDL_image.h
 include/Robot.h:
 include/Component.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/string:
@@ -426,3 +426,5 @@ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h:
 include/State.h:
+include/SDL_ttf.h:
+include/SDL_image.h:

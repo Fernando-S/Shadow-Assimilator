@@ -93,7 +93,7 @@ void CoatGuy::Update(float dt) {
 
 		contadorW2 = verticalSpeed;
 
-		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+		if (((contadorW2 == contadorW1) && (verticalSpeed != 0)) || (verticalSpeed >= 600)) {
 			BuzzL++;
 		}
 
@@ -260,7 +260,7 @@ void CoatGuy::Update(float dt) {
 
 		contadorW2 = verticalSpeed;
 
-		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+		if (((contadorW2 == contadorW1) && (verticalSpeed != 0)) || (verticalSpeed >= 600)) {
 			BuzzL++;
 		}
 		if (((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
@@ -363,7 +363,7 @@ void CoatGuy::Update(float dt) {
 					}
 				}
 		}
-		double atrictSpeedLoss = COATGUY_ATRICT * dt;
+		// double atrictSpeedLoss = COATGUY_ATRICT * dt;
 
 		if (!inputManager.IsKeyDown(LEFT_ARROW_KEY) && !moveEsquerda)
 			Getspeed1 = false;
@@ -473,7 +473,7 @@ void CoatGuy::Update(float dt) {
 		///////////////////////////////////////
 		//		Corrida para a esquerda		//
 		/////////////////////////////////////
-		if ( ( ( (Run == -1) && (Ground > 0)) || ((Ground == 1) && (Run < 0) && inputManager.IsKeyDown(LEFT_ARROW_KEY || moveEsquerda))) && (Fall <= 1) && (Jump == 0)) {
+		if (( ((Run == 1) && (Ground > 0)) || ((Ground == 1) && (Run > 0) && (inputManager.IsKeyDown(RIGHT_ARROW_KEY) || moveDireita)) ) && (Fall <= 1) && (Jump == 0)) {
 			associated.RemoveComponent(sprite);
 			sprite = new Sprite(associated, "./assets/img/Vilao/vilao_corrida_inv.png", 10, 0.09);
 			associated.AddComponent(sprite);

@@ -102,11 +102,11 @@ void Player::Update(float dt) {
 		contadorW2 = verticalSpeed;
 
 
-		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+		if ((contadorW2 == contadorW1) && ((verticalSpeed != 0) || (verticalSpeed >= 600))) {
 			BuzzL++;
 		}
 
-		if (((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
+		if ( ((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
 			BuzzL = 0;
 		}
 
@@ -227,10 +227,10 @@ void Player::Update(float dt) {
 
 		contadorW2 = verticalSpeed;
 
-		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+		if ((contadorW2 == contadorW1) && ((verticalSpeed != 0) || (verticalSpeed >= 600))) {
 			BuzzL++;
 		}
-		if (((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
+		if ( ((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
 			BuzzL = 0;
 		}
 
@@ -457,7 +457,7 @@ void Player::Update(float dt) {
 			//linearSpeed = 0;
 		}
 
-		double atrictSpeedLoss = PLAYER_ATRICT * dt;
+		// double atrictSpeedLoss = PLAYER_ATRICT * dt;
 
 		if (!inputManager.IsKeyDown(A_KEY))
 			Getspeed1 = false;

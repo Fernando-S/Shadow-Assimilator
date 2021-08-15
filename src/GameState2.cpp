@@ -17,7 +17,7 @@ GameState2::GameState2() {
 }
 
 void GameState2::LoadAssets() {
-	int i;
+	// int i;
 
 	/////////////////////////////////////////////
 	//	  Carrega a Musica e aperta o play	  //

@@ -83,8 +83,7 @@ Game& Game::GetInstance() {
 	if (instance != nullptr)
 		return *instance;		// retorna a instancia se ja existir uma
 	else {
-		//instance = new Game("Shadow Assimilator", 1280, 640);		// instancia um novo jogo
-		instance = new Game("Shadow Assimilator", 1366, 768);		// instancia um novo jogo
+		instance = new Game("Shadow Assimilator", 1366, 768);		// instancia um novo jogo na resolução escolhida (mudar essa resolução zoa a UI do menu principal)
 		return *instance;		// retorna a nova instancia instancia
 	}
 }

@@ -168,8 +168,8 @@ dep/GameState0.d bin/GameState0.o: src/GameState0.cpp \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/unordered_map.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/erase_if.h \
  include/SDL_mixer.h include/Timer.h include/Camera.h \
- include/InputManager.h include/Music.h include/Sound.h include/TileSet.h \
- include/TileMap.h \
+ include/InputManager.h C:/TDM-GCC-32/include/string.h include/Music.h \
+ include/Sound.h include/TileSet.h include/TileMap.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/fstream \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/codecvt.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/mingw32/bits/basic_file.h \
@@ -190,7 +190,8 @@ dep/GameState0.d bin/GameState0.o: src/GameState0.cpp \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/deque \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc \
- C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h
+ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h \
+ include/SDL_ttf.h include/SDL_image.h
 include/GameState0.h:
 include/Sprite.h:
 include/SDL_include.h:
@@ -411,6 +412,7 @@ include/SDL_mixer.h:
 include/Timer.h:
 include/Camera.h:
 include/InputManager.h:
+C:/TDM-GCC-32/include/string.h:
 include/Music.h:
 include/Sound.h:
 include/TileSet.h:
@@ -449,3 +451,5 @@ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/deque:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h:
+include/SDL_ttf.h:
+include/SDL_image.h:

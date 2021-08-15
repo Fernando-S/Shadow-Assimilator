@@ -16,8 +16,8 @@
 #include "InputManager.h"
 
 
-#define COATGUY_ACCELERATION 1000			// em pixels/s²
-#define COATGUY_ATRICT 150					// em pixels/s²
+#define COATGUY_ACCELERATION 1000			// em pixels/sï¿½
+#define COATGUY_ATRICT 150					// em pixels/sï¿½
 #define COATGUY_INITIAL_HP 28				// em hit points
 #define ONETILESQUARE 64					// tamanho de 1 tile
 #define COATGUY_LASER_DAMAGE 2				// em hit points
@@ -42,7 +42,7 @@ public:
 
 	static CoatGuy* coatGuy;
 	Sprite* sprite;
-	bool damaged = false, isAtacking = false, gotHit = false;;
+	bool damaged = false, isAtacking = false, gotHit = false;
 	Sound* coatGuySFX;
 
 private:

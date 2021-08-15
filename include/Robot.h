@@ -18,8 +18,8 @@
 #include "GameData.h"
 
 
-#define ROBOT_ACCELERATION 1000		// em pixels/s²
-#define ROBOT_ATRICT 150				// em pixels/s²
+#define ROBOT_ACCELERATION 1000		// em pixels/sï¿½
+#define ROBOT_ATRICT 150				// em pixels/sï¿½
 #define ROBOT_INITIAL_HP 4			// em hit points
 #define ONETILESQUARE 64				// tamanho de 1 tile
 #define ROBOT_LASER_DAMAGE 2			// em hit points
@@ -40,7 +40,7 @@ public:
 
 	static Robot* robot;
 	Sprite* sprite;
-	bool damaged = false, isAtacking = false, gotHit = false;;
+	bool damaged = false, isAtacking = false, gotHit = false;
 	Sound* robotSFX;
 
 private:
@@ -58,22 +58,6 @@ private:
 	int hp, Stop = 0, Run = 0, Jump = 0, Fall = 0, Ground = 0, BuzzL = 0, contadorW1 = 0, contadorW2 = 0;
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #endif	//ROBOT_H

@@ -10,7 +10,7 @@ GameState3::GameState3() {
 }
 
 void GameState3::LoadAssets() {
-	int i;
+	// int i;
 
 	/////////////////////////////////////////////
 	//	  Carrega a Musica e aperta o play	  //

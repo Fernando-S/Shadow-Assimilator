@@ -91,11 +91,11 @@ void Robot::Update(float dt) {
 
 		contadorW2 = verticalSpeed;
 
-		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+		if ((contadorW2 == contadorW1) && ((verticalSpeed != 0) || (verticalSpeed >= 600))) {
 			BuzzL++;
 		}
 
-		if (((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
+		if ( ((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
 			BuzzL = 0;
 		}
 
@@ -216,17 +216,17 @@ void Robot::Update(float dt) {
 
 		contadorW2 = verticalSpeed;
 
-		if ((contadorW2 == contadorW1) && (verticalSpeed != 0) || (verticalSpeed >= 600)) {
+		if ((contadorW2 == contadorW1) && ((verticalSpeed != 0) || (verticalSpeed >= 600))) {
 			BuzzL++;
 		}
-		if (((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
+		if ( ((BuzzL >= 1) && (contadorW2 != contadorW1)) || verticalSpeed == -800) {
 			BuzzL = 0;
 		}
 
 		///////////////////////////////////////////////////////////////////
 		//		IA do Robo espera um tempo parado e muda de lado		//
 		/////////////////////////////////////////////////////////////////
-		if (idle && changeSideTimer.Get() > 1.2 && !shooting || patrol) {
+		if (idle && changeSideTimer.Get() > 1.2 && (!shooting || patrol)) {
 			//cout << "ENTRA NA CONDICAO DO TEMPO\n";
 
 			// SETA PARA CORRER PARA A ESQUERDA SE ESTA PARADO OLHANDO PARA A DIREITA
@@ -397,7 +397,7 @@ void Robot::Update(float dt) {
 			}
 		}
 
-		double atrictSpeedLoss = ROBOT_ATRICT * dt;
+		// double atrictSpeedLoss = ROBOT_ATRICT * dt;
 
 		if (/*!inputManager.IsKeyDown(NUMPAD_FOUR_KEY) &&*/ !moveEsquerda)
 			Getspeed1 = false;

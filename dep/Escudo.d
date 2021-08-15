@@ -168,8 +168,9 @@ dep/Escudo.d bin/Escudo.o: src/Escudo.cpp include/Escudo.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/unordered_map.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/erase_if.h \
  include/SDL_mixer.h include/Timer.h include/Camera.h \
- include/InputManager.h include/Music.h include/Sound.h \
- include/Collider.h include/Laser.h include/Player.h include/TileMap.h \
+ include/InputManager.h C:/TDM-GCC-32/include/string.h include/Music.h \
+ include/Sound.h include/Collider.h include/Laser.h include/Player.h \
+ include/TileMap.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/fstream \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/codecvt.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/mingw32/bits/basic_file.h \
@@ -181,7 +182,7 @@ dep/Escudo.d bin/Escudo.o: src/Escudo.cpp include/Escudo.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h \
- include/State.h
+ include/State.h include/SDL_ttf.h include/SDL_image.h
 include/Escudo.h:
 include/Component.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/string:
@@ -403,6 +404,7 @@ include/SDL_mixer.h:
 include/Timer.h:
 include/Camera.h:
 include/InputManager.h:
+C:/TDM-GCC-32/include/string.h:
 include/Music.h:
 include/Sound.h:
 include/Collider.h:
@@ -425,3 +427,5 @@ C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_deque.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/deque.tcc:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/stl_stack.h:
 include/State.h:
+include/SDL_ttf.h:
+include/SDL_image.h:

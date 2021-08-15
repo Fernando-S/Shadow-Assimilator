@@ -172,7 +172,7 @@ dep/Game.d bin/Game.o: src/Game.cpp include/Game.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/bits/vector.tcc \
  include/Component.h include/Rect.h include/Vec2.h \
  C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/cmath \
- C:/TDM-GCC-32/include/math.h
+ C:/TDM-GCC-32/include/math.h include/SDL_ttf.h include/SDL_image.h
 include/Game.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/stack:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/deque:
@@ -398,3 +398,5 @@ include/Rect.h:
 include/Vec2.h:
 C:/TDM-GCC-32/lib/gcc/mingw32/10.3.0/include/c++/cmath:
 C:/TDM-GCC-32/include/math.h:
+include/SDL_ttf.h:
+include/SDL_image.h:
