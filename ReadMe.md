@@ -41,4 +41,8 @@ README
 		-Barra de vida (do protagonista e do boss);
 
 ## 4- Imagens
-<img src="imgs/MainMenu.png" alt="MainMenu.png">
+<img src="imgs/print1.png" alt="print1.png">
+<img src="imgs/print2.png" alt="print2.png">
+<img src="imgs/print3.png" alt="print3.png">
+<img src="imgs/print4.png" alt="print4.png">
+<img src="imgs/print5.png" alt="print5.png">
